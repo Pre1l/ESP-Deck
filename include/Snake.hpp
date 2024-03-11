@@ -11,9 +11,10 @@ namespace Snake
     extern int gridY;
     extern int offsetX;
     extern int offsetY;
-    extern bool gameOver;
     extern int tileSize;
+    extern int lastMovedDirection;
     extern int tiles[10][12];
+    extern bool gameOver;
     extern std::vector<Vector2D> snakeTiles;
 
     void initialize();

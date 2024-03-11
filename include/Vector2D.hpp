@@ -14,10 +14,10 @@ class Vector2D
         float getY();
         int getIntX();
         int getIntY();
-        void setX(float x);
-        void setY(float y);
-        void addX(float value);
-        void addY(float value);
+        Vector2D setX(float x);
+        Vector2D setY(float y);
+        Vector2D addX(float value);
+        Vector2D addY(float value);
 };
 
 #endif // VECTOR2D_HPP

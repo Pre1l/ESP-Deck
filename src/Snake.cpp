@@ -3,6 +3,7 @@
 #include <ctime>
 
 int Snake::direction = 0;
+int Snake::lastMovedDirection = 0;
 int Snake::gridX = 12;
 int Snake::gridY = 10;
 int Snake::tileSize = 30;
@@ -22,19 +23,23 @@ void Snake::initialize()
   for (int row = 0; row < gridY; row++) {
     for (int col = 0; col < gridX; col++) {
       tiles[row][col] = 0;
-      //uint16_t color = (row % 2 == 0) ? ((col % 2 == 0) ? TFT_BLUE : TFT_CYAN) : ((col % 2 == 0) ? TFT_CYAN : TFT_BLUE);
       DisplayManager::getDisplay().fillRect(col * tileSize + offsetX, row * tileSize + offsetY, tileSize, tileSize, TFT_BLACK); 
       DisplayManager::getDisplay().drawRect(col * tileSize + offsetX, row * tileSize + offsetY, tileSize, tileSize, TFT_DARKGREEN); 
     }
   }
 
-  snakeTiles.push_back(Vector2D(0,4));
-  snakeTiles.push_back(Vector2D(1,4));
-  snakeTiles.push_back(Vector2D(2,4));
+  std::vector<Vector2D> randomSnakeTiles;
 
-  setStatus(snakeTiles[0], 1);
-  setStatus(snakeTiles[1], 1);
-  setStatus(snakeTiles[2], 1);
+  for (int row = 0; row < gridY; row++) {
+    for (int col = 0; col < gridX - 3; col++) {
+        randomSnakeTiles.push_back(Vector2D(col, row));
+    }
+  }
+
+  int randomIndex = random(randomSnakeTiles.size());
+
+  snakeTiles.push_back(randomSnakeTiles[randomIndex]);
+  setTileSnake(snakeTiles[0]);
 
   generateFood();
   updateScore();
@@ -50,10 +55,10 @@ void Snake::moveSnake()
   Vector2D newVector = snakeTiles[snakeTiles.size() - 1];
 
   switch (direction) {
-    case 0: newVector.addX(1); break;
-    case 1: newVector.addY(-1); break;
-    case 2: newVector.addX(-1); break;
-    case 3: newVector.addY(1); break;
+    case 0: newVector.addX(1); lastMovedDirection = 0; break;
+    case 1: newVector.addY(-1); lastMovedDirection = 1; break;
+    case 2: newVector.addX(-1); lastMovedDirection = 2; break;
+    case 3: newVector.addY(1); lastMovedDirection = 3; break;
   }
 
   Vector2D frontVector = snakeTiles.front();
@@ -105,8 +110,7 @@ void Snake::generateFood()
   }
 
   if (!freeTiles.empty()) {
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
-    int randomIndex = std::rand() % freeTiles.size();
+    int randomIndex = random(freeTiles.size());
     setTileFood(freeTiles[randomIndex]);
   } else {
     playerGameOver();
@@ -127,7 +131,6 @@ void Snake::setTileSnake(Vector2D vector)
 
 void Snake::setTileFood(Vector2D vector) 
 {
-  //DisplayManager::getDisplay().fillCircle(vector.getIntX() * tileSize + tileSize/2 + offsetX, vector.getIntY() * tileSize + tileSize/2 + offsetY, tileSize/2 - 1, TFT_YELLOW);
   DisplayManager::getDisplay().fillRect(vector.getIntX() * tileSize + offsetX, vector.getIntY() * tileSize + offsetY, tileSize, tileSize, TFT_RED);
   DisplayManager::getDisplay().drawRect(vector.getIntX() * tileSize + offsetX, vector.getIntY() * tileSize + offsetY, tileSize, tileSize, TFT_DARKGREEN);
   setStatus(vector, 2);
@@ -135,7 +138,6 @@ void Snake::setTileFood(Vector2D vector)
 
 void Snake::resetTileColor(Vector2D vector) 
 {
-  //uint16_t color = (vector.getIntY() % 2 == 0) ? ((vector.getIntX() % 2 == 0) ? TFT_BLUE : TFT_CYAN) : ((vector.getIntX() % 2 == 0) ? TFT_CYAN : TFT_BLUE);
   DisplayManager::getDisplay().fillRect(vector.getIntX() * tileSize + offsetX, vector.getIntY() * tileSize + offsetY, tileSize, tileSize, TFT_BLACK);
   DisplayManager::getDisplay().drawRect(vector.getIntX() * tileSize + offsetX, vector.getIntY() * tileSize + offsetY, tileSize, tileSize, TFT_DARKGREEN); 
 }
