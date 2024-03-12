@@ -2,8 +2,8 @@
 #define SNAKE_HPP
 
 #include <vector>
-#include "Vector2D.hpp"
-#include "Game.hpp"
+#include "math/Vector2D.hpp"
+#include "game/Game.hpp"
 
 class Snake : public Game
 {

@@ -1,8 +1,8 @@
-#include "Core.hpp"
+#include "core/Core.hpp"
 #include <Arduino.h>
-#include "Game.hpp"
-#include "Snake.hpp"
-#include "DisplayManager.hpp"
+#include "game/Game.hpp"
+#include "game/Snake.hpp"
+#include "display/DisplayManager.hpp"
 
 #define right 9 // ORANGE
 #define up 10   // GREEN
