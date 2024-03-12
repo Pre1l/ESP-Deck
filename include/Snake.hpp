@@ -3,30 +3,36 @@
 
 #include <vector>
 #include "Vector2D.hpp"
+#include "Game.hpp"
 
-namespace Snake 
+class Snake : public Game
 {
-    extern int direction;
-    extern int gridX;
-    extern int gridY;
-    extern int offsetX;
-    extern int offsetY;
-    extern int tileSize;
-    extern int lastMovedDirection;
-    extern int tiles[10][12];
-    extern bool gameOver;
-    extern std::vector<Vector2D> snakeTiles;
+    private:
+        int direction;
+        int gridX;
+        int gridY;
+        int offsetX;
+        int offsetY;
+        int tileSize;
+        int lastMovedDirection;
+        int tiles[10][12];
+        bool gameOver;
+        std::vector<Vector2D> snakeTiles;
 
-    void initialize();
-    void update();
-    void setTileSnake(Vector2D vector);
-    void setTileFood(Vector2D vector);
-    void resetTileColor(Vector2D vector);
-    void moveSnake();
-    void setStatus(Vector2D vector, int status);
-    void generateFood();
-    void playerGameOver();
-    void updateScore();
-}
+    public:
+        Snake();
+        void update() override;
+        void input(int key) override;
+
+    private:
+        void setTileSnake(Vector2D vector);
+        void setTileFood(Vector2D vector);
+        void resetTileColor(Vector2D vector);
+        void moveSnake();
+        void setStatus(Vector2D vector, int status);
+        void generateFood();
+        void playerGameOver();
+        void updateScore();
+};
 
 #endif // SNAKE_HPP

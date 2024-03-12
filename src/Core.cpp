@@ -1,5 +1,6 @@
 #include "Core.hpp"
 #include <Arduino.h>
+#include "Game.hpp"
 #include "Snake.hpp"
 #include "DisplayManager.hpp"
 
@@ -9,6 +10,7 @@
 #define down 12 // YELLOW
 
 TaskHandle_t core0TaskHandle;
+Game* currentGame;
 
 void setup() 
 {
@@ -32,28 +34,26 @@ void setup()
     randomSeed(analogRead(0));
 
     DisplayManager::initialize();
-    Snake::initialize();    
+
+    currentGame = new Snake();
 }
 
 void loop()
 {
-    if (!Snake::gameOver) {
-        delay(1.5 * (120 - Snake::snakeTiles.size()) + 200);
-        Snake::update();
-    }
+    currentGame->update();
 }
 
 void inputLoop(void * parameter) 
 {
     for (;;) {
-        if (digitalRead(right) == LOW && Snake::lastMovedDirection != 2) {
-            Snake::direction = 0;
-        } else if (digitalRead(up) == LOW && Snake::lastMovedDirection != 3) {
-            Snake::direction = 1;
-        } else if (digitalRead(left) == LOW && Snake::lastMovedDirection != 0) {
-            Snake::direction = 2;
-        } else if (digitalRead(down) == LOW && Snake::lastMovedDirection != 1) {
-            Snake::direction = 3;
+        if (digitalRead(right) == LOW) {
+            currentGame->input(0);
+        } else if (digitalRead(up) == LOW) {
+            currentGame->input(1);
+        } else if (digitalRead(left) == LOW) {
+            currentGame->input(2);
+        } else if (digitalRead(down) == LOW) {
+            currentGame->input(3);
         }
         delay(10);
     }

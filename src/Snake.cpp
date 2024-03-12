@@ -2,19 +2,17 @@
 #include "DisplayManager.hpp"
 #include <ctime>
 
-int Snake::direction = 0;
-int Snake::lastMovedDirection = 0;
-int Snake::gridX = 12;
-int Snake::gridY = 10;
-int Snake::tileSize = 30;
-int Snake::offsetX = 10;
-int Snake::offsetY = 10;
-bool Snake::gameOver = false;
-std::vector<Vector2D> Snake::snakeTiles;
-int Snake::tiles[10][12];
-
-void Snake::initialize() 
+Snake::Snake()
 {
+  direction = 0;
+  lastMovedDirection = 0;
+  gridX = 12;
+  gridY = 10;
+  tileSize = 30;
+  offsetX = 10;
+  offsetY = 10;
+  gameOver = false;
+
   DisplayManager::getDisplay().fillScreen(TFT_DARKGREEN);
   DisplayManager::getDisplay().setTextColor(TFT_GREEN);
   DisplayManager::getDisplay().setTextSize(2);
@@ -47,7 +45,23 @@ void Snake::initialize()
 
 void Snake::update()
 {
-  moveSnake();
+  if (!gameOver) {
+    delay(1.5 * (120 - Snake::snakeTiles.size()) + 200);
+    moveSnake();
+  }
+}
+
+void Snake::input(int key) 
+{
+  if (key == 0 && Snake::lastMovedDirection != 2) {
+    direction = 0;
+  } else if (key == 1 && Snake::lastMovedDirection != 3) {
+    direction = 1;
+  } else if (key == 2 && Snake::lastMovedDirection != 0) {
+    direction = 2;
+  } else if (key == 3 && Snake::lastMovedDirection != 1) {
+    direction = 3;
+  }
 }
 
 void Snake::moveSnake() 
