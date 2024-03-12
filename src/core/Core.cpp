@@ -1,6 +1,8 @@
 #include "core/Core.hpp"
 #include <Arduino.h>
+#include <memory>
 #include "game/Game.hpp"
+#include "game/GameMenu.hpp"
 #include "game/Snake.hpp"
 #include "display/DisplayManager.hpp"
 
@@ -8,9 +10,12 @@
 #define up 10   // GREEN
 #define left 11 // BLUE
 #define down 12 // YELLOW
+#define action 43
+#define menu 13 
 
 TaskHandle_t core0TaskHandle;
-Game* currentGame;
+std::unique_ptr<Game> currentGame;
+bool menuButtonPressed = false;
 
 void setup() 
 {
@@ -30,20 +35,27 @@ void setup()
     pinMode(up, INPUT_PULLUP);
     pinMode(left, INPUT_PULLUP);
     pinMode(down, INPUT_PULLUP);
+    pinMode(action, INPUT_PULLUP);
+    pinMode(menu, INPUT_PULLUP);
 
     randomSeed(analogRead(0));
 
     DisplayManager::initialize();
 
-    currentGame = new Snake();
+    currentGame.reset(new Snake());
 }
 
 void loop()
 {
+    if (menuButtonPressed) {
+        currentGame.reset(new GameMenu());
+        menuButtonPressed = false;
+    }
+
     currentGame->update();
 }
 
-void inputLoop(void * parameter) 
+void inputLoop(void * parameter)
 {
     for (;;) {
         if (digitalRead(right) == LOW) {
@@ -54,6 +66,10 @@ void inputLoop(void * parameter)
             currentGame->input(2);
         } else if (digitalRead(down) == LOW) {
             currentGame->input(3);
+        } else if (digitalRead(action) == LOW) {
+            currentGame->input(4);
+        } else if (digitalRead(menu) == LOW) {
+            menuButtonPressed = true;
         }
         delay(10);
     }
