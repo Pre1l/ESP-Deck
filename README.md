@@ -1,7 +1,7 @@
 # ESP-Deck
 
-ESP-Deck is an ongoing school project aimed at creating an ESP32-based handheld gaming device. 
-However, it's essential to emphasize that it's a way-worse, highly simplified, and retro-style alternative inspired by the SteamDeck.
+ESP-Deck is an ongoing school project aimed at creating an ESP32-based handheld gaming device.
+Its a **extremely** simplified, retro-style handheld gaming device inspired by the Steam Deck.
 
 ## ℹ️ Info
 - **Project Status:** Work-in-progress
