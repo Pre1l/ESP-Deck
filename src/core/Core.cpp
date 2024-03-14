@@ -5,21 +5,22 @@
 #include "game/GameMenu.hpp"
 #include "game/Snake.hpp"
 #include "display/DisplayManager.hpp"
+#include "TFT_eSPI.h"
 
-#define right 9 // ORANGE
-#define up 10   // GREEN
-#define left 11 // BLUE
-#define down 12 // YELLOW
-#define action 43
-#define menu 13 
+#define right 9
+#define up 10
+#define left 11
+#define down 12
+#define action 13
+#define menu 43
 
 TaskHandle_t core0TaskHandle;
 std::unique_ptr<Game> currentGame;
-bool menuButtonPressed = false;
+bool menuButtonPressed = true;
 
 void setup() 
 {
-    Serial.begin(115200);
+    Serial.begin(250000);
 
     xTaskCreatePinnedToCore(
         inputLoop,
@@ -41,8 +42,6 @@ void setup()
     randomSeed(analogRead(0));
 
     DisplayManager::initialize();
-
-    currentGame.reset(new Snake());
 }
 
 void loop()
@@ -58,19 +57,21 @@ void loop()
 void inputLoop(void * parameter)
 {
     for (;;) {
-        if (digitalRead(right) == LOW) {
-            currentGame->input(0);
-        } else if (digitalRead(up) == LOW) {
-            currentGame->input(1);
-        } else if (digitalRead(left) == LOW) {
-            currentGame->input(2);
-        } else if (digitalRead(down) == LOW) {
-            currentGame->input(3);
-        } else if (digitalRead(action) == LOW) {
-            currentGame->input(4);
-        } else if (digitalRead(menu) == LOW) {
-            menuButtonPressed = true;
+        if (!menuButtonPressed) {
+            if (digitalRead(right) == LOW) {
+                currentGame->input(0);
+            } else if (digitalRead(up) == LOW) {
+                currentGame->input(1);
+            } else if (digitalRead(left) == LOW) {
+                currentGame->input(2);
+            } else if (digitalRead(down) == LOW) {
+                currentGame->input(3);
+            } else if (digitalRead(action) == LOW) {
+                currentGame->input(4);
+            } else if (digitalRead(menu) == LOW) {
+                menuButtonPressed = true;
+            }
         }
-        delay(10);
+        delay(50);
     }
 }

@@ -6,9 +6,11 @@
 namespace DisplayManager 
 {
     extern TFT_eSPI tft;
+    extern TFT_eSprite img;
 
     void initialize();
     TFT_eSPI& getDisplay();
+    TFT_eSprite& getImg();
 }
 
 #endif // DISPLAY_MANAGER_HPP
