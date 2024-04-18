@@ -12,7 +12,7 @@
 #define left 11
 #define down 12
 #define action 13
-#define menu 43
+#define menu 46
 
 TaskHandle_t core0TaskHandle;
 std::unique_ptr<Game> currentGame;
@@ -47,7 +47,7 @@ void setup()
 void loop()
 {
     if (menuButtonPressed) {
-        currentGame.reset(new GameMenu());
+        currentGame.reset(new Snake());
         menuButtonPressed = false;
     }
 
@@ -56,8 +56,17 @@ void loop()
 
 void inputLoop(void * parameter)
 {
+    bool menuButtonSpamProt = true;
+
     for (;;) {
         if (!menuButtonPressed) {
+            if (digitalRead(menu) == LOW && menuButtonSpamProt) {
+                menuButtonPressed = true;
+                menuButtonSpamProt = false;
+            } else if (digitalRead(menu) == HIGH) {
+                menuButtonSpamProt = true;
+            }
+            
             if (digitalRead(right) == LOW) {
                 currentGame->input(0);
             } else if (digitalRead(up) == LOW) {
@@ -68,8 +77,6 @@ void inputLoop(void * parameter)
                 currentGame->input(3);
             } else if (digitalRead(action) == LOW) {
                 currentGame->input(4);
-            } else if (digitalRead(menu) == LOW) {
-                menuButtonPressed = true;
             }
         }
         delay(50);

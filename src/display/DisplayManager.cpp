@@ -8,8 +8,9 @@ void DisplayManager::initialize()
     tft.init();
     tft.setRotation(1);
     tft.fillScreen(TFT_BLACK);
-    img.createSprite(200, 100);
-    img.setColorDepth(8);
+    img.createSprite(200, 320);
+    img.setColorDepth(16);
+    img.setScrollRect(0, 0, 200, 320, TFT_GREEN);
 }
 
 TFT_eSPI& DisplayManager::getDisplay() 

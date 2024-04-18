@@ -29,7 +29,7 @@ Snake::Snake()
     std::vector<Vector2D> randomSnakeTiles;
 
     for (int row = 0; row < gridY; row++) {
-        for (int col = 0; col < gridX - 3; col++) {
+        for (int col = 0; col < gridX - 6; col++) {
             randomSnakeTiles.push_back(Vector2D(col, row));
         }
     }
@@ -117,9 +117,9 @@ void Snake::generateFood()
 
     for (int row = 0; row < gridY; row++) {
         for (int col = 0; col < gridX; col++) {
-        if (tiles[row][col] == 0) {
-            freeTiles.push_back(Vector2D(col, row));
-        }
+            if (tiles[row][col] == 0) {
+                freeTiles.push_back(Vector2D(col, row));
+            }
         }
     }
 
