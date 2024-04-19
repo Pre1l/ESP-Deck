@@ -9,6 +9,9 @@ class GameMenu : public Game
         GameMenu();
         void update();
         void input(int key);
+
+    private:
+        bool focusOnSideMenu;
 };
 
 #endif // GAMEMENU_HPP

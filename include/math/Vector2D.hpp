@@ -18,6 +18,9 @@ class Vector2D
         Vector2D setY(float y);
         Vector2D addX(float value);
         Vector2D addY(float value);
+        Vector2D subtract(Vector2D vector);
+        Vector2D copy();
+        Vector2D subtractX(float value);
 };
 
 #endif // VECTOR2D_HPP

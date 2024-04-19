@@ -2,8 +2,8 @@
 #include <Arduino.h>
 #include <memory>
 #include "game/Game.hpp"
-#include "game/GameMenu.hpp"
-#include "game/Snake.hpp"
+#include "game/game_menu/GameMenu.hpp"
+#include "game/snake/Snake.hpp"
 #include "display/DisplayManager.hpp"
 #include "TFT_eSPI.h"
 
