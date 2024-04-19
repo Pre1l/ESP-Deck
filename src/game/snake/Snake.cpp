@@ -2,6 +2,8 @@
 #include "display/DisplayManager.hpp"
 #include <ctime>
 #include "bitmaps/SnakeBitmap.hpp"
+#include "bitmaps/AppleBitmap.hpp"
+#include "bitmaps/GreenBrickBackgroundBitmap.hpp"
 
 TFT_eSprite snakeSpriteSheet = TFT_eSprite(&DisplayManager::tft);
 
@@ -16,10 +18,12 @@ Snake::Snake()
     offsetY = 10;
     gameOver = false;
 
-    DisplayManager::getDisplay().fillScreen(TFT_DARKGREEN);
-    DisplayManager::getDisplay().setTextColor(TFT_GREEN);
+    DisplayManager::getDisplay().setSwapBytes(true);
+    DisplayManager::getDisplay().pushImage(0, 0, 480, 320, greenBrickBackgroundBitmap);
+    DisplayManager::getDisplay().setTextColor(0x75AE);
     DisplayManager::getDisplay().setTextSize(2);
-    DisplayManager::getDisplay().drawString("Score:", 380, 20);
+    DisplayManager::getDisplay().fillRoundRect(375, 10, 100, 40, 10, 0x21E4);
+    DisplayManager::getDisplay().pushImage(377, 15, 30, 30, appleBitmap);
 
     snakeSpriteSheet.createSprite(30, 30);
     snakeSpriteSheet.setSwapBytes(true);
@@ -112,14 +116,18 @@ void Snake::moveSnake()
 
     pushSnakeTile(newSnakeTilePosition);
 
-    updateScore();
+    if (newSnakeTilePositionStatus == 2) {
+        updateScore();
+    }
 }
 
 void Snake::playerGameOver()
 {
-    DisplayManager::getDisplay().setTextColor(TFT_RED);
+    DisplayManager::getDisplay().setTextColor(0xDA49);
     DisplayManager::getDisplay().setTextSize(2);
-    DisplayManager::getDisplay().drawCentreString("Game Over", 190, 100, 4);
+    DisplayManager::getDisplay().fillRoundRect(40, 40, 300, 60, 10, 0x21E4);
+    DisplayManager::getDisplay().drawRoundRect(40, 40, 300, 60, 10, 0x5C6B);
+    DisplayManager::getDisplay().drawCentreString("Game Over", 190, 49, 4);
     gameOver = true;
 }
 
@@ -231,8 +239,17 @@ void Snake::resetTileColor(Vector2D tilePosition)
 
 void Snake::updateScore() 
 {
-    DisplayManager::getDisplay().fillRect(450, 20, 30, 16, TFT_DARKGREEN);
-    DisplayManager::getDisplay().drawString(String(snakeTiles.size()), 450, 20);
+    DisplayManager::getDisplay().fillRoundRect(410, 10, 65, 40, 10, 0x21E4);
+    int score = snakeTiles.size();
+    String scoreString = String(score);
+
+    if (score < 10) {
+        scoreString = "00" + scoreString;
+    } else if (score < 100) {
+        scoreString = "0" + scoreString;
+    }
+
+    DisplayManager::getDisplay().drawString(scoreString, 408, 15);
 }
 
 void Snake::renderSprite(Vector2D tilePosition, Vector2D sprite) 
