@@ -57,7 +57,6 @@ Snake::Snake()
     renderSprite(spawnSnakeTile2, SNAKE_BODY_HORIZONTAL);
     renderSprite(spawnSnakeTile3, SNAKE_TAIL_LEFT);
 
-
     generateFood();
     updateScore();
 }
@@ -240,7 +239,7 @@ void Snake::resetTileColor(Vector2D tilePosition)
 void Snake::updateScore() 
 {
     DisplayManager::getDisplay().fillRoundRect(410, 10, 65, 40, 10, 0x21E4);
-    int score = snakeTiles.size();
+    int score = snakeTiles.size() - 3;
     String scoreString = String(score);
 
     if (score < 10) {
