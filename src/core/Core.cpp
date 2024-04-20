@@ -49,6 +49,9 @@ void setup()
 void loop()
 {
     if (menuButtonPressed) {
+        if (currentGame != nullptr) {
+            currentGame->onGameClosed();
+        }
         currentGame.reset(new Menu());
         menuButtonPressed = false;
     }

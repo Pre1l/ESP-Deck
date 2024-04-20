@@ -50,6 +50,7 @@ class Snake : public Game
         void update() override;
         void keyPressed(int key) override;
         void keyReleased(int key) override;
+        void onGameClosed() override;
 
     private:
         void pushSnakeTile(Vector2D newSnakeTileVector);
@@ -62,6 +63,7 @@ class Snake : public Game
         void updateScore();
         void renderSprite(Vector2D tilePosition, Vector2D sprite);
         void pullSnakeTail();
+        void updateHighscore();
 };
 
 #endif // SNAKE_HPP

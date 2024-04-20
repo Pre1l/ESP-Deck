@@ -23,6 +23,11 @@ void Menu::update()
     delay(10);
 }
 
+void Menu::onGameClosed() 
+{
+    
+}
+
 void Menu::keyPressed(int key) 
 {
     if (key == 2 && focusOnSideMenu == false) {

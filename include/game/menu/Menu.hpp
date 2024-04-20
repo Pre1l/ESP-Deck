@@ -18,6 +18,7 @@ class Menu : public Game
         void update() override;
         void keyPressed(int key) override;
         void keyReleased(int key) override;
+        void onGameClosed() override;
 
     private:
         void advanceSelectionUpAndExecute();

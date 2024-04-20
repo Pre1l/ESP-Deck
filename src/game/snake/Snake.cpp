@@ -78,6 +78,11 @@ void Snake::update()
     }
 }
 
+void Snake::onGameClosed() 
+{
+    updateHighscore();
+}
+
 void Snake::keyPressed(int key) 
 {
     if (key == 0 && Snake::lastMovedDirection != 2) {
@@ -246,16 +251,21 @@ void Snake::renderSprite(Vector2D tilePosition, Vector2D sprite)
 
 void Snake::playerGameOver()
 {
-    if (snakeTiles.size() - 3 > highscore) {
-        EEPROM.write(EEPROM_HIGHSCORE_ADDR, snakeTiles.size() - 3);
-        EEPROM.commit();
-    }
+    updateHighscore();
     DisplayManager::getDisplay().setTextColor(0xD800);
     DisplayManager::getDisplay().fillRoundRect(40, 40, 300, 60, 10, 0x3366);
     DisplayManager::getDisplay().setTextSize(3);
     DisplayManager::getDisplay().drawString("Game Over", 45, 45);
     DisplayManager::getDisplay().setTextSize(2);
     gameOver = true;
+}
+
+void Snake::updateHighscore() 
+{
+    if (snakeTiles.size() - 3 > highscore) {
+        EEPROM.write(EEPROM_HIGHSCORE_ADDR, snakeTiles.size() - 3);
+        EEPROM.commit();
+    }
 }
 
 void Snake::updateScore() 
