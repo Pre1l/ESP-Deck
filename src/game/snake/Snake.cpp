@@ -20,9 +20,9 @@ Snake::Snake()
 
     DisplayManager::getDisplay().setSwapBytes(true);
     DisplayManager::getDisplay().pushImage(0, 0, 480, 320, greenBrickBackgroundBitmap);
-    DisplayManager::getDisplay().setTextColor(0x75AE);
+    DisplayManager::getDisplay().setTextColor(0x6ECD);
     DisplayManager::getDisplay().setTextSize(2);
-    DisplayManager::getDisplay().fillRoundRect(375, 10, 100, 40, 10, 0x21E4);
+    DisplayManager::getDisplay().fillRoundRect(375, 10, 100, 40, 10, 0x3366);
     DisplayManager::getDisplay().pushImage(377, 15, 30, 30, appleBitmap);
 
     snakeSpriteSheet.createSprite(30, 30);
@@ -122,10 +122,9 @@ void Snake::moveSnake()
 
 void Snake::playerGameOver()
 {
-    DisplayManager::getDisplay().setTextColor(0xDA49);
+    DisplayManager::getDisplay().setTextColor(0xD800);
     DisplayManager::getDisplay().setTextSize(2);
-    DisplayManager::getDisplay().fillRoundRect(40, 40, 300, 60, 10, 0x21E4);
-    DisplayManager::getDisplay().drawRoundRect(40, 40, 300, 60, 10, 0x5C6B);
+    DisplayManager::getDisplay().fillRoundRect(40, 40, 300, 60, 10, 0x3366);
     DisplayManager::getDisplay().drawCentreString("Game Over", 190, 49, 4);
     gameOver = true;
 }
@@ -238,7 +237,7 @@ void Snake::resetTileColor(Vector2D tilePosition)
 
 void Snake::updateScore() 
 {
-    DisplayManager::getDisplay().fillRoundRect(410, 10, 65, 40, 10, 0x21E4);
+    DisplayManager::getDisplay().fillRoundRect(410, 10, 65, 40, 10, 0x3366);
     int score = snakeTiles.size() - 3;
     String scoreString = String(score);
 
