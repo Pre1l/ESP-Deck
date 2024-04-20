@@ -8,17 +8,10 @@
 #include <EEPROM.h>
 #include "config/eepromConfig.hpp"
 
-TFT_eSprite snakeSpriteSheet = TFT_eSprite(&DisplayManager::tft);
-
 Snake::Snake()
 {
     direction = 0;
     lastMovedDirection = 0;
-    gridX = 12;
-    gridY = 10;
-    tileSize = 30;
-    offsetX = 10;
-    offsetY = 10;
     gameOver = false;
     highscore = EEPROM.read(EEPROM_HIGHSCORE_ADDR);
 

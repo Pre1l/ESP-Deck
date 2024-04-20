@@ -1,7 +1,7 @@
-#ifdef LOAD_GFXFF // Only include the fonts if LOAD_GFXFF is defined in User_Setup.h
+#ifndef FONTS
+#define FONTS
+#ifdef LOAD_GFXFF
 
-// Use these when printing or drawing text in GLCD and high rendering speed fonts
-// Call up the font using tft.setTextFont()
 #define GFXFF 1
 #define GLCD  0
 #define FONT2 2
@@ -9,11 +9,6 @@
 #define FONT6 6
 #define FONT7 7
 #define FONT8 8
-
-// Use the following when calling tft.setFreeFont()
-//
-// Reserved for GLCD font  // FF0
-//
 
 #define TT1 &TomThumb
 
@@ -138,13 +133,6 @@
 #define FF47 &FreeSerifBoldItalic18pt7b
 #define FF48 &FreeSerifBoldItalic24pt7b
 
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// Now we define "s"tring versions for easy printing of the font name so:
-//   tft.println(sFF5);
-// will print
-//   Mono bold 9
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
 #define sFF0 "GLCD"
 #define sTT1 "Tom Thumb"
 #define sFF1 "Mono 9"
@@ -165,7 +153,7 @@
 #define sFF13 "Mono bold oblique 9"
 #define sFF14 "Mono bold oblique 12"
 #define sFF15 "Mono bold oblique 18"
-#define sFF16 "Mono bold oblique 24" // Full text line is too big for 480 pixel wide screen
+#define sFF16 "Mono bold oblique 24"
 
 #define sFF17 "Sans 9"
 #define sFF18 "Sans 12"
@@ -207,12 +195,7 @@
 #define sFF47 "Serif bold italic 18"
 #define sFF48 "Serif bold italic 24"
 
-#else // LOAD_GFXFF not defined so setup defaults to prevent error messages
-
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-// Free fonts are not loaded in User_Setup.h so we must define all as font 1
-// to prevent compile error messages
-// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#else
 
 #define GFXFF 1
 #define GLCD  1
@@ -335,3 +318,4 @@
 #define FSBI24 1
 
 #endif // LOAD_GFXFF
+#endif // FONTS

@@ -4,21 +4,26 @@
 #include <vector>
 #include "math/Vector2D.hpp"
 #include "game/Game.hpp"
+#include <TFT_eSPI.h>
+#include "display/DisplayManager.hpp"
 
 class Snake : public Game
 {
     private:
         int direction;
-        int gridX;
-        int gridY;
-        int offsetX;
-        int offsetY;
-        int tileSize;
         int lastMovedDirection;
-        int tiles[10][12];
-        bool gameOver;
         int highscore;
+        int tiles[10][12];
+
+        bool gameOver;
+        TFT_eSprite snakeSpriteSheet = TFT_eSprite(&DisplayManager::tft);
         std::vector<Vector2D> snakeTiles;
+
+        const int gridX = 12;
+        const int gridY = 10;
+        const int offsetX = 10;
+        const int offsetY = 10;
+        const int tileSize = 30;
 
         const Vector2D SNAKE_HEAD_UP = Vector2D(-90, 0);
         const Vector2D SNAKE_HEAD_LEFT = Vector2D(-90, -30);

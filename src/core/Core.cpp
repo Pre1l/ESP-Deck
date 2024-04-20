@@ -2,7 +2,7 @@
 #include <Arduino.h>
 #include <memory>
 #include "game/Game.hpp"
-#include "game/game_menu/GameMenu.hpp"
+#include "game/menu/Menu.hpp"
 #include "game/snake/Snake.hpp"
 #include "display/DisplayManager.hpp"
 #include "TFT_eSPI.h"
@@ -49,11 +49,16 @@ void setup()
 void loop()
 {
     if (menuButtonPressed) {
-        currentGame.reset(new Snake());
+        currentGame.reset(new Menu());
         menuButtonPressed = false;
     }
 
     currentGame->update();
+}
+
+void setCurrentGame(std::unique_ptr<Game> newGame) 
+{
+    currentGame = std::move(newGame);
 }
 
 void inputLoop(void * parameter)
