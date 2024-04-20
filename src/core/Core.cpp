@@ -8,12 +8,13 @@
 #include "TFT_eSPI.h"
 #include <EEPROM.h>
 
-#define right 9
-#define up 10
-#define left 11
-#define down 12
-#define action 13
-#define menu 46
+#define RIGHT_PIN 9
+#define UP_PIN 10
+#define LEFT_PIN 11
+#define DOWN_PIN 12
+#define ACTION_PIN 13
+#define MENU_PIN 46
+int keyPins[] = {RIGHT_PIN, UP_PIN, LEFT_PIN, DOWN_PIN, ACTION_PIN};
 
 TaskHandle_t core0TaskHandle;
 std::unique_ptr<Game> currentGame;
@@ -34,12 +35,12 @@ void setup()
         0
     );
 
-    pinMode(right, INPUT_PULLUP);
-    pinMode(up, INPUT_PULLUP);
-    pinMode(left, INPUT_PULLUP);
-    pinMode(down, INPUT_PULLUP);
-    pinMode(action, INPUT_PULLUP);
-    pinMode(menu, INPUT_PULLUP);
+    pinMode(RIGHT_PIN, INPUT_PULLUP);
+    pinMode(UP_PIN, INPUT_PULLUP);
+    pinMode(LEFT_PIN, INPUT_PULLUP);
+    pinMode(DOWN_PIN, INPUT_PULLUP);
+    pinMode(ACTION_PIN, INPUT_PULLUP);
+    pinMode(MENU_PIN, INPUT_PULLUP);
 
     randomSeed(analogRead(0));
 
@@ -67,57 +68,28 @@ void setCurrentGame(std::unique_ptr<Game> newGame)
 void inputLoop(void * parameter)
 {
     bool menuButtonSpamProt = true;
-    bool upKey = false;
-    bool downKey = false;
-    bool leftKey = false;
-    bool rightKey = false;
-    bool actionKey = false;
+    bool keyStates[5] = {false};
 
     for (;;) {
         if (!menuButtonPressed) {
-            if (digitalRead(menu) == LOW && menuButtonSpamProt) {
+            if (digitalRead(MENU_PIN) == LOW && menuButtonSpamProt) {
                 menuButtonPressed = true;
                 menuButtonSpamProt = false;
-            } else if (digitalRead(menu) == HIGH) {
+            } else if (digitalRead(MENU_PIN) == HIGH) {
                 menuButtonSpamProt = true;
             }
             
-            if (digitalRead(right) == LOW && !rightKey) {
-                currentGame->keyPressed(0);
-                rightKey = true;
-            } else if (digitalRead(up) == LOW && !upKey) {
-                currentGame->keyPressed(1);
-                upKey = true;
-            } else if (digitalRead(left) == LOW && !leftKey) {
-                currentGame->keyPressed(2);
-                leftKey = true;
-            } else if (digitalRead(down) == LOW && !downKey) {
-                currentGame->keyPressed(3);
-                downKey = true;
-            } else if (digitalRead(action) == LOW && !actionKey) {
-                currentGame->keyPressed(4);
-                actionKey = true;
-            }
-
-            if (digitalRead(right) == HIGH && rightKey) {
-                currentGame->keyReleased(0);
-                rightKey = false;
-            }
-            if (digitalRead(up) == HIGH && upKey) {
-                currentGame->keyReleased(1);
-                upKey = false;
-            }
-            if (digitalRead(left) == HIGH && leftKey) {
-                currentGame->keyReleased(2);
-                leftKey = false;
-            }
-            if (digitalRead(down) == HIGH && downKey) {
-                currentGame->keyReleased(3);
-                downKey = false;
-            }
-            if (digitalRead(action) == HIGH && actionKey) {
-                currentGame->keyReleased(4);
-                actionKey = false;
+            for (int key = 0; key < 5; ++key) {
+                int pin = keyPins[key];
+                bool &keyState = keyStates[key];
+                
+                if (digitalRead(pin) == LOW && !keyState) {
+                    currentGame->keyPressed(key);
+                    keyState = true;
+                } else if (digitalRead(pin) == HIGH && keyState) {
+                    currentGame->keyReleased(key);
+                    keyState = false;
+                }
             }
         }
         delay(50);
