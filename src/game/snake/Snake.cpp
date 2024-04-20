@@ -69,7 +69,7 @@ void Snake::update()
     }
 }
 
-void Snake::input(int key) 
+void Snake::keyPressed(int key) 
 {
     if (key == 0 && Snake::lastMovedDirection != 2) {
         direction = 0;
@@ -80,6 +80,11 @@ void Snake::input(int key)
     } else if (key == 3 && Snake::lastMovedDirection != 1) {
         direction = 3;
     }
+}
+
+void Snake::keyReleased(int key) 
+{
+    
 }
 
 void Snake::moveSnake() 

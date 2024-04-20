@@ -5,13 +5,16 @@
 
 class GameMenu : public Game
 {
+    private:
+        bool focusOnSideMenu;
+        bool up;
+        bool down;
+
     public:
         GameMenu();
         void update();
-        void input(int key);
-
-    private:
-        bool focusOnSideMenu;
+        void keyPressed(int key) override;
+        void keyReleased(int key) override;
 };
 
 #endif // GAMEMENU_HPP

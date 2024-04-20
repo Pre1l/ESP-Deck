@@ -42,7 +42,8 @@ class Snake : public Game
     public:
         Snake();
         void update() override;
-        void input(int key) override;
+        void keyPressed(int key) override;
+        void keyReleased(int key) override;
 
     private:
         void pushSnakeTile(Vector2D newSnakeTileVector);

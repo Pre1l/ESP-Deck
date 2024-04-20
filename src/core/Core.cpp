@@ -47,7 +47,7 @@ void setup()
 void loop()
 {
     if (menuButtonPressed) {
-        currentGame.reset(new Snake());
+        currentGame.reset(new GameMenu());
         menuButtonPressed = false;
     }
 
@@ -57,6 +57,11 @@ void loop()
 void inputLoop(void * parameter)
 {
     bool menuButtonSpamProt = true;
+    bool upKey = false;
+    bool downKey = false;
+    bool leftKey = false;
+    bool rightKey = false;
+    bool actionKey = false;
 
     for (;;) {
         if (!menuButtonPressed) {
@@ -67,16 +72,42 @@ void inputLoop(void * parameter)
                 menuButtonSpamProt = true;
             }
             
-            if (digitalRead(right) == LOW) {
-                currentGame->input(0);
-            } else if (digitalRead(up) == LOW) {
-                currentGame->input(1);
-            } else if (digitalRead(left) == LOW) {
-                currentGame->input(2);
-            } else if (digitalRead(down) == LOW) {
-                currentGame->input(3);
-            } else if (digitalRead(action) == LOW) {
-                currentGame->input(4);
+            if (digitalRead(right) == LOW && !rightKey) {
+                currentGame->keyPressed(0);
+                rightKey = true;
+            } else if (digitalRead(up) == LOW && !upKey) {
+                currentGame->keyPressed(1);
+                upKey = true;
+            } else if (digitalRead(left) == LOW && !leftKey) {
+                currentGame->keyPressed(2);
+                leftKey = true;
+            } else if (digitalRead(down) == LOW && !downKey) {
+                currentGame->keyPressed(3);
+                downKey = true;
+            } else if (digitalRead(action) == LOW && !actionKey) {
+                currentGame->keyPressed(4);
+                actionKey = true;
+            }
+
+            if (digitalRead(right) == HIGH && rightKey) {
+                currentGame->keyReleased(0);
+                rightKey = false;
+            }
+            if (digitalRead(up) == HIGH && upKey) {
+                currentGame->keyReleased(1);
+                upKey = false;
+            }
+            if (digitalRead(left) == HIGH && leftKey) {
+                currentGame->keyReleased(2);
+                leftKey = false;
+            }
+            if (digitalRead(down) == HIGH && downKey) {
+                currentGame->keyReleased(3);
+                downKey = false;
+            }
+            if (digitalRead(action) == HIGH && actionKey) {
+                currentGame->keyReleased(4);
+                actionKey = false;
             }
         }
         delay(50);

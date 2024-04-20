@@ -1,36 +1,44 @@
 #include "game/game_menu/GameMenu.hpp"
 #include "display/DisplayManager.hpp"
-#include "bitmaps/SnakeBitmap.hpp"
+#include "bitmaps/GreenBrickBackgroundBitmap.hpp"
+
+TFT_eSprite gameMenuSprite = TFT_eSprite(&DisplayManager::tft);
 
 GameMenu::GameMenu() 
 {
     focusOnSideMenu = false;
+    up = false;
+    down = false;
 
-    DisplayManager::getDisplay().fillScreen(TFT_BLACK);
-    DisplayManager::getDisplay().fillRect(0, 0, 100, 320, TFT_DARKGREY);
-    DisplayManager::getDisplay().fillRect(100, 0, 380, 320, TFT_RED);
-    /*snakeSprite.createSprite(30, 30);
-    snakeSprite.setSwapBytes(true);
-    snakeSprite.pushImage(0, 0, 150, 120, snakeBitmap);
-    snakeSprite.pushSprite(0, 0);*/
+    DisplayManager::getDisplay().fillRect(0, 0, 80, 320, 0x18e3);
+    DisplayManager::getDisplay().pushImage(80, 0, 480, 320, greenBrickBackgroundBitmap);
 }
 
 void GameMenu::update() 
 {
-    delay(1);
+    delay(10);
 }
 
-void GameMenu::input(int key) 
+void GameMenu::keyPressed(int key) 
 {
     if (key == 2 && focusOnSideMenu == false) {
-        DisplayManager::getDisplay().fillRect(0, 0, 200, 320, TFT_DARKGREY);
-        DisplayManager::getDisplay().drawRect(0, 0, 200, 320, TFT_BLUE);
-        DisplayManager::getDisplay().drawRect(200, 0, 280, 320, TFT_RED);
+        DisplayManager::getDisplay().drawRect(0, 0, 80, 320, TFT_CYAN);
+        DisplayManager::getDisplay().drawRect(80, 0, 400, 320, 0x18e3);
         focusOnSideMenu = true;
     } else if (key == 0 && focusOnSideMenu == true) {
-        DisplayManager::getDisplay().fillRect(100, 0, 380, 320, TFT_RED);
-        DisplayManager::getDisplay().drawRect(100, 0, 380, 320, TFT_BLUE);
-        DisplayManager::getDisplay().drawRect(0, 0, 100, 320, TFT_DARKGREY);
+        DisplayManager::getDisplay().drawRect(0, 0, 80, 320, 0x18e3);
+        DisplayManager::getDisplay().drawRect(80, 0, 400, 320, TFT_CYAN);
         focusOnSideMenu = false;
+    } else if (key == 1) {
+        up = true;
+        Serial.println("up");
+    } else if (key == 3) {
+        down = true;
+        Serial.println("down");
     }
+}
+
+void GameMenu::keyReleased(int key) 
+{
+
 }
