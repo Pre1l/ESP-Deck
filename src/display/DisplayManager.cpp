@@ -1,5 +1,5 @@
 #include "display/DisplayManager.hpp"
-#include "font/Fonts.hpp";
+#include "font/Fonts.hpp"
 
 TFT_eSPI DisplayManager::tft = TFT_eSPI();
 
@@ -10,14 +10,10 @@ void DisplayManager::initialize()
     tft.fillScreen(TFT_BLACK);
     tft.setSwapBytes(true);
     tft.setFreeFont(FF25);
+    tft.setTextSize(2);
 }
 
 TFT_eSPI& DisplayManager::getDisplay() 
 {
     return tft;
-}
-
-int DisplayManager::rgb(int r, int g, int b) 
-{
-    return (r << (5 + 6)) | (g << 5) | b;
 }

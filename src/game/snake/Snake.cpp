@@ -31,7 +31,6 @@ Snake::Snake()
     DisplayManager::getDisplay().fillRoundRect(375, 270, 100, 40, 10, 0x3366);
     DisplayManager::getDisplay().pushImage(375, 272, 35, 35, trophyBitmap);
     DisplayManager::getDisplay().setTextColor(0xF480);
-    DisplayManager::getDisplay().setTextSize(2);
 
     DisplayManager::getDisplay().fillRoundRect(410, 270, 65, 40, 10, 0x3366);
     String highscoreString = String(highscore);
@@ -122,7 +121,6 @@ void Snake::moveSnake()
         playerGameOver();
         return;
     } else if (newSnakeTilePositionStatus != 2) {
-        pullSnakeTail();
         setStatus(frontTilePosition, 0);
     }
 
@@ -136,6 +134,7 @@ void Snake::moveSnake()
         pushSnakeTile(newSnakeTilePosition);
         updateScore();
     } else {
+        pullSnakeTail();
         pushSnakeTile(newSnakeTilePosition);
     }
 }
@@ -259,9 +258,10 @@ void Snake::playerGameOver()
         EEPROM.commit();
     }
     DisplayManager::getDisplay().setTextColor(0xD800);
-    DisplayManager::getDisplay().setTextSize(2);
     DisplayManager::getDisplay().fillRoundRect(40, 40, 300, 60, 10, 0x3366);
-    DisplayManager::getDisplay().drawCentreString("Game Over", 190, 49, 4);
+    DisplayManager::getDisplay().setTextSize(3);
+    DisplayManager::getDisplay().drawString("Game Over", 45, 45);
+    DisplayManager::getDisplay().setTextSize(2);
     gameOver = true;
 }
 
