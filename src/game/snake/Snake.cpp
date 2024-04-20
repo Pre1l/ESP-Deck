@@ -4,6 +4,9 @@
 #include "bitmaps/SnakeBitmap.hpp"
 #include "bitmaps/AppleBitmap.hpp"
 #include "bitmaps/GreenBrickBackgroundBitmap.hpp"
+#include "bitmaps/TrophyBitmap.hpp"
+#include <EEPROM.h>
+#include "config/eepromConfig.hpp"
 
 TFT_eSprite snakeSpriteSheet = TFT_eSprite(&DisplayManager::tft);
 
@@ -17,13 +20,27 @@ Snake::Snake()
     offsetX = 10;
     offsetY = 10;
     gameOver = false;
+    highscore = EEPROM.read(EEPROM_HIGHSCORE_ADDR);
 
     DisplayManager::getDisplay().setSwapBytes(true);
     DisplayManager::getDisplay().pushImage(0, 0, 480, 320, greenBrickBackgroundBitmap);
-    DisplayManager::getDisplay().setTextColor(0x6ECD);
-    DisplayManager::getDisplay().setTextSize(2);
+
     DisplayManager::getDisplay().fillRoundRect(375, 10, 100, 40, 10, 0x3366);
     DisplayManager::getDisplay().pushImage(377, 15, 30, 30, appleBitmap);
+
+    DisplayManager::getDisplay().fillRoundRect(375, 270, 100, 40, 10, 0x3366);
+    DisplayManager::getDisplay().pushImage(375, 272, 35, 35, trophyBitmap);
+    DisplayManager::getDisplay().setTextColor(0xF480);
+    DisplayManager::getDisplay().setTextSize(2);
+
+    DisplayManager::getDisplay().fillRoundRect(410, 270, 65, 40, 10, 0x3366);
+    String highscoreString = String(highscore);
+    if (highscore < 10) {
+        highscoreString = "00" + highscoreString;
+    } else if (highscore < 100) {
+        highscoreString = "0" + highscoreString;
+    }
+    DisplayManager::getDisplay().drawString(highscoreString, 408, 275);
 
     snakeSpriteSheet.createSprite(30, 30);
     snakeSpriteSheet.setSwapBytes(true);
@@ -116,47 +133,11 @@ void Snake::moveSnake()
 
     if (newSnakeTilePositionStatus == 2) {
         generateFood();
-    }
-
-    pushSnakeTile(newSnakeTilePosition);
-
-    if (newSnakeTilePositionStatus == 2) {
+        pushSnakeTile(newSnakeTilePosition);
         updateScore();
-    }
-}
-
-void Snake::playerGameOver()
-{
-    DisplayManager::getDisplay().setTextColor(0xD800);
-    DisplayManager::getDisplay().setTextSize(2);
-    DisplayManager::getDisplay().fillRoundRect(40, 40, 300, 60, 10, 0x3366);
-    DisplayManager::getDisplay().drawCentreString("Game Over", 190, 49, 4);
-    gameOver = true;
-}
-
-void Snake::generateFood()
-{
-    std::vector<Vector2D> freeTiles;
-
-    for (int row = 0; row < gridY; row++) {
-        for (int col = 0; col < gridX; col++) {
-            if (tiles[row][col] == 0) {
-                freeTiles.push_back(Vector2D(col, row));
-            }
-        }
-    }
-
-    if (!freeTiles.empty()) {
-        int randomTileIndex = random(freeTiles.size());
-        setFoodTile(freeTiles[randomTileIndex]);
     } else {
-        playerGameOver();
+        pushSnakeTile(newSnakeTilePosition);
     }
-}
-
-void Snake::setStatus(Vector2D tilePosition, int status) 
-{
-    tiles[tilePosition.getIntY()][tilePosition.getIntX()] = status;
 }
 
 void Snake::pushSnakeTile(Vector2D newSnakeTileVector) 
@@ -229,6 +210,31 @@ void Snake::pullSnakeTail()
     snakeTiles.erase(snakeTiles.begin());
 }
 
+void Snake::generateFood()
+{
+    std::vector<Vector2D> freeTiles;
+
+    for (int row = 0; row < gridY; row++) {
+        for (int col = 0; col < gridX; col++) {
+            if (tiles[row][col] == 0) {
+                freeTiles.push_back(Vector2D(col, row));
+            }
+        }
+    }
+
+    if (!freeTiles.empty()) {
+        int randomTileIndex = random(freeTiles.size());
+        setFoodTile(freeTiles[randomTileIndex]);
+    } else {
+        playerGameOver();
+    }
+}
+
+void Snake::setStatus(Vector2D tilePosition, int status) 
+{
+    tiles[tilePosition.getIntY()][tilePosition.getIntX()] = status;
+}
+
 void Snake::setFoodTile(Vector2D foodTilePosition) 
 {
     renderSprite(foodTilePosition, APPLE);
@@ -238,6 +244,25 @@ void Snake::setFoodTile(Vector2D foodTilePosition)
 void Snake::resetTileColor(Vector2D tilePosition) 
 {
     DisplayManager::getDisplay().fillRect(tilePosition.getIntX() * tileSize + offsetX, tilePosition.getIntY() * tileSize + offsetY, tileSize, tileSize, TFT_BLACK);
+}
+
+void Snake::renderSprite(Vector2D tilePosition, Vector2D sprite) 
+{
+    snakeSpriteSheet.pushImage(sprite.getIntX(), sprite.getIntY(), 150, 120, snakeBitmap);
+    snakeSpriteSheet.pushSprite(tilePosition.getIntX() * tileSize + offsetX, tilePosition.getIntY() * tileSize + offsetY);
+}
+
+void Snake::playerGameOver()
+{
+    if (snakeTiles.size() - 3 > highscore) {
+        EEPROM.write(EEPROM_HIGHSCORE_ADDR, snakeTiles.size() - 3);
+        EEPROM.commit();
+    }
+    DisplayManager::getDisplay().setTextColor(0xD800);
+    DisplayManager::getDisplay().setTextSize(2);
+    DisplayManager::getDisplay().fillRoundRect(40, 40, 300, 60, 10, 0x3366);
+    DisplayManager::getDisplay().drawCentreString("Game Over", 190, 49, 4);
+    gameOver = true;
 }
 
 void Snake::updateScore() 
@@ -252,11 +277,12 @@ void Snake::updateScore()
         scoreString = "0" + scoreString;
     }
 
+    DisplayManager::getDisplay().setTextColor(0x6ECD);
     DisplayManager::getDisplay().drawString(scoreString, 408, 15);
-}
 
-void Snake::renderSprite(Vector2D tilePosition, Vector2D sprite) 
-{
-    snakeSpriteSheet.pushImage(sprite.getIntX(), sprite.getIntY(), 150, 120, snakeBitmap);
-    snakeSpriteSheet.pushSprite(tilePosition.getIntX() * tileSize + offsetX, tilePosition.getIntY() * tileSize + offsetY);
+    if (score > highscore) {
+        DisplayManager::getDisplay().setTextColor(0xF480);
+        DisplayManager::getDisplay().fillRoundRect(410, 270, 65, 40, 10, 0x3366);
+        DisplayManager::getDisplay().drawString(scoreString, 408, 275);
+    }
 }

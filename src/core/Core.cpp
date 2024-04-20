@@ -6,6 +6,7 @@
 #include "game/snake/Snake.hpp"
 #include "display/DisplayManager.hpp"
 #include "TFT_eSPI.h"
+#include <EEPROM.h>
 
 #define right 9
 #define up 10
@@ -21,6 +22,7 @@ bool menuButtonPressed = true;
 void setup() 
 {
     Serial.begin(250000);
+    EEPROM.begin(512);
 
     xTaskCreatePinnedToCore(
         inputLoop,
@@ -47,7 +49,7 @@ void setup()
 void loop()
 {
     if (menuButtonPressed) {
-        currentGame.reset(new GameMenu());
+        currentGame.reset(new Snake());
         menuButtonPressed = false;
     }
 

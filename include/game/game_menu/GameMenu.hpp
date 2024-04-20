@@ -7,8 +7,6 @@ class GameMenu : public Game
 {
     private:
         bool focusOnSideMenu;
-        bool up;
-        bool down;
 
     public:
         GameMenu();

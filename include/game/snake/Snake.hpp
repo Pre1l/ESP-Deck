@@ -17,6 +17,7 @@ class Snake : public Game
         int lastMovedDirection;
         int tiles[10][12];
         bool gameOver;
+        int highscore;
         std::vector<Vector2D> snakeTiles;
 
         const Vector2D SNAKE_HEAD_UP = Vector2D(-90, 0);

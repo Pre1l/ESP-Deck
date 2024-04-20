@@ -7,8 +7,6 @@ TFT_eSprite gameMenuSprite = TFT_eSprite(&DisplayManager::tft);
 GameMenu::GameMenu() 
 {
     focusOnSideMenu = false;
-    up = false;
-    down = false;
 
     DisplayManager::getDisplay().fillRect(0, 0, 80, 320, 0x18e3);
     DisplayManager::getDisplay().pushImage(80, 0, 480, 320, greenBrickBackgroundBitmap);
@@ -30,11 +28,9 @@ void GameMenu::keyPressed(int key)
         DisplayManager::getDisplay().drawRect(80, 0, 400, 320, TFT_CYAN);
         focusOnSideMenu = false;
     } else if (key == 1) {
-        up = true;
-        Serial.println("up");
+
     } else if (key == 3) {
-        down = true;
-        Serial.println("down");
+
     }
 }
 

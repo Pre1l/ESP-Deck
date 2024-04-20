@@ -1,0 +1,6 @@
+#ifndef EEPROM_CONFIG
+#define EEPROM_CONFIG
+
+#define EEPROM_HIGHSCORE_ADDR 0
+
+#endif // EEPROM_CONFIG

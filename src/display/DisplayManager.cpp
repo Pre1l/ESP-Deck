@@ -1,5 +1,5 @@
 #include "display/DisplayManager.hpp"
-#include "fonts/Fonts.hpp";
+#include "font/Fonts.hpp";
 
 TFT_eSPI DisplayManager::tft = TFT_eSPI();
 
