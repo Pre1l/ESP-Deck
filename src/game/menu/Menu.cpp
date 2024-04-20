@@ -5,17 +5,17 @@
 #include "game/menu/GameMenu.hpp"
 #include "game/menu/EspDeckMenu.hpp"
 
-Menu::Menu() 
+Menu::Menu(int menuIndex) 
 {
     DisplayManager::getDisplay().fillRect(0, 0, 80, 320, 0x18e3);
     DisplayManager::getDisplay().drawRect(0, 0, 80, 320, TFT_CYAN);
 
     focusOnSideMenu = true;
-    menuIndex = 0;
+    this->menuIndex = menuIndex;
     GameMenu::init();
     gameMenus.push_back(std::unique_ptr<GameMenu>(new EspDeckMenu()));
     gameMenus.push_back(std::unique_ptr<GameMenu>(new SnakeMenu()));
-    gameMenus[0]->renderMenu();
+    gameMenus[menuIndex]->renderMenu();
 }
 
 void Menu::update() 
@@ -25,7 +25,7 @@ void Menu::update()
 
 void Menu::onGameClosed() 
 {
-    
+
 }
 
 void Menu::keyPressed(int key) 

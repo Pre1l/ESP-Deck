@@ -14,11 +14,12 @@ class Menu : public Game
         int menuIndex;
 
     public:
-        Menu();
+        Menu(int menuIndex);
         void update() override;
         void keyPressed(int key) override;
         void keyReleased(int key) override;
         void onGameClosed() override;
+        int getSideMenuIndex() const override { return 0; };
 
     private:
         void advanceSelectionUpAndExecute();

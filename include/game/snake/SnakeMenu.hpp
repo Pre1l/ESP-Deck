@@ -11,6 +11,10 @@ class SnakeMenu : public GameMenu
         void advanceSelectionUp() override;
         void advanceSelectionDown() override;
         void executeSelected() override;
+
+    private:
+        void highlightSelectedButton();
+        void unhighlightSelectedButton();
 };
 
 #endif // SNAKE_MENU

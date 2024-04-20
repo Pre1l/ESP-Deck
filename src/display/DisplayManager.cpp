@@ -17,3 +17,9 @@ TFT_eSPI& DisplayManager::getDisplay()
 {
     return tft;
 }
+
+void DisplayManager::resetFont() 
+{
+    tft.setFreeFont(FF25);
+    tft.setTextSize(2);
+}

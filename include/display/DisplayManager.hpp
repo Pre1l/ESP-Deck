@@ -9,7 +9,7 @@ namespace DisplayManager
 
     void initialize();
     TFT_eSPI& getDisplay();
-    int rgb(int r, int g, int b);
+    void resetFont();
 }
 
 #endif // DISPLAY_MANAGER_HPP

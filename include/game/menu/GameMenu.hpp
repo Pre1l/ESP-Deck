@@ -11,6 +11,7 @@ class GameMenu
         String gameMenuIconSpriteName;
         static TFT_eSprite backgroundSprite;
         int menuIndex;
+        int menuButtonAmount;
 
     public: 
         virtual void renderMenu() = 0;
@@ -19,6 +20,10 @@ class GameMenu
         virtual void executeSelected() = 0;
 
         static void init();
+
+    protected:
+        void downCountMenuIndex();
+        void upCountMenuIndex();
 };
 
 #endif // GAMEMENU_HPP

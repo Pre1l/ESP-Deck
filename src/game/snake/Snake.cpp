@@ -4,35 +4,38 @@
 #include "bitmaps/SnakeBitmap.hpp"
 #include "bitmaps/AppleBitmap.hpp"
 #include "bitmaps/GreenBrickBackgroundBitmap.hpp"
-#include "bitmaps/TrophyBitmap.hpp"
+#include "bitmaps/TrophyDarkGreenBitmap.hpp"
 #include <EEPROM.h>
 #include "config/eepromConfig.hpp"
 
-Snake::Snake()
+Snake::Snake(int gamemode)
 {
     direction = 0;
     lastMovedDirection = 0;
+    this->gamemode = gamemode;
     gameOver = false;
-    highscore = EEPROM.read(EEPROM_HIGHSCORE_ADDR);
+    highscore = EEPROM.read(snakeHighscoreAddresses[gamemode]);
 
-    DisplayManager::getDisplay().setSwapBytes(true);
-    DisplayManager::getDisplay().pushImage(0, 0, 480, 320, greenBrickBackgroundBitmap);
+    TFT_eSPI& display = DisplayManager::getDisplay();
 
-    DisplayManager::getDisplay().fillRoundRect(375, 10, 100, 40, 10, 0x3366);
-    DisplayManager::getDisplay().pushImage(377, 15, 30, 30, appleBitmap);
+    display.setSwapBytes(true);
+    display.pushImage(0, 0, 480, 320, greenBrickBackgroundBitmap);
 
-    DisplayManager::getDisplay().fillRoundRect(375, 270, 100, 40, 10, 0x3366);
-    DisplayManager::getDisplay().pushImage(375, 272, 35, 35, trophyBitmap);
-    DisplayManager::getDisplay().setTextColor(0xF480);
+    display.fillRoundRect(375, 10, 100, 40, 10, 0x3366);
+    display.pushImage(377, 15, 30, 30, appleBitmap);
 
-    DisplayManager::getDisplay().fillRoundRect(410, 270, 65, 40, 10, 0x3366);
+    display.fillRoundRect(375, 270, 100, 40, 10, 0x3366);
+    display.pushImage(375, 272, 35, 35, trophyDarkGreenBitmap);
+    display.setTextColor(0xF480);
+
+    display.fillRoundRect(410, 270, 65, 40, 10, 0x3366);
     String highscoreString = String(highscore);
     if (highscore < 10) {
         highscoreString = "00" + highscoreString;
     } else if (highscore < 100) {
         highscoreString = "0" + highscoreString;
     }
-    DisplayManager::getDisplay().drawString(highscoreString, 408, 275);
+    display.drawString(highscoreString, 408, 275);
 
     snakeSpriteSheet.createSprite(30, 30);
     snakeSpriteSheet.setSwapBytes(true);
@@ -40,7 +43,7 @@ Snake::Snake()
     for (int row = 0; row < gridY; row++) {
         for (int col = 0; col < gridX; col++) {
             tiles[row][col] = 0;
-            DisplayManager::getDisplay().fillRect(col * tileSize + offsetX, row * tileSize + offsetY, tileSize, tileSize, TFT_BLACK); 
+            display.fillRect(col * tileSize + offsetX, row * tileSize + offsetY, tileSize, tileSize, TFT_BLACK); 
         }
     }
 
@@ -73,7 +76,17 @@ Snake::Snake()
 void Snake::update()
 {
     if (!gameOver) {
-        delay(1.5 * (120 - Snake::snakeTiles.size()) + 200);
+        switch (gamemode) {
+            case 0:
+                delay(300);
+                break;
+            case 1:
+                delay(160);
+                break;
+            case 2:
+                delay(1.5 * (120 - Snake::snakeTiles.size()) + 200);
+                break;
+        }
         moveSnake();
     }
 }
@@ -252,25 +265,28 @@ void Snake::renderSprite(Vector2D tilePosition, Vector2D sprite)
 void Snake::playerGameOver()
 {
     updateHighscore();
-    DisplayManager::getDisplay().setTextColor(0xD800);
-    DisplayManager::getDisplay().fillRoundRect(40, 40, 300, 60, 10, 0x3366);
-    DisplayManager::getDisplay().setTextSize(3);
-    DisplayManager::getDisplay().drawString("Game Over", 45, 45);
-    DisplayManager::getDisplay().setTextSize(2);
+
+    TFT_eSPI& display = DisplayManager::getDisplay();
+    display.setTextColor(0xD800);
+    display.fillRoundRect(40, 40, 300, 60, 10, 0x3366);
+    display.setTextSize(3);
+    display.drawString("Game Over", 45, 45);
+    display.setTextSize(2);
     gameOver = true;
 }
 
 void Snake::updateHighscore() 
 {
     if (snakeTiles.size() - 3 > highscore) {
-        EEPROM.write(EEPROM_HIGHSCORE_ADDR, snakeTiles.size() - 3);
+        EEPROM.write(snakeHighscoreAddresses[gamemode], snakeTiles.size() - 3);
         EEPROM.commit();
     }
 }
 
 void Snake::updateScore() 
 {
-    DisplayManager::getDisplay().fillRoundRect(410, 10, 65, 40, 10, 0x3366);
+    TFT_eSPI& display = DisplayManager::getDisplay();
+    display.fillRoundRect(410, 10, 65, 40, 10, 0x3366);
     int score = snakeTiles.size() - 3;
     String scoreString = String(score);
 
@@ -280,12 +296,12 @@ void Snake::updateScore()
         scoreString = "0" + scoreString;
     }
 
-    DisplayManager::getDisplay().setTextColor(0x6ECD);
-    DisplayManager::getDisplay().drawString(scoreString, 408, 15);
+    display.setTextColor(0x6ECD);
+    display.drawString(scoreString, 408, 15);
 
     if (score > highscore) {
-        DisplayManager::getDisplay().setTextColor(0xF480);
-        DisplayManager::getDisplay().fillRoundRect(410, 270, 65, 40, 10, 0x3366);
-        DisplayManager::getDisplay().drawString(scoreString, 408, 275);
+        display.setTextColor(0xF480);
+        display.fillRoundRect(410, 270, 65, 40, 10, 0x3366);
+        display.drawString(scoreString, 408, 275);
     }
 }

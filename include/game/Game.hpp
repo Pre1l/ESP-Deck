@@ -8,6 +8,7 @@ class Game
         virtual void keyPressed(int key) = 0;
         virtual void keyReleased(int key) = 0;
         virtual void onGameClosed() = 0;
+        virtual int getSideMenuIndex() const = 0;
 };
 
 #endif // GAME_HPP
