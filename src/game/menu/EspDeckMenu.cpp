@@ -10,7 +10,7 @@ EspDeckMenu::EspDeckMenu()
 void EspDeckMenu::renderMenu()
 {
     backgroundSprite.pushImage(0, 0, 480, 320, cityBackgroundBitmap);
-    backgroundSprite.pushSprite(60, 0);
+    backgroundSprite.pushSprite(60, 1);
 
     TFT_eSPI& display = DisplayManager::getDisplay();
     display.setTextColor(TFT_WHITE);
@@ -18,7 +18,7 @@ void EspDeckMenu::renderMenu()
     display.drawString("ESP-Deck", 105, 35);
     DisplayManager::resetFont();
     display.setTextSize(1);
-    display.drawString("Update Build 22", 105, 95);
+    display.drawString("Update Build 23", 105, 95);
     DisplayManager::resetFont();
 }
 

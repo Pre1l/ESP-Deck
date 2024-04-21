@@ -9,6 +9,8 @@ Menu::Menu(int menuIndex)
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
     display.fillRect(0, 0, 60, 320, 0x18e3);
+    drawMenuOutline(59, 0, 421, 320, false, false);
+    drawMenuOutline(0, 0, 60, 320, true, true);
 
     focusOnSideMenu = true;
     this->menuIndex = menuIndex;
@@ -57,6 +59,7 @@ void Menu::keyPressed(int key)
         } else if (key == 3) {
             gameMenus[menuIndex]->advanceSelectionDown();
         } else if (key == 4) {
+            drawMenuOutline(59, 0, 421, 320, false, false);
             gameMenus[menuIndex]->executeSelected();
         }
     } else if (focusOnSideMenu) {
@@ -97,8 +100,6 @@ void Menu::advanceSelectionDownAndExecute()
     upCountMenuIndex();
     highlightSelectedButton();
     gameMenus[menuIndex]->renderMenu();
-    drawMenuOutline(59, 0, 421, 320, false, false);
-    drawMenuOutline(0, 0, 60, 320, true, true);
 }
 
 void Menu::advanceSelectionUpAndExecute() 
@@ -107,8 +108,6 @@ void Menu::advanceSelectionUpAndExecute()
     downCountMenuIndex();
     highlightSelectedButton();
     gameMenus[menuIndex]->renderMenu();
-    drawMenuOutline(59, 0, 421, 320, false, false);
-    drawMenuOutline(0, 0, 60, 320, true, true);
 }
 
 void Menu::downCountMenuIndex() 

@@ -21,8 +21,8 @@ void SnakeMenu::renderMenu()
     menuIndex = 0;
     menuButtonAmount = 3;
 
-    backgroundSprite.pushImage(-60, 0, 480, 320, greenBrickBackgroundBitmap);
-    backgroundSprite.pushSprite(60, 0);
+    backgroundSprite.pushImage(-60, -1, 480, 320, greenBrickBackgroundBitmap);
+    backgroundSprite.pushSprite(60, 1);
 
     TFT_eSPI& display = DisplayManager::getDisplay();
     display.setFreeFont(FF32);
@@ -105,7 +105,6 @@ void SnakeMenu::highlightSelectedButton()
 
 void SnakeMenu::executeSelected()
 {
-    Menu::drawMenuOutline(60, 0, 420, 320, false, false);
     std::unique_ptr<Game> newGame(new Snake(menuIndex));
     setCurrentGame(std::move(newGame));
 }

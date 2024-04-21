@@ -3,7 +3,7 @@
 TFT_eSprite GameMenu::backgroundSprite(&DisplayManager::tft);
 
 void GameMenu::init() {
-    backgroundSprite.createSprite(420, 320);
+    backgroundSprite.createSprite(419, 318);
     backgroundSprite.setSwapBytes(true);
 }
 
