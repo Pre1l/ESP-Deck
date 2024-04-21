@@ -8,7 +8,6 @@
 class GameMenu 
 {
     protected:
-        String gameMenuIconSpriteName;
         static TFT_eSprite backgroundSprite;
         int menuIndex;
         int menuButtonAmount;
@@ -18,6 +17,7 @@ class GameMenu
         virtual void advanceSelectionUp() = 0;
         virtual void advanceSelectionDown() = 0;
         virtual void executeSelected() = 0;
+        virtual const unsigned short* getIconBitmap() const = 0;
 
         static void init();
 

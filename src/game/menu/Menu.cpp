@@ -7,15 +7,28 @@
 
 Menu::Menu(int menuIndex) 
 {
-    DisplayManager::getDisplay().fillRect(0, 0, 80, 320, 0x18e3);
-    DisplayManager::getDisplay().drawRect(0, 0, 80, 320, TFT_CYAN);
+    TFT_eSPI& display = DisplayManager::getDisplay();
+    display.fillRect(0, 0, 60, 320, 0x18e3);
 
     focusOnSideMenu = true;
     this->menuIndex = menuIndex;
+
     GameMenu::init();
     gameMenus.push_back(std::unique_ptr<GameMenu>(new EspDeckMenu()));
     gameMenus.push_back(std::unique_ptr<GameMenu>(new SnakeMenu()));
+    menuButtonAmount = gameMenus.size();
+    for (int i = 0; i < menuButtonAmount; i++) {
+        display.pushImage(10, i*51 + 13, 40, 40, gameMenus[i]->getIconBitmap());
+        for (int j = 4; j > 0; j--) {
+            display.drawRoundRect(9, i*51 + 12, 42, 42, j, 0x18e3);
+        }
+    }
+    highlightSelectedButton();
+
     gameMenus[menuIndex]->renderMenu();
+
+    drawMenuOutline(59, 0, 421, 320, false, false);
+    drawMenuOutline(0, 0, 60, 320, true, true);
 }
 
 void Menu::update() 
@@ -31,12 +44,12 @@ void Menu::onGameClosed()
 void Menu::keyPressed(int key) 
 {
     if (key == 2 && focusOnSideMenu == false) {
-        DisplayManager::getDisplay().drawRect(0, 0, 80, 320, TFT_CYAN);
-        DisplayManager::getDisplay().drawRect(80, 0, 400, 320, 0x18e3);
+        drawMenuOutline(59, 0, 421, 320, false, false);
+        drawMenuOutline(0, 0, 60, 320, true, true);
         focusOnSideMenu = true;
     } else if (key == 0 && focusOnSideMenu == true) {
-        DisplayManager::getDisplay().drawRect(0, 0, 80, 320, 0x18e3);
-        DisplayManager::getDisplay().drawRect(80, 0, 400, 320, TFT_CYAN);
+        drawMenuOutline(0, 0, 60, 320, true, false);
+        drawMenuOutline(59, 0, 421, 320, false, true);
         focusOnSideMenu = false;
     } else if (!focusOnSideMenu) {
         if (key == 1) {
@@ -60,20 +73,68 @@ void Menu::keyReleased(int key)
 
 }
 
+void Menu::drawMenuOutline(int x, int y, int width, int height, bool roundEdges, bool status) 
+{
+    TFT_eSPI& display = DisplayManager::getDisplay();
+    uint16_t color;
+
+    if (status) {
+        color = 0xACB9;
+    } else {
+        color = 0x18e3;
+    }
+    display.drawRect(x, y, width, height, color);
+    if (roundEdges) {
+        for (int i = 4; i > 0; i--) {
+            display.drawRoundRect(x, y, width, height, i, color);
+        }
+    }
+}
+
 void Menu::advanceSelectionDownAndExecute() 
 {
-    menuIndex--;
-    if (menuIndex < 0) {
-        menuIndex = gameMenus.size() -1;
-    }
+    unhighlightSelectedButton();
+    upCountMenuIndex();
+    highlightSelectedButton();
     gameMenus[menuIndex]->renderMenu();
+    drawMenuOutline(59, 0, 421, 320, false, false);
+    drawMenuOutline(0, 0, 60, 320, true, true);
 }
 
 void Menu::advanceSelectionUpAndExecute() 
 {
+    unhighlightSelectedButton();
+    downCountMenuIndex();
+    highlightSelectedButton();
+    gameMenus[menuIndex]->renderMenu();
+    drawMenuOutline(59, 0, 421, 320, false, false);
+    drawMenuOutline(0, 0, 60, 320, true, true);
+}
+
+void Menu::downCountMenuIndex() 
+{
+    menuIndex--;
+    if (menuIndex < 0) {
+        menuIndex = menuButtonAmount - 1;
+    }
+}
+
+void Menu::upCountMenuIndex() 
+{
     menuIndex++;
-    if (menuIndex == gameMenus.size()) {
+    if (menuIndex == menuButtonAmount) {
         menuIndex = 0;
     }
-    gameMenus[menuIndex]->renderMenu();
+}
+
+void Menu::unhighlightSelectedButton() 
+{
+    TFT_eSPI& display = DisplayManager::getDisplay();
+    display.drawRoundRect(9, menuIndex*51 + 12, 42, 42, 4, 0x18e3);
+}
+
+void Menu::highlightSelectedButton() 
+{
+    TFT_eSPI& display = DisplayManager::getDisplay();
+    display.drawRoundRect(9, menuIndex*51 + 12, 42, 42, 4, 0xACB9);
 }

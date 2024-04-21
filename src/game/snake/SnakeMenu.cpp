@@ -9,6 +9,7 @@
 #include "bitmaps/TrophyGoldenBitmap.hpp"
 #include <EEPROM.h>
 #include "config/eepromConfig.hpp"
+#include <game/menu/Menu.hpp>
 
 SnakeMenu::SnakeMenu() 
 {
@@ -20,28 +21,28 @@ void SnakeMenu::renderMenu()
     menuIndex = 0;
     menuButtonAmount = 3;
 
-    backgroundSprite.pushImage(-80, 0, 480, 320, greenBrickBackgroundBitmap);
-    backgroundSprite.pushSprite(80, 0);
+    backgroundSprite.pushImage(-60, 0, 480, 320, greenBrickBackgroundBitmap);
+    backgroundSprite.pushSprite(60, 0);
 
     TFT_eSPI& display = DisplayManager::getDisplay();
     display.setFreeFont(FF32);
     display.setTextColor(0x576a);
-    display.drawString("Snake", 135, 40);
+    display.drawString("Snake", 125, 40);
     DisplayManager::resetFont();
-    display.fillRoundRect(320, 135, 100, 40, 10, 0xFEE0);
-    display.fillRoundRect(160, 130, 180, 50, 10, 0x3366);
-    display.pushImage(340, 138, 35, 35, trophyGoldenBitmap);
-    display.drawString("Classic", 188, 139);
+    display.fillRoundRect(310, 135, 100, 40, 10, 0xFEE0);
+    display.fillRoundRect(150, 130, 180, 50, 10, 0x3366);
+    display.pushImage(330, 138, 35, 35, trophyGoldenBitmap);
+    display.drawString("Classic", 178, 139);
 
-    display.fillRoundRect(320, 195, 100, 40, 10, 0xFEE0);
-    display.fillRoundRect(160, 190, 180, 50, 10, 0x3366);
-    display.pushImage(340, 198, 35, 35, trophyGoldenBitmap);
-    display.drawString("Speed", 192, 199);
+    display.fillRoundRect(310, 195, 100, 40, 10, 0xFEE0);
+    display.fillRoundRect(150, 190, 180, 50, 10, 0x3366);
+    display.pushImage(330, 198, 35, 35, trophyGoldenBitmap);
+    display.drawString("Speed", 182, 199);
 
-    display.fillRoundRect(320, 255, 100, 40, 10, 0xFEE0);
-    display.fillRoundRect(160, 250, 180, 50, 10, 0x3366);
-    display.pushImage(340, 258, 35, 35, trophyGoldenBitmap);
-    display.drawString("Rising", 195, 259);
+    display.fillRoundRect(310, 255, 100, 40, 10, 0xFEE0);
+    display.fillRoundRect(150, 250, 180, 50, 10, 0x3366);
+    display.pushImage(330, 258, 35, 35, trophyGoldenBitmap);
+    display.drawString("Rising", 185, 259);
 
     int highscores[] = {
         EEPROM.read(EEPROM_SNAKE_CLASSIC_HIGHSCORE_ADDR),
@@ -66,9 +67,9 @@ void SnakeMenu::renderMenu()
     display.setTextColor(0xF440);
     display.setTextSize(1);
     display.setFreeFont(FF26);
-    display.drawString(highscoreStrings[0], 374, 146);
-    display.drawString(highscoreStrings[1], 374, 206);
-    display.drawString(highscoreStrings[2], 374, 266);
+    display.drawString(highscoreStrings[0], 364, 146);
+    display.drawString(highscoreStrings[1], 364, 206);
+    display.drawString(highscoreStrings[2], 364, 266);
 
     highlightSelectedButton();
     DisplayManager::resetFont();
@@ -91,20 +92,20 @@ void SnakeMenu::advanceSelectionUp()
 void SnakeMenu::unhighlightSelectedButton() 
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
-    display.drawRoundRect(160, menuIndex*60 + 130, 180, 50, 10, 0x3366);
-    display.drawRoundRect(161, menuIndex*60 + 131, 178, 48, 8, 0x3366);
+    display.drawRoundRect(150, menuIndex*60 + 130, 180, 50, 10, 0x3366);
+    display.drawRoundRect(151, menuIndex*60 + 131, 178, 48, 8, 0x3366);
 }
 
 void SnakeMenu::highlightSelectedButton() 
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
-    display.drawRoundRect(160, menuIndex*60 + 130, 180, 50, 10, 0x576a);
-    display.drawRoundRect(161, menuIndex*60 + 131, 178, 48, 8, 0x576a);
+    display.drawRoundRect(150, menuIndex*60 + 130, 180, 50, 10, 0x576a);
+    display.drawRoundRect(151, menuIndex*60 + 131, 178, 48, 8, 0x576a);
 }
 
 void SnakeMenu::executeSelected()
 {
-    DisplayManager::getDisplay().drawRect(80, 0, 400, 320, 0x18e3);
+    Menu::drawMenuOutline(60, 0, 420, 320, false, false);
     std::unique_ptr<Game> newGame(new Snake(menuIndex));
     setCurrentGame(std::move(newGame));
 }

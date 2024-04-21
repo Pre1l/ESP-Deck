@@ -2,6 +2,7 @@
 #define SNAKE_MENU
 
 #include "game/menu/GameMenu.hpp"
+#include "bitmaps/SnakeIconBitmap.hpp"
 
 class SnakeMenu : public GameMenu 
 {
@@ -11,6 +12,7 @@ class SnakeMenu : public GameMenu
         void advanceSelectionUp() override;
         void advanceSelectionDown() override;
         void executeSelected() override;
+        const unsigned short* getIconBitmap() const override { return snakeIconBitmap; }
 
     private:
         void highlightSelectedButton();
