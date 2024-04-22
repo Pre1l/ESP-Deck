@@ -12,6 +12,7 @@ class SnakeMenu : public GameMenu
         void advanceSelectionUp() override;
         void advanceSelectionDown() override;
         void executeSelected() override;
+        void update() override;
         const unsigned short* getIconBitmap() const override { return snakeIconBitmap; }
 
     private:

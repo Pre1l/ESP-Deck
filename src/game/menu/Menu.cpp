@@ -35,7 +35,7 @@ Menu::Menu(int menuIndex)
 
 void Menu::update() 
 {
-    delay(10);
+    gameMenus[menuIndex]->update();
 }
 
 void Menu::onGameClosed() 

@@ -75,6 +75,11 @@ void SnakeMenu::renderMenu()
     DisplayManager::resetFont();
 }
 
+void SnakeMenu::update() 
+{
+    
+}
+
 void SnakeMenu::advanceSelectionDown()
 {
     unhighlightSelectedButton();
