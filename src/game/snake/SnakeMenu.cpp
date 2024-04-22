@@ -1,12 +1,12 @@
 #include "game/snake/SnakeMenu.hpp"
-#include "bitmaps/GreenBrickBackgroundBitmap.hpp"
+#include "bitmap/GreenBrickBackgroundBitmap.hpp"
 #include "core/Core.hpp"
 #include <Arduino.h>
 #include <memory>
 #include "game/snake/Snake.hpp"
 #include "font/Fonts.hpp"
 #include "display/DisplayManager.hpp"
-#include "bitmaps/TrophyGoldenBitmap.hpp"
+#include "bitmap/TrophyGoldenBitmap.hpp"
 #include <EEPROM.h>
 #include "config/eepromConfig.hpp"
 #include <game/menu/Menu.hpp>

@@ -1,10 +1,10 @@
 #include "game/snake/Snake.hpp"
 #include "display/DisplayManager.hpp"
 #include <ctime>
-#include "bitmaps/SnakeBitmap.hpp"
-#include "bitmaps/AppleBitmap.hpp"
-#include "bitmaps/GreenBrickBackgroundBitmap.hpp"
-#include "bitmaps/TrophyDarkGreenBitmap.hpp"
+#include "bitmap/SnakeBitmap.hpp"
+#include "bitmap/AppleBitmap.hpp"
+#include "bitmap/GreenBrickBackgroundBitmap.hpp"
+#include "bitmap/TrophyDarkGreenBitmap.hpp"
 #include <EEPROM.h>
 #include "config/eepromConfig.hpp"
 

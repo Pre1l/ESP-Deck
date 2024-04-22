@@ -1,6 +1,6 @@
 #include "game/menu/Menu.hpp"
 #include "display/DisplayManager.hpp"
-#include "bitmaps/GreenBrickBackgroundBitmap.hpp"
+#include "bitmap/GreenBrickBackgroundBitmap.hpp"
 #include "game/snake/SnakeMenu.hpp"
 #include "game/menu/GameMenu.hpp"
 #include "game/menu/EspDeckMenu.hpp"

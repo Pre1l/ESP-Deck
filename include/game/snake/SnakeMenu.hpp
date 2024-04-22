@@ -2,7 +2,7 @@
 #define SNAKE_MENU
 
 #include "game/menu/GameMenu.hpp"
-#include "bitmaps/SnakeIconBitmap.hpp"
+#include "bitmap/SnakeIconBitmap.hpp"
 
 class SnakeMenu : public GameMenu 
 {

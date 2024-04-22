@@ -2,7 +2,7 @@
 #define ESP_DECK_MENU
 
 #include "game/menu/GameMenu.hpp"
-#include "bitmaps/EspDeckIconBitmap.hpp"
+#include "bitmap/EspDeckIconBitmap.hpp"
 
 class EspDeckMenu : public GameMenu 
 {

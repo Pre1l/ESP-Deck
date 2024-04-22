@@ -1,5 +1,5 @@
 #include "game/menu/EspDeckMenu.hpp"
-#include "bitmaps/CityBackgroundBitmap.hpp"
+#include "bitmap/CityBackgroundBitmap.hpp"
 #include "font/Fonts.hpp"
 
 EspDeckMenu::EspDeckMenu() 
@@ -18,7 +18,7 @@ void EspDeckMenu::renderMenu()
     display.drawString("ESP-Deck", 105, 35);
     DisplayManager::resetFont();
     display.setTextSize(1);
-    display.drawString("Update Build 23", 105, 95);
+    display.drawString("Update Build 24", 105, 95);
     DisplayManager::resetFont();
 }
 
