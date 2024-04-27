@@ -29,15 +29,15 @@ void EspDeckMenu::update()
 
 void EspDeckMenu::advanceSelectionDown()
 {
-    Serial.println("EspDeckMenu Down");
+
 }
 
 void EspDeckMenu::advanceSelectionUp()
 {
-    Serial.println("EspDeckMenu Up");
+
 }
 
 void EspDeckMenu::executeSelected()
 {
-    Serial.println("EspDeckMenu Execute");
+
 }

@@ -13,14 +13,14 @@ class Menu : public Game
         std::vector<std::unique_ptr<GameMenu>> gameMenus;
         int menuIndex;
         int menuButtonAmount;
+        static int menuReturnIndex;
 
     public:
-        Menu(int menuIndex);
+        Menu();
         void update() override;
         void keyPressed(int key) override;
         void keyReleased(int key) override;
         void onGameClosed() override;
-        int getSideMenuIndex() const override { return 0; };
         void static drawMenuOutline(int x, int y, int width, int height, bool roundEdges, bool status);
 
     private:

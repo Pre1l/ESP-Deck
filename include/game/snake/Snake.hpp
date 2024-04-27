@@ -54,7 +54,6 @@ class Snake : public Game
         void keyPressed(int key) override;
         void keyReleased(int key) override;
         void onGameClosed() override;
-        int getSideMenuIndex() const override { return 1; };
 
     private:
         void pushSnakeTile(Vector2D newSnakeTileVector);

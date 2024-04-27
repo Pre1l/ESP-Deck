@@ -50,12 +50,10 @@ void setup()
 void loop()
 {
     if (menuButtonPressed) {
-        int menuIndex = 0;
         if (currentGame != nullptr) {
             currentGame->onGameClosed();
-            menuIndex = currentGame->getSideMenuIndex();
         }
-        currentGame.reset(new Menu(menuIndex));
+        currentGame.reset(new Menu());
         menuButtonPressed = false;
     }
 

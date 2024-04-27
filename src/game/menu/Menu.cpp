@@ -5,7 +5,9 @@
 #include "game/menu/GameMenu.hpp"
 #include "game/menu/EspDeckMenu.hpp"
 
-Menu::Menu(int menuIndex) 
+int Menu::menuReturnIndex = 0;
+
+Menu::Menu() 
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
     display.fillRect(0, 0, 60, 320, 0x18e3);
@@ -13,7 +15,7 @@ Menu::Menu(int menuIndex)
     drawMenuOutline(0, 0, 60, 320, true, true);
 
     focusOnSideMenu = true;
-    this->menuIndex = menuIndex;
+    menuIndex = menuReturnIndex;
 
     GameMenu::init();
     gameMenus.push_back(std::unique_ptr<GameMenu>(new EspDeckMenu()));
@@ -52,6 +54,7 @@ void Menu::keyPressed(int key)
     } else if (key == 0 && focusOnSideMenu == true) {
         drawMenuOutline(0, 0, 60, 320, true, false);
         drawMenuOutline(59, 0, 421, 320, false, true);
+        menuReturnIndex = menuIndex;
         focusOnSideMenu = false;
     } else if (!focusOnSideMenu) {
         if (key == 1) {
@@ -59,7 +62,9 @@ void Menu::keyPressed(int key)
         } else if (key == 3) {
             gameMenus[menuIndex]->advanceSelectionDown();
         } else if (key == 4) {
-            drawMenuOutline(59, 0, 421, 320, false, false);
+            if (menuIndex != 0) {
+                drawMenuOutline(59, 0, 421, 320, false, false);
+            }
             gameMenus[menuIndex]->executeSelected();
         }
     } else if (focusOnSideMenu) {
