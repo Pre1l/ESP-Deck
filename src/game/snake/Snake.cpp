@@ -18,7 +18,6 @@ Snake::Snake(int gamemode)
 
     TFT_eSPI& display = DisplayManager::getDisplay();
 
-    display.setSwapBytes(true);
     display.pushImage(0, 0, 480, 320, greenBrickBackgroundBitmap);
 
     display.fillRoundRect(375, 10, 100, 40, 10, 0x3366);
@@ -232,12 +231,13 @@ void Snake::generateFood()
         }
     }
 
-    if (!freeTiles.empty()) {
-        int randomTileIndex = random(freeTiles.size());
-        setFoodTile(freeTiles[randomTileIndex]);
-    } else {
+    if (freeTiles.empty()) {
         playerGameOver();
+        return;
     }
+    
+    int randomTileIndex = random(freeTiles.size());
+    setFoodTile(freeTiles[randomTileIndex]);
 }
 
 void Snake::setStatus(Vector2D tilePosition, int status) 

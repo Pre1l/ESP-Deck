@@ -1,5 +1,5 @@
-#ifndef SNAKE_MENU
-#define SNAKE_MENU
+#ifndef SNAKE_MENU_HPP
+#define SNAKE_MENU_HPP
 
 #include "game/menu/GameMenu.hpp"
 #include "bitmap/SnakeIconBitmap.hpp"
@@ -20,4 +20,4 @@ class SnakeMenu : public GameMenu
         void unhighlightSelectedButton();
 };
 
-#endif // SNAKE_MENU
+#endif // SNAKE_MENU_HPP

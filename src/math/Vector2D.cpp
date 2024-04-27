@@ -50,6 +50,14 @@ Vector2D Vector2D::addY(float value)
 	return *this;
 }
 
+Vector2D Vector2D::add(Vector2D vector) 
+{
+	y += vector.getY();
+	x += vector.getX();
+
+	return *this;
+}
+
 Vector2D Vector2D::subtract(Vector2D vector) 
 {
 	y -= vector.getY();

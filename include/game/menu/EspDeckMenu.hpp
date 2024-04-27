@@ -1,5 +1,5 @@
-#ifndef ESP_DECK_MENU
-#define ESP_DECK_MENU
+#ifndef ESP_DECK_MENU_HPP
+#define ESP_DECK_MENU_HPP
 
 #include "game/menu/GameMenu.hpp"
 #include "bitmap/EspDeckIconBitmap.hpp"
@@ -16,4 +16,4 @@ class EspDeckMenu : public GameMenu
         const unsigned short* getIconBitmap() const override { return espDeckIconBitmap; }
 };
 
-#endif // ESP_DECK_MENU
+#endif // ESP_DECK_MENU_HPP
