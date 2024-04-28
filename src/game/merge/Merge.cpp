@@ -46,9 +46,11 @@ void Merge::keyPressed(int key)
                 moveInDirection(key);
                 delay(100);
                 generateRandomTile();
+                checkForGameOver();
             }
             break;
         default:
+            playerGameOver();
             break;
     }
 }
@@ -152,7 +154,6 @@ void Merge::generateRandomTile()
     }
 
     if (freeTiles.empty()) {
-        playerGameOver();
         return;
     }
 
@@ -167,31 +168,68 @@ void Merge::setTile(int value, Vector2D position)
     uint16_t color = TFT_DARKGREY;
 
     switch (value) {
-        case 2: color = 0xF7E7; break;
-        case 4: color = 0xF9C7; break;
-        case 8: color = 0xF5A7; break;
-        case 16: color = 0xF385; break;
-        case 32: color = 0xF163; break;
-        case 64: color = 0xEE41; break;
-        case 128: color = 0xEB21; break;
-        case 256: color = 0xE8FF; break;
-        case 512: color = 0x98DF; break;
-        case 1024: color = 0x7BDF; break;
-        case 2048: color = 0x3FDF; break;
+        case 2: color = 0xFFFF; break;
+        case 4: color = 0xE71C; break;
+        case 8: color = 0xFAC0; break;
+        case 16: color = 0xF7A5; break;
+        case 32: color = 0x07E0; break;
+        case 64: color = 0xF800; break;
+        case 128: color = 0x0210; break;
+        case 256: color = 0xFFE0; break;
+        case 512: color = 0xEA85; break;
+        case 1024: color = 0x4FD9; break;
+        case 2048: color = 0x66D5; break;
     }
 
     display.fillRoundRect(position.getIntX() * 70 + 25, position.getIntY() * 70 + 25, 60, 60, 5, color);
 
     if (value != 0) {
-        display.setTextColor(TFT_BLACK);
+        display.setTextColor(0x3166);
         display.setTextSize(1);
         display.setFreeFont(FF21);
-        display.drawString(String(value), position.getIntX() * 70 + 30, position.getIntY() * 70 + 30);
+        display.drawString("$" + String(value), position.getIntX() * 70 + 30, position.getIntY() * 70 + 30);
         DisplayManager::resetFont();
     }
 }
 
+void Merge::checkForGameOver() 
+{
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            if (j != 3 && (tiles[i][j] == tiles[i][j + 1] || tiles[j][i] == tiles[j + 1][i]) || tiles[j][i] == 0) {
+                return;
+            }
+        }
+    }
+
+    playerGameOver();
+}
+
 void Merge::playerGameOver() 
 {
+    TFT_eSPI& display = DisplayManager::getDisplay();
+    display.setTextColor(TFT_RED);
+    display.setTextSize(2);
+    display.setFreeFont(FF32);
+
+    delay(1000);
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 4; col++) {
+            display.fillRoundRect(col * 70 + 25, row * 70 + 25, 60, 60, 5, TFT_DARKGREY);
+            delay(50);
+        }
+    }
+    delay(500);
+    for (int i = 0; i < 8; i++) {
+        display.fillRect(i*35 + 30, 15, 15, 290, 0x2124);
+        int randomDelay = random(250);
+        delay(60 + randomDelay);
+    }
+    delay(200);
+    display.drawString("Game", 23, 70);
+    delay(600);
+    display.drawString("Over", 39, 145);
+
+    DisplayManager::resetFont();
     gameOver = true;
 }

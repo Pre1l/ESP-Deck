@@ -21,6 +21,7 @@ class Merge : public Game
 
     private:
         void generateRandomTile();
+        void checkForGameOver();
         void playerGameOver();
         void moveInDirection(int direction);
         void setTile(int value, Vector2D position);

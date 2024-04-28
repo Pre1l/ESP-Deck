@@ -6,6 +6,7 @@
 #include "bitmap/GreenBrickBackgroundBitmap.hpp"
 #include "bitmap/TrophyDarkGreenBitmap.hpp"
 #include <EEPROM.h>
+#include "font/Fonts.hpp"
 #include "config/eepromConfig.hpp"
 
 Snake::Snake(int gamemode)
@@ -268,10 +269,21 @@ void Snake::playerGameOver()
 
     TFT_eSPI& display = DisplayManager::getDisplay();
     display.setTextColor(0xD800);
-    display.fillRoundRect(40, 40, 300, 60, 10, 0x3366);
-    display.setTextSize(3);
-    display.drawString("Game Over", 45, 45);
     display.setTextSize(2);
+    display.setFreeFont(FF32);
+
+    delay(500);
+    for (int i = snakeTiles.size() - 1; i >= 0; i--) {
+        resetTileColor(snakeTiles[i]);
+        DisplayManager::getDisplay().fillCircle(snakeTiles[i].getIntX() * tileSize + offsetX + 15, snakeTiles[i].getIntY() * tileSize + offsetY + 15, 5, 0x6ECD);
+        delay(60);
+    }
+
+    delay(200);
+    display.drawString("Game", 53, 70);
+    delay(600);
+    display.drawString("Over", 69, 145);
+    DisplayManager::resetFont();
     gameOver = true;
 }
 
