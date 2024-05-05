@@ -6,7 +6,7 @@
 #include "game/Game.hpp"
 #include <TFT_eSPI.h>
 #include "display/DisplayManager.hpp"
-#include "config/eepromConfig.hpp"
+#include <eeprom/EepromManager.hpp>
 
 class Snake : public Game
 {
@@ -20,7 +20,11 @@ class Snake : public Game
         bool gameOver;
         TFT_eSprite snakeSpriteSheet = TFT_eSprite(&DisplayManager::tft);
         std::vector<Vector2D> snakeTiles;
-        const int snakeHighscoreAddresses[3] = {EEPROM_SNAKE_CLASSIC_HIGHSCORE_ADDR, EEPROM_SNAKE_SPEED_HIGHSCORE_ADDR, EEPROM_SNAKE_RISING_HIGHSCORE_ADDR};
+        const int snakeHighscoreAddresses[3] = {
+            EepromManager::EEPROM_SNAKE_CLASSIC_HIGHSCORE_ADDR_INT8, 
+            EepromManager::EEPROM_SNAKE_SPEED_HIGHSCORE_ADDR_INT8, 
+            EepromManager::EEPROM_SNAKE_RISING_HIGHSCORE_ADDR_INT8
+        };
 
         const int gridX = 12;
         const int gridY = 10;
@@ -56,6 +60,7 @@ class Snake : public Game
         void onGameClosed() override;
 
     private:
+        void init(bool renderBackground);
         void pushSnakeTile(Vector2D newSnakeTileVector);
         void setFoodTile(Vector2D foodTilePosition);
         void resetTileColor(Vector2D tilePosition);

@@ -7,9 +7,8 @@
 #include "font/Fonts.hpp"
 #include "display/DisplayManager.hpp"
 #include "bitmap/TrophyGoldenBitmap.hpp"
-#include <EEPROM.h>
-#include "config/eepromConfig.hpp"
 #include <game/menu/Menu.hpp>
+#include "eeprom/EepromManager.hpp"
 
 SnakeMenu::SnakeMenu() 
 {
@@ -45,9 +44,9 @@ void SnakeMenu::renderMenu()
     display.drawString("Rising", 185, 259);
 
     int highscores[] = {
-        EEPROM.read(EEPROM_SNAKE_CLASSIC_HIGHSCORE_ADDR),
-        EEPROM.read(EEPROM_SNAKE_SPEED_HIGHSCORE_ADDR),
-        EEPROM.read(EEPROM_SNAKE_RISING_HIGHSCORE_ADDR)
+        EepromManager::readInt8(EepromManager::EEPROM_SNAKE_CLASSIC_HIGHSCORE_ADDR_INT8),
+        EepromManager::readInt8(EepromManager::EEPROM_SNAKE_SPEED_HIGHSCORE_ADDR_INT8),
+        EepromManager::readInt8(EepromManager::EEPROM_SNAKE_RISING_HIGHSCORE_ADDR_INT8)
     };
 
     String highscoreStrings[] = {

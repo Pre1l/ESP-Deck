@@ -5,21 +5,28 @@
 #include "bitmap/AppleBitmap.hpp"
 #include "bitmap/GreenBrickBackgroundBitmap.hpp"
 #include "bitmap/TrophyDarkGreenBitmap.hpp"
-#include <EEPROM.h>
 #include "font/Fonts.hpp"
-#include "config/eepromConfig.hpp"
+#include <core/Core.hpp>
 
 Snake::Snake(int gamemode)
 {
+    this->gamemode = gamemode;
+    init(true);
+}
+
+void Snake::init(bool renderBackground) 
+{
     direction = 0;
     lastMovedDirection = 0;
-    this->gamemode = gamemode;
     gameOver = false;
-    highscore = EEPROM.read(snakeHighscoreAddresses[gamemode]);
+    snakeTiles.clear();
+
+    highscore = EepromManager::readInt8(snakeHighscoreAddresses[gamemode]);
 
     TFT_eSPI& display = DisplayManager::getDisplay();
 
-    display.pushImage(0, 0, 480, 320, greenBrickBackgroundBitmap);
+    if (renderBackground) 
+        display.pushImage(0, 0, 480, 320, greenBrickBackgroundBitmap);
 
     display.fillRoundRect(375, 10, 100, 40, 10, 0x3366);
     display.pushImage(377, 15, 30, 30, appleBitmap);
@@ -77,15 +84,9 @@ void Snake::update()
 {
     if (!gameOver) {
         switch (gamemode) {
-            case 0:
-                delay(300);
-                break;
-            case 1:
-                delay(160);
-                break;
-            case 2:
-                delay(1.5 * (120 - Snake::snakeTiles.size()) + 200);
-                break;
+            case 0: delay(300); break;
+            case 1: delay(160); break;
+            case 2: delay(1.5 * (120 - Snake::snakeTiles.size()) + 200); break;
         }
         moveSnake();
     }
@@ -98,6 +99,11 @@ void Snake::onGameClosed()
 
 void Snake::keyPressed(int key) 
 {
+    if (gameOver) {
+        init(false); 
+        return;
+    }
+
     if (key == 0 && Snake::lastMovedDirection != 2) {
         direction = 0;
     } else if (key == 1 && Snake::lastMovedDirection != 3) {
@@ -290,8 +296,7 @@ void Snake::playerGameOver()
 void Snake::updateHighscore() 
 {
     if (snakeTiles.size() - 3 > highscore) {
-        EEPROM.write(snakeHighscoreAddresses[gamemode], snakeTiles.size() - 3);
-        EEPROM.commit();
+        EepromManager::writeInt8(snakeHighscoreAddresses[gamemode], snakeTiles.size() - 3);
     }
 }
 

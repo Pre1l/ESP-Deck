@@ -3,6 +3,7 @@
 
 #include "game/Game.hpp"
 #include "math/Vector2D.hpp"
+#include <vector>
 
 class Merge : public Game
 {
@@ -10,6 +11,7 @@ class Merge : public Game
         int tiles[4][4];
         int madeMoves;
         int score;
+        int highscore;
         bool gameOver;
 
     public:
@@ -23,6 +25,8 @@ class Merge : public Game
         void generateRandomTile();
         void checkForGameOver();
         void playerGameOver();
+        void updateHighscore();
+        void updateScore();
         void moveInDirection(int direction);
         void setTile(int value, Vector2D position);
         void moveTile(Vector2D pattern, Vector2D tile, bool (&combinedTiles)[4][4], bool combined);
