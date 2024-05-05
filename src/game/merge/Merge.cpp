@@ -11,12 +11,20 @@
 
 Merge::Merge() 
 {
+    init(true);
+}
+
+void Merge::init(bool renderBackground) 
+{
     gameOver = false;
     score = 0;
     highscore = EepromManager::readInt16(EepromManager::EEPROM_MERGE_HIGHSCORE_ADDR_INT16);
 
     TFT_eSPI& display = DisplayManager::getDisplay();
-    display.pushImage(0, 0, 480, 320, factoryBackgroundBitmap);
+
+    if (renderBackground)
+        display.pushImage(0, 0, 480, 320, factoryBackgroundBitmap);
+
     display.fillRoundRect(15, 15, 290, 290, 10, 0x1082);
 
     display.fillRoundRect(320, 15, 145, 60, 5, 0x1082);
@@ -55,20 +63,20 @@ void Merge::onGameClosed()
 
 void Merge::keyPressed(int key) 
 {
+    if (gameOver) {
+        init(false);
+        return;
+    }
+
     switch (key) {
         case 0: 
         case 1: 
         case 2: 
         case 3:
-            if (!gameOver) {
-                moveInDirection(key);
-                // delay(100);
-                generateRandomTile();
-                checkForGameOver();
-            }
-            break;
-        default:
-            // playerGameOver();
+            moveInDirection(key);
+            delay(10);
+            generateRandomTile();
+            checkForGameOver();
             break;
     }
 }

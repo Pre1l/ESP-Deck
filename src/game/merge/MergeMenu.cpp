@@ -1,6 +1,6 @@
 #include "game/merge/MergeMenu.hpp"
 
-#include "bitmap/FactoryBackgroundBitmap.hpp";
+#include "bitmap/FactoryBackgroundBitmap.hpp"
 #include "game/Game.hpp"
 #include "game/merge/Merge.hpp"
 #include "core/Core.hpp"

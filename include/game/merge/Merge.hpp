@@ -27,6 +27,7 @@ class Merge : public Game
         void playerGameOver();
         void updateHighscore();
         void updateScore();
+        void init(bool renderBackground);
         void moveInDirection(int direction);
         void setTile(int value, Vector2D position);
         void moveTile(Vector2D pattern, Vector2D tile, bool (&combinedTiles)[4][4], bool combined);
