@@ -20,6 +20,8 @@ int keyPins[] = {RIGHT_PIN, UP_PIN, LEFT_PIN, DOWN_PIN, ACTION_PIN};
 TaskHandle_t core0TaskHandle;
 std::unique_ptr<Game> currentGame;
 bool menuButtonPressed = true;
+unsigned long previousMillis = 0;
+const unsigned long interval = 1000;
 
 void setup() 
 {
@@ -58,7 +60,14 @@ void loop()
         menuButtonPressed = false;
     }
 
-    currentGame->update();
+    unsigned long currentMillis = millis();
+    unsigned long deltaTime = currentMillis - previousMillis;
+
+    currentGame->update(deltaTime);
+
+    if (deltaTime >= interval) {
+        previousMillis = currentMillis;
+    }
 }
 
 void setCurrentGame(std::unique_ptr<Game> newGame) 

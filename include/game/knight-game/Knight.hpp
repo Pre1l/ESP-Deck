@@ -13,16 +13,19 @@ class Knight
         static const int RUNNING_LEFT = 2;
 
     private:
-        const int pixelSpeed = 2;
+        const float acceleration = 0.1;
+        const float deceleration = 0.1;
+        const float maxSpeed = 2;
         TFT_eSprite knightSprite = TFT_eSprite(&DisplayManager::tft);
         Vector2D position;
+        Vector2D velocity;
         int animationIndex;
         int animationDelayCounter;
         int state;
 
     public:
         Knight();
-        void update(float deltatime);
+        void update(float deltaTime);
         void attack();
         void jump();
         void setState(int state);

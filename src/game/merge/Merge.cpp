@@ -51,7 +51,7 @@ void Merge::init(bool renderBackground)
     generateRandomTile();
 }
 
-void Merge::update() 
+void Merge::update(float deltaTime) 
 {
     
 }

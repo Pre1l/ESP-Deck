@@ -12,7 +12,7 @@ Knight::Knight()
     knightSprite.setSwapBytes(true);
 }
 
-void Knight::update(float deltatime) 
+void Knight::update(float deltaTime) 
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
     animationDelayCounter++;
@@ -38,7 +38,7 @@ void Knight::update(float deltatime)
         case 2:
             if (animationIndex > 6)
                 animationIndex = 0;
-            display.fillRect(position.getIntX() + 54 - pixelSpeed, position.getIntY(), 2, 64, TFT_BLACK);
+            display.fillRect(position.getIntX() + 54 - 2, position.getIntY(), 2, 64, TFT_BLACK);
 
             position.subtractX(2);
             knightSprite.pushImage(animationIndex*-54, 0, 378, 64, knightRunLeftBitmap);

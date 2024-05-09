@@ -80,7 +80,7 @@ void Snake::init(bool renderBackground)
     updateScore();
 }
 
-void Snake::update()
+void Snake::update(float deltaTime)
 {
     if (!gameOver) {
         switch (gamemode) {

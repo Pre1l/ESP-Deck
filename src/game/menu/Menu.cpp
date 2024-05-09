@@ -34,7 +34,7 @@ Menu::Menu()
     gameMenus[menuIndex]->renderMenu();
 }
 
-void Menu::update() 
+void Menu::update(float deltaTime) 
 {
     gameMenus[menuIndex]->update();
 }

@@ -10,9 +10,9 @@ KnightGame::KnightGame()
     Knight knight();
 }
 
-void KnightGame::update()  
+void KnightGame::update(float deltaTime)  
 {
-    knight.update(1);
+    knight.update(deltaTime);
 }
 
 void KnightGame::keyPressed(int key) 
