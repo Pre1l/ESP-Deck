@@ -8,6 +8,7 @@ class Vector2D
         float y;
 
     public:
+        Vector2D() : x(0), y(0) {}
         Vector2D(float x, float y);
 
         float getX();

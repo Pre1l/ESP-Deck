@@ -4,6 +4,7 @@
 #include "game/Game.hpp"
 #include "game/menu/Menu.hpp"
 #include "game/snake/Snake.hpp"
+#include "game/knight-game/KnightGame.hpp"
 #include "display/DisplayManager.hpp"
 #include "TFT_eSPI.h"
 #include <EEPROM.h>
