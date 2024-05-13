@@ -3,21 +3,21 @@
 
 #include "game/Game.hpp"
 #include "TFT_eSPI.h"
+#include <vector>
 #include "display/DisplayManager.hpp"
-#include "Knight.hpp"
 
 class KnightGame : public Game 
 {
     private:
-        TFT_eSprite knightWalkSpriteSheet = TFT_eSprite(&DisplayManager::tft);
-        Knight knight;
+        KnightGame();
+        static KnightGame* instance;
 
     public:
-        KnightGame();
+        static KnightGame* getInstance();
         void update(float deltaTime) override;
         void keyPressed(int key) override;
         void keyReleased(int key) override;
-        void onGameClosed();
+        void onGameClosed() override;
 };
 
 #endif // KNIGHT_GAME_HPP

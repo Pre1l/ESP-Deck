@@ -1,34 +1,12 @@
 #ifndef KNIGHT_HPP
-#define KNIGHT_HPP
+#define KNGIHT_HPP
 
-#include "TFT_eSPI.h"
-#include "display/DisplayManager.hpp"
-#include <math/Vector2D.hpp>
+#include "Entity.hpp"
 
-class Knight 
+class Knight : public Entity
 {
     public:
-        static const int IDLE = 0;
-        static const int RUNNING_RIGHT = 1;
-        static const int RUNNING_LEFT = 2;
-
-    private:
-        const float acceleration = 0.1;
-        const float deceleration = 0.1;
-        const float maxSpeed = 2;
-        TFT_eSprite knightSprite = TFT_eSprite(&DisplayManager::tft);
-        Vector2D position;
-        Vector2D velocity;
-        int animationIndex;
-        int animationDelayCounter;
-        int state;
-
-    public:
-        Knight();
-        void update(float deltaTime);
-        void attack();
-        void jump();
-        void setState(int state);
+        Knight(Vector2D& position);
 };
 
 #endif // KNIGHT_HPP

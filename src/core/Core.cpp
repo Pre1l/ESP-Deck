@@ -21,7 +21,6 @@ TaskHandle_t core0TaskHandle;
 std::unique_ptr<Game> currentGame;
 bool menuButtonPressed = true;
 unsigned long previousMillis = 0;
-const unsigned long interval = 1000;
 
 void setup() 
 {
@@ -56,18 +55,16 @@ void loop()
         if (currentGame != nullptr) {
             currentGame->onGameClosed();
         }
-        currentGame.reset(new Menu());
+        currentGame.reset(KnightGame::getInstance());
         menuButtonPressed = false;
     }
 
     unsigned long currentMillis = millis();
-    unsigned long deltaTime = currentMillis - previousMillis;
+    unsigned long deltaTime = currentMillis - previousMillis + 1;
 
     currentGame->update(deltaTime);
 
-    if (deltaTime >= interval) {
-        previousMillis = currentMillis;
-    }
+    previousMillis = currentMillis;
 }
 
 void setCurrentGame(std::unique_ptr<Game> newGame) 
