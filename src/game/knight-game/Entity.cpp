@@ -9,7 +9,7 @@ Entity::Entity(Vector2D& position, Vector2D velocity, Hitbox hitbox)
 
 void Entity::update(float deltaTime) 
 {
-    position->add(velocity->copy().multiply(deltaTime));
+    position->add(*velocity);
 }
 
 Vector2D* Entity::getPosition() 

@@ -5,12 +5,14 @@
 #include "TFT_eSPI.h"
 #include <vector>
 #include "display/DisplayManager.hpp"
+#include "Knight.hpp"
 
 class KnightGame : public Game 
 {
     private:
-        KnightGame();
         static KnightGame* instance;
+
+        Knight* knight;
 
     public:
         static KnightGame* getInstance();
@@ -18,6 +20,9 @@ class KnightGame : public Game
         void keyPressed(int key) override;
         void keyReleased(int key) override;
         void onGameClosed() override;
+
+    private:
+        KnightGame();
 };
 
 #endif // KNIGHT_GAME_HPP

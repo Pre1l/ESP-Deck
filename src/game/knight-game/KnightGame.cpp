@@ -4,7 +4,8 @@ KnightGame* KnightGame::instance = nullptr;
 
 KnightGame::KnightGame() 
 {
-    
+    Vector2D startPosition(0, 0);
+    this->knight = new Knight(startPosition);
 }
 
 KnightGame* KnightGame::getInstance() 
@@ -16,9 +17,10 @@ KnightGame* KnightGame::getInstance()
     return instance;
 }
 
-void KnightGame::update(float deltatTime) 
+void KnightGame::update(float deltaTime) 
 {
-
+    knight->update(deltaTime);
+    delay(1);
 }
 
 void KnightGame::keyPressed(int key)
