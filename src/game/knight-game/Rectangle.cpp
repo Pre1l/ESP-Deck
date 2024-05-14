@@ -3,15 +3,15 @@
 uint8_t Rectangle::nextId = 0;
 
 Rectangle::Rectangle(Vector2D& position, float width, float height) 
+: position(position)
 {
-    this->position = &position;
     this->width = width;
     this->height = height;
     this->id = nextId;
     nextId++;
 }
 
-Vector2D* Rectangle::getPosition() 
+Vector2D& Rectangle::getPosition() 
 {
     return position;
 }

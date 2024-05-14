@@ -6,18 +6,16 @@
 class Entity 
 {
     private:
-        Vector2D* position;
-        Vector2D* velocity;
-        Hitbox* hitbox;
+        Vector2D position;
+        Vector2D velocity;
 
     public:
         virtual void update(float deltaTime);
-        Vector2D* getPosition();
-        Vector2D* getVelocity();
-        Hitbox* getHitbox();
+        Vector2D& getPosition();
+        Vector2D& getVelocity();
 
     protected:
-        Entity(Vector2D& position, Vector2D velocity, Hitbox hitbox);
+        Entity(Vector2D& position, Vector2D velocity);
 };
 
 #endif // ENTITY_HPP

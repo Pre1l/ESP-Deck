@@ -1,5 +1,5 @@
 #ifndef KNIGHT_HPP
-#define KNGIHT_HPP
+#define KNIGHT_HPP
 
 #include "Entity.hpp"
 #include <TFT_eSPI.h>
@@ -9,10 +9,12 @@ class Knight : public Entity
 {
     private:
         TFT_eSprite knightSprite = TFT_eSprite(&DisplayManager::tft);
+        Hitbox hitbox;
 
     public:
         Knight(Vector2D& position);
         void update(float deltaTime) override;
+        Hitbox& getHitbox();
 };
 
 #endif // KNIGHT_HPP

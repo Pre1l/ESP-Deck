@@ -5,7 +5,7 @@ KnightGame* KnightGame::instance = nullptr;
 KnightGame::KnightGame() 
 {
     Vector2D startPosition(0, 0);
-    this->knight = new Knight(startPosition);
+    knight = new Knight(startPosition);
 }
 
 KnightGame* KnightGame::getInstance() 
@@ -19,8 +19,9 @@ KnightGame* KnightGame::getInstance()
 
 void KnightGame::update(float deltaTime) 
 {
+    Serial.println(knight->getPosition().getY());
+    Serial.println(knight->getHitbox().getPosition().getY());
     knight->update(deltaTime);
-    delay(1);
 }
 
 void KnightGame::keyPressed(int key)

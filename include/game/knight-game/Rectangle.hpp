@@ -8,13 +8,13 @@ class Rectangle
     private:
         static uint8_t nextId;
 
-        Vector2D* position;
+        Vector2D& position;
         float width;
         float height;
         uint8_t id;
 
     public:
-        Vector2D* getPosition();
+        Vector2D& getPosition();
         float getWidth();
         float getHeight();
         uint8_t getId();

@@ -1,28 +1,26 @@
 #include "game/knight-game/Entity.hpp"
 
-Entity::Entity(Vector2D& position, Vector2D velocity, Hitbox hitbox) 
+#include <iostream>
+#include <HardwareSerial.h>
+
+Entity::Entity(Vector2D& position, Vector2D velocity) 
+: position(position),
+  velocity(velocity)
 {
-    this->position = &position;
-    this->velocity = &velocity;
-    this->hitbox = &hitbox;
+
 }
 
 void Entity::update(float deltaTime) 
 {
-    position->add(*velocity);
+    getPosition().add(velocity.copy().multiply(deltaTime));
 }
 
-Vector2D* Entity::getPosition() 
+Vector2D& Entity::getPosition() 
 {
     return position;
 }
 
-Vector2D* Entity::getVelocity() 
+Vector2D& Entity::getVelocity() 
 {
     return velocity;
-}
-
-Hitbox* Entity::getHitbox() 
-{
-    return hitbox;
 }
