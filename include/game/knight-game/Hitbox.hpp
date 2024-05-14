@@ -6,7 +6,7 @@
 class Hitbox : public Rectangle
 {
     public:
-        Hitbox(Vector2D& position, float width, float height);
+        Hitbox(Vector2D* position, float width, float height);
 };
 
 #endif // HITBOX_HPP

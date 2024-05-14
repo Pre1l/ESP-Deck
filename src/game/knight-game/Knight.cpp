@@ -1,10 +1,11 @@
 #include "game/knight-game/Knight.hpp"
 
 #include "bitmap/knight-game/KnightIdleBitmap.hpp"
+#include <game/knight-game/KnightGame.hpp>
 
-Knight::Knight(Vector2D& position) 
-: Entity(position, Vector2D(0, 0.01)),
-  hitbox(getPosition(), 54, 64)
+Knight::Knight(Vector2D position) 
+: Entity(position, Vector2D(0, 0)),
+  hitbox(&getPosition(), 54, 64)
 {
     knightSprite.createSprite(54, 64);
     knightSprite.setSwapBytes(true);
@@ -14,7 +15,14 @@ Knight::Knight(Vector2D& position)
 void Knight::update(float deltaTime) 
 {
     DisplayManager::getDisplay().fillRect(getPosition().getIntX(), getPosition().getIntY(), 54, 64, TFT_BLACK);
-    Entity::update(deltaTime);
+
+    Vector2D deltaVelocity = getVelocity().copy().multiply(deltaTime);
+
+    getHitbox().getPosition()->add(deltaVelocity);
+    if (KnightGame::getInstance()->calculateCollisions(getHitbox())) {
+        getHitbox().getPosition()->subtract(deltaVelocity);
+    }
+
     knightSprite.pushSprite(getPosition().getIntX(), getPosition().getIntY());
 }
 

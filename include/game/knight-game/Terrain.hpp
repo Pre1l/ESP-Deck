@@ -9,7 +9,7 @@ class Terrain : public Rectangle
         int16_t color;
 
     public:
-        Terrain(Vector2D& position, float width, float height, int16_t color);
+        Terrain(Vector2D* position, float width, float height, int16_t color);
 
     private:
         void render();

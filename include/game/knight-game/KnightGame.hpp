@@ -6,12 +6,14 @@
 #include <vector>
 #include "display/DisplayManager.hpp"
 #include "Knight.hpp"
+#include "Terrain.hpp"
 
 class KnightGame : public Game 
 {
     private:
         static KnightGame* instance;
 
+        std::vector<Terrain> terrains;
         Knight* knight;
 
     public:
@@ -20,6 +22,7 @@ class KnightGame : public Game
         void keyPressed(int key) override;
         void keyReleased(int key) override;
         void onGameClosed() override;
+        bool calculateCollisions(Rectangle& rectangle);
 
     private:
         KnightGame();

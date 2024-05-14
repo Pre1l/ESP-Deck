@@ -12,7 +12,7 @@ class Knight : public Entity
         Hitbox hitbox;
 
     public:
-        Knight(Vector2D& position);
+        Knight(Vector2D position);
         void update(float deltaTime) override;
         Hitbox& getHitbox();
 };
