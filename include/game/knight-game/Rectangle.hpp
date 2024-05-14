@@ -5,6 +5,10 @@
 
 class Rectangle 
 {
+    public:
+        static const int COLLISION_X = 0;
+        static const int COLLISION_Y = 1;
+
     private:
         static uint8_t nextId;
 
@@ -18,7 +22,7 @@ class Rectangle
         float getWidth();
         float getHeight();
         uint8_t getId();
-        bool intersects(Rectangle& other);
+        float calculateCollision(Rectangle& other, int direction);
 
     protected:
         Rectangle(Vector2D* position, float width, float height);

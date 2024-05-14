@@ -31,7 +31,7 @@ uint8_t Rectangle::getId()
     return id;
 }
 
-bool Rectangle::intersects(Rectangle& other) 
+float Rectangle::calculateCollision(Rectangle& other, int direction) 
 {
     Vector2D pos = *getPosition();
     float x = pos.getX();
@@ -45,8 +45,32 @@ bool Rectangle::intersects(Rectangle& other)
     float oWidth  = other.getWidth();
     float oHeight = other.getHeight();
 
-    bool intersectX = (x < oX + oWidth) && (x + width > oX);
-    bool intersectY = (y < oY + oHeight) && (y + height > oY);
+    bool collideX = (x < oX + oWidth) && (x + width > oX);
+    bool collideY = (y < oY + oHeight) && (y + height > oY);
 
-    return intersectX && intersectY;
+    if (!collideX || !collideY) {
+        return 0;
+    }
+
+    if (direction == 0 && collideX) {
+        float overlapLeft = oX + oWidth - x;
+        float overlapRight = x + width - oX;
+        float overlapX = (overlapLeft < overlapRight) ? overlapLeft : overlapRight;
+
+        if (overlapX == width || overlapX == oWidth) {
+            return 0;
+        }
+        return overlapX;
+    } else if (direction == 1 && collideY) {
+        float overlapTop = oY + oHeight - y;
+        float overlapBottom = y + height - oY;
+        float overlapY = (overlapTop < overlapBottom) ? overlapTop : overlapBottom;
+
+        if (overlapY == height || overlapY == oHeight) {
+            return 0;
+        }
+        return overlapY;
+    }
+
+    return 0;
 }

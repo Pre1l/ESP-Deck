@@ -22,7 +22,9 @@ class KnightGame : public Game
         void keyPressed(int key) override;
         void keyReleased(int key) override;
         void onGameClosed() override;
-        bool calculateCollisions(Rectangle& rectangle);
+        std::vector<Terrain>& getTerrains();
+        Knight* getKnight();
+        float calculateCollision(Rectangle& rectangle, int direction);
 
     private:
         KnightGame();

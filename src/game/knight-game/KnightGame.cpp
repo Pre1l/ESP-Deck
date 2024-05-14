@@ -5,7 +5,7 @@ KnightGame* KnightGame::instance = nullptr;
 KnightGame::KnightGame() 
 {
     knight = new Knight(Vector2D(0, 0));
-    terrains.push_back(Terrain(new Vector2D(0, 300), 480, 20, TFT_WHITE));
+    terrains.push_back(Terrain(new Vector2D(0, 300), 480, 500, TFT_WHITE));
 }
 
 KnightGame* KnightGame::getInstance() 
@@ -25,19 +25,17 @@ void KnightGame::update(float deltaTime)
 void KnightGame::keyPressed(int key)
 {
     Vector2D& velocity = knight->getVelocity();
+    Knight* knight = getKnight();
 
     switch (key) {
         case 0:
-            velocity.addX(0.5);
+            knight->runRight();
             break;
         case 1:
-            velocity.addY(-0.5);
+            knight->jump();
             break;
         case 2:
-            velocity.addX(-0.5);
-            break;
-        case 3:
-            velocity.addY(0.5);
+            knight->runLeft();
             break;
     }
 }
@@ -45,41 +43,54 @@ void KnightGame::keyPressed(int key)
 void KnightGame::keyReleased(int key)
 {
     Vector2D& velocity = knight->getVelocity();
+    Knight* knight = getKnight();
 
     switch (key) {
         case 0:
-            velocity.addX(-0.5);
-            break;
-        case 1:
-            velocity.addY(0.5);
+            knight->stopRunRight();
             break;
         case 2:
-            velocity.addX(0.5);
-            break;
-        case 3:
-            velocity.addY(-0.5);
+            knight->stopRunLeft();
             break;
     }
 }
 
-bool KnightGame::calculateCollisions(Rectangle& rectangle) 
+float KnightGame::calculateCollision(Rectangle& rectangle, int direction) 
 {
-    for (Rectangle& terrain : terrains) {
-        if (rectangle.getId() != terrain.getId() && rectangle.intersects(terrain)) {
-            return true;
+    for (Rectangle& terrain : getTerrains()) {
+        if (rectangle.getId() != terrain.getId()) {
+            float overlap = rectangle.calculateCollision(terrain, direction);
+
+            if (overlap != 0) {
+                return overlap;
+            }
         }
     }
 
-    Rectangle& knightHitbox = knight->getHitbox();
+    Rectangle& knightHitbox = getKnight()->getHitbox();
 
-    if (rectangle.getId() != knightHitbox.getId() && rectangle.intersects(knightHitbox)) {
-        return true;
+    if (rectangle.getId() != knightHitbox.getId()) {
+        float overlap = rectangle.calculateCollision(knightHitbox, direction);
+
+        if (overlap != 0) {
+            return overlap;
+        }
     }
 
-    return false;
+    return 0;
 }
 
 void KnightGame::onGameClosed() 
 {
 
+}
+
+Knight* KnightGame::getKnight() 
+{
+    return knight;
+} 
+
+std::vector<Terrain>& KnightGame::getTerrains() 
+{
+    return terrains;
 }

@@ -78,6 +78,13 @@ Vector2D& Vector2D::subtractX(float value)
 	return *this;
 }
 
+Vector2D& Vector2D::subtractY(float value) 
+{
+	y -= value;
+	
+	return *this;
+}
+
 Vector2D& Vector2D::multiply(float value) 
 {
 	x *= value;

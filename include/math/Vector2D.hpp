@@ -23,6 +23,7 @@ class Vector2D
         Vector2D& subtract(Vector2D vector);
         Vector2D copy();
         Vector2D& subtractX(float value);
+        Vector2D& subtractY(float value);
         Vector2D& multiply(float value);
 };
 
