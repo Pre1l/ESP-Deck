@@ -39,6 +39,8 @@ void KnightGame::keyPressed(int key)
         case 2:
             knight->runLeft();
             break;
+        case 4:
+            knight->attack();
     }
 }
 

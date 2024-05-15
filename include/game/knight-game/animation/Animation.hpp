@@ -5,7 +5,7 @@
 
 class Animation
 {
-    private:
+    protected:
         const unsigned short* animationBitmap;
         int animationFrameWidth;
         int animationFrameHeight;
@@ -18,10 +18,10 @@ class Animation
 
     public:
         Animation(const unsigned short* animationBitmap, int yIndex, int animationFrameWidth, int animationFrameHeight, int animationFrameAmount, int animationInterval, TFT_eSprite& outputSprite);
-        void update(float deltaTime);
+        virtual void update(float deltaTime);
         void setNewAnimation(const unsigned short* animationBitmap, int yIndex, int animationFrameAmount, int animationInterval);
 
-    private:
+    protected:
         void pushAnimationFrame();
 };
 

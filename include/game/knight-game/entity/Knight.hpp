@@ -5,8 +5,9 @@
 #include <TFT_eSPI.h>
 #include <display/DisplayManager.hpp>
 #include "game/knight-game/animation/Animation.hpp"
+#include "game/knight-game/animation/AnimationObserver.hpp"
 
-class Knight : public Entity
+class Knight : public Entity, public AnimationObserver
 {
     private:
         TFT_eSprite knightSprite = TFT_eSprite(&DisplayManager::tft);
@@ -17,18 +18,21 @@ class Knight : public Entity
         bool jumpRequest = false;
         bool runLeftRequest = false;
         bool runRightRequest = false;
+        bool attackRequest = false;
         bool facingRight = true;
         bool invert = false;
 
     public:
         Knight(Vector2D position);
         void update(float deltaTime) override;
+        void animationCallback() override;
         Hitbox& getHitbox();
         void jump();
         void runLeft();
         void runRight();
         void stopRunLeft();
         void stopRunRight();
+        void attack();
 
     private:
         void clearAfterImage(Vector2D& deltaVelocity);

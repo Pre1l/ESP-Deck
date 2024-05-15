@@ -6,9 +6,12 @@
 #include "bitmap/knight-game/KnightAttackBitmap.hpp"
 #include <game/knight-game/KnightGame.hpp>
 #include "bitmap/knight-game/KnightJumpBitmap.hpp"
+#include <game/knight-game/animation/CallbackAnimation.hpp>
+#include <game/knight-game/animation/AnimationObserver.hpp>
 
 Knight::Knight(Vector2D position) 
 : Entity(position, Vector2D(0, 0)),
+  AnimationObserver(CallbackAnimation(knightAttackBitmap, 0, 54, 64, 5, 110, knightSprite, this)),
   hitbox(&getPosition(), 54, 64),
   knightAnimation(knightIdleBitmap, 0, 54, 64, 4, 200, knightSprite)
 {
@@ -18,6 +21,10 @@ Knight::Knight(Vector2D position)
 }
 
 void Knight::update(float deltaTime) {
+    if (attackRequest) {
+        attackRequest = false;
+        callbackAnimation.update(deltaTime);
+    }
     handleVelocity(deltaTime);
     handleAnimation(deltaTime);
     knightSprite.pushSprite(getPosition().getIntX(), getPosition().getIntY());
@@ -30,25 +37,31 @@ void Knight::handleVelocity(float deltaTime)
     Vector2D& velocity = getVelocity();
 
     velocity.addY(0.05);
-    if (jumpRequest == true) {
+    if (jumpRequest == true && !callbackAnimation.callbackInProgress) {
         velocity.subtractY(0.7);
         jumpRequest = false;
     }
 
-    if (runRightRequest && runLeftRequest) {
-        velocity.setX(0);
-        running = false;
-    } else if (runRightRequest) {
-        velocity.setX(0.2);
-        facingRight = true;
-        running = true;
-    } else if (runLeftRequest) {
-        velocity.setX(-0.2);
-        facingRight = false;
-        running = true;
+    if (!callbackAnimation.callbackInProgress) {
+        if (runRightRequest && runLeftRequest) {
+            velocity.setX(0);
+            running = false;
+        } else if (runRightRequest) {
+            velocity.setX(0.2);
+            facingRight = true;
+            running = true;
+        } else if (runLeftRequest) {
+            velocity.setX(-0.2);
+            facingRight = false;
+            running = true;
+        } else {
+            velocity.setX(0);
+            running = false;
+        }
     } else {
         velocity.setX(0);
         running = false;
+
     }
 
     Vector2D deltaVelocity = velocity.copy().multiply(deltaTime);
@@ -101,6 +114,11 @@ void Knight::clearAfterImage(Vector2D& deltaVelocity)
 
 void Knight::handleAnimation(float deltaTime) 
 {
+    if (callbackAnimation.callbackInProgress) {
+        callbackAnimation.update(deltaTime);
+        return;
+    }
+
     if (onGround) {
         if (running) {
             if (facingRight) {
@@ -124,6 +142,21 @@ void Knight::handleAnimation(float deltaTime)
     }
 
     knightAnimation.update(deltaTime);
+    
+}
+
+void Knight::animationCallback()
+{
+
+}
+
+void Knight::attack() 
+{
+    if (onGround) {
+        attackRequest = true;
+        stopRunLeft();
+        stopRunRight();
+    }
 }
 
 void Knight::jump() 
