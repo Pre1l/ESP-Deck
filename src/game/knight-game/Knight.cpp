@@ -38,7 +38,7 @@ void Knight::update(float deltaTime) {
     if (deltaVelocity.getY() > 0) {
         display.fillRect(ceil(getPosition().getIntX()), ceil(getPosition().getY()) - 1, 55, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
     } else if (deltaVelocity.getY() < 0) {
-        display.fillRect(ceil(getPosition().getIntX()), ceil(getPosition().getY() + 64 + deltaVelocity.getIntY()) - 1, 55, ceil(-deltaVelocity.getY()), TFT_BLACK);
+        display.fillRect(ceil(getPosition().getIntX()), ceil(getPosition().getY() + 64 + deltaVelocity.getIntY()) - 1, 55, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
     }
 
     if (deltaVelocity.getX() > 0) {
