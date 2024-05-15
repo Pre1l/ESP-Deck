@@ -13,9 +13,8 @@ class Knight : public Entity
         bool onGround = false;
         bool jumpRequest = false;
         bool runLeftRequest = false;
-        bool runLeftCheck = false;
         bool runRightRequest = false;
-        bool runRightCheck = false;
+        bool invert = false;
 
     public:
         Knight(Vector2D position);
@@ -26,6 +25,9 @@ class Knight : public Entity
         void runRight();
         void stopRunLeft();
         void stopRunRight();
+
+    private:
+        void handleCollisions(Vector2D& deltaVelocity);
 };
 
 #endif // KNIGHT_HPP

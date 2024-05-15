@@ -4,8 +4,11 @@ KnightGame* KnightGame::instance = nullptr;
 
 KnightGame::KnightGame() 
 {
-    knight = new Knight(Vector2D(0, 0));
-    terrains.push_back(Terrain(new Vector2D(0, 300), 480, 500, TFT_WHITE));
+    knight = new Knight(Vector2D(133, 0));
+    terrains.push_back(Terrain(new Vector2D(0, 300), 480, 20, TFT_WHITE));
+    terrains.push_back(Terrain(new Vector2D(0, 0), 20, 300, TFT_WHITE));
+    terrains.push_back(Terrain(new Vector2D(460, 0), 20, 300, TFT_WHITE));
+    terrains.push_back(Terrain(new Vector2D(150, 270), 60, 30, TFT_WHITE));
 }
 
 KnightGame* KnightGame::getInstance() 
