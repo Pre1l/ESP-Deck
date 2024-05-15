@@ -1,12 +1,15 @@
 #include "game/knight-game/Knight.hpp"
 
 #include "bitmap/knight-game/KnightIdleBitmap.hpp"
+#include "bitmap/knight-game/KnightRunRightBitmap.hpp"
+#include "bitmap/knight-game/KnightRunLeftBitmap.hpp"
 #include <game/knight-game/KnightGame.hpp>
 #include "bitmap/knight-game/KnightJumpBitmap.hpp"
 
 Knight::Knight(Vector2D position) 
 : Entity(position, Vector2D(0, 0)),
-  hitbox(&getPosition(), 54, 64)
+  hitbox(&getPosition(), 54, 64),
+  knightAnimation(knightIdleBitmap, 0, 54, 64, 4, 200, knightSprite)
 {
     knightSprite.createSprite(54, 64);
     knightSprite.setSwapBytes(true);
@@ -14,10 +17,16 @@ Knight::Knight(Vector2D position)
 }
 
 void Knight::update(float deltaTime) {
-    TFT_eSPI& display = DisplayManager::getDisplay();
-    Vector2D& velocity = getVelocity();
+    handleVelocity(deltaTime);
+    handleAnimation(deltaTime);
+    knightSprite.pushSprite(getPosition().getIntX(), getPosition().getIntY());
+}
+
+void Knight::handleVelocity(float deltaTime) 
+{
     Hitbox& hitbox = getHitbox();
     KnightGame* knightGame = KnightGame::getInstance();
+    Vector2D& velocity = getVelocity();
 
     velocity.addY(0.05);
     if (jumpRequest == true) {
@@ -25,44 +34,39 @@ void Knight::update(float deltaTime) {
         jumpRequest = false;
     }
 
-    if (runRightRequest) {
+    if (runRightRequest && runLeftRequest) {
+        velocity.setX(0);
+        running = false;
+    } else if (runRightRequest) {
         velocity.setX(0.2);
+        facingRight = true;
+        running = true;
     } else if (runLeftRequest) {
         velocity.setX(-0.2);
+        facingRight = false;
+        running = true;
     } else {
         velocity.setX(0);
+        running = false;
     }
 
     Vector2D deltaVelocity = velocity.copy().multiply(deltaTime);
-
-    if (deltaVelocity.getY() > 0) {
-        display.fillRect(ceil(getPosition().getIntX()), ceil(getPosition().getY()) - 1, 55, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
-    } else if (deltaVelocity.getY() < 0) {
-        display.fillRect(ceil(getPosition().getIntX()), ceil(getPosition().getY() + 64 + deltaVelocity.getIntY()) - 1, 55, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
-    }
-
-    if (deltaVelocity.getX() > 0) {
-        display.fillRect(ceil(getPosition().getIntX()) - 1, ceil(getPosition().getIntY()), ceil(deltaVelocity.getX()) + 1, 65, TFT_BLACK);
-        facingRight = true;
-    } else if (deltaVelocity.getX() < 0) {
-        display.fillRect(ceil(getPosition().getIntX()) + 54 + ceil(deltaVelocity.getX()) - 1, ceil(getPosition().getIntY()), ceil(-deltaVelocity.getX()) + 1, 65, TFT_BLACK);
-        facingRight = false;
-    }
+    clearAfterImage(deltaVelocity);
 
     getPosition().addX(deltaVelocity.getX());
-
     float overlapX = knightGame->calculateCollision(hitbox, Rectangle::COLLISION_X);
 
     if (deltaVelocity.getX() > 0 && overlapX != 0) {
         getPosition().subtractX(overlapX);
         velocity.setX(0);
+        running = false;
     } else if (deltaVelocity.getX() < 0 && overlapX != 0) {
         getPosition().addX(overlapX);
         velocity.setX(0);
+        running = false;
     }
 
     getPosition().addY(deltaVelocity.getY());
-
     float overlapY = knightGame->calculateCollision(hitbox, Rectangle::COLLISION_Y);
 
     if (deltaVelocity.getY() > 0 && overlapY != 0) {
@@ -75,8 +79,50 @@ void Knight::update(float deltaTime) {
     } else {
         onGround = false;
     }
+}
 
-    knightSprite.pushSprite(getPosition().getIntX(), getPosition().getIntY());
+void Knight::clearAfterImage(Vector2D& deltaVelocity) 
+{
+    TFT_eSPI& display = DisplayManager::getDisplay();
+
+    if (deltaVelocity.getY() > 0) {
+        display.fillRect(ceil(getPosition().getIntX()), ceil(getPosition().getY()) - 1, 55, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
+    } else if (deltaVelocity.getY() < 0) {
+        display.fillRect(ceil(getPosition().getIntX()), ceil(getPosition().getY() + 64 + deltaVelocity.getIntY()) - 1, 55, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
+    }
+
+    if (deltaVelocity.getX() > 0) {
+        display.fillRect(ceil(getPosition().getIntX()) - 1, ceil(getPosition().getIntY()), ceil(deltaVelocity.getX()) + 1, 65, TFT_BLACK);
+    } else if (deltaVelocity.getX() < 0) {
+        display.fillRect(ceil(getPosition().getIntX()) + 54 + ceil(deltaVelocity.getX()) - 1, ceil(getPosition().getIntY()), ceil(-deltaVelocity.getX()) + 1, 65, TFT_BLACK);
+    }
+}
+
+void Knight::handleAnimation(float deltaTime) 
+{
+    if (onGround) {
+        if (running) {
+            if (facingRight) {
+                knightAnimation.setNewAnimation(knightRunRightBitmap, 0, 7, 100);
+            } else {
+                knightAnimation.setNewAnimation(knightRunLeftBitmap, 0, 7, 100);
+            }
+        } else {
+            if (facingRight) {
+                knightAnimation.setNewAnimation(knightIdleBitmap, 0, 2, 250);
+            } else {
+                knightAnimation.setNewAnimation(knightIdleBitmap, 1, 2, 250);
+            }
+        }
+    } else {
+        if (facingRight) {
+            knightAnimation.setNewAnimation(knightJumpBitmap, 0, 0, -1);
+        } else {
+            knightAnimation.setNewAnimation(knightJumpBitmap, 1, 0, -1);
+        }
+    }
+
+    knightAnimation.update(deltaTime);
 }
 
 void Knight::jump() 

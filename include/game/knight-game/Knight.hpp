@@ -4,13 +4,16 @@
 #include "Entity.hpp"
 #include <TFT_eSPI.h>
 #include <display/DisplayManager.hpp>
+#include "Animation.hpp"
 
 class Knight : public Entity
 {
     private:
         TFT_eSprite knightSprite = TFT_eSprite(&DisplayManager::tft);
         Hitbox hitbox;
+        Animation knightAnimation;
         bool onGround = false;
+        bool running = false;
         bool jumpRequest = false;
         bool runLeftRequest = false;
         bool runRightRequest = false;
@@ -28,7 +31,9 @@ class Knight : public Entity
         void stopRunRight();
 
     private:
-        void handleCollisions(Vector2D& deltaVelocity);
+        void clearAfterImage(Vector2D& deltaVelocity);
+        void handleVelocity(float deltaTime);
+        void handleAnimation(float deltaTime);
 };
 
 #endif // KNIGHT_HPP
