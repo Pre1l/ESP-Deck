@@ -1,7 +1,8 @@
-#include <math/Vector2D.hpp>
-#include "Hitbox.hpp"
 #ifndef ENTITY_HPP
 #define ENTITY_HPP
+
+#include <math/Vector2D.hpp>
+#include "game/knight-game/rectangle/Hitbox.hpp"
 
 class Entity 
 {

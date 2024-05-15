@@ -1,7 +1,8 @@
-#include <math/Vector2D.hpp>
-#include <cstdint>
 #ifndef RECTANGLE_HPP
 #define RECTANGLE_HPP
+
+#include <math/Vector2D.hpp>
+#include <cstdint>
 
 class Rectangle 
 {

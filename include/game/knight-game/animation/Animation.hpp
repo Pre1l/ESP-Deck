@@ -1,6 +1,7 @@
-#include <TFT_eSPI.h>
 #ifndef ANIMATION_HPP
 #define ANIMATION_HPP
+
+#include <TFT_eSPI.h>
 
 class Animation
 {

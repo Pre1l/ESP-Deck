@@ -1,8 +1,9 @@
-#include "game/knight-game/Knight.hpp"
+#include "game/knight-game/entity/Knight.hpp"
 
 #include "bitmap/knight-game/KnightIdleBitmap.hpp"
 #include "bitmap/knight-game/KnightRunRightBitmap.hpp"
 #include "bitmap/knight-game/KnightRunLeftBitmap.hpp"
+#include "bitmap/knight-game/KnightAttackBitmap.hpp"
 #include <game/knight-game/KnightGame.hpp>
 #include "bitmap/knight-game/KnightJumpBitmap.hpp"
 

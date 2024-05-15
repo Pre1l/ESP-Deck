@@ -1,4 +1,4 @@
-#include "game/knight-game/Terrain.hpp"
+#include "game/knight-game/rectangle/Terrain.hpp"
 #include <display/DisplayManager.hpp>
 
 Terrain::Terrain(Vector2D* position, float width, float height, int16_t color) 

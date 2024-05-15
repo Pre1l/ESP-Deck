@@ -1,4 +1,4 @@
-#include "game/knight-game/Entity.hpp"
+#include "game/knight-game/entity/Entity.hpp"
 
 #include <iostream>
 #include <HardwareSerial.h>

@@ -5,8 +5,8 @@
 #include "TFT_eSPI.h"
 #include <vector>
 #include "display/DisplayManager.hpp"
-#include "Knight.hpp"
-#include "Terrain.hpp"
+#include "game/knight-game/entity/Knight.hpp"
+#include "game/knight-game/rectangle/Terrain.hpp"
 
 class KnightGame : public Game 
 {

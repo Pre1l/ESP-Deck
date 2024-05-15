@@ -8,11 +8,6 @@ KnightGame::KnightGame()
     terrains.push_back(Terrain(new Vector2D(0, 300), 480, 20, TFT_WHITE));
     terrains.push_back(Terrain(new Vector2D(0, 0), 20, 300, TFT_WHITE));
     terrains.push_back(Terrain(new Vector2D(460, 0), 20, 300, TFT_WHITE));
-    terrains.push_back(Terrain(new Vector2D(150, 270), 40, 30, TFT_WHITE));
-    terrains.push_back(Terrain(new Vector2D(100, 270), 40, 30, TFT_WHITE));
-    terrains.push_back(Terrain(new Vector2D(20, 100), 100, 20, TFT_WHITE));
-    terrains.push_back(Terrain(new Vector2D(190, 210), 40, 30, TFT_WHITE));
-    terrains.push_back(Terrain(new Vector2D(230, 150), 40, 30, TFT_WHITE));
 }
 
 KnightGame* KnightGame::getInstance() 

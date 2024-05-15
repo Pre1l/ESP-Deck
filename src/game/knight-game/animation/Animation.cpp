@@ -1,4 +1,4 @@
-#include "game/knight-game/Animation.hpp"
+#include "game/knight-game/animation/Animation.hpp"
 
 Animation::Animation(const unsigned short* animationBitmap, int yIndex, int animationFrameWidth, int animationFrameHeight, int animationFrameAmount, int animationInterval, TFT_eSprite& outputSprite) 
 :animationBitmap(animationBitmap),
@@ -33,9 +33,8 @@ void Animation::setNewAnimation(const unsigned short* animationBitmap, int yInde
 
         animationIndex = 0;
         currentAnimationIndex = 0;
+        pushAnimationFrame();
     }
-
-    pushAnimationFrame();
 }
 
 void Animation::pushAnimationFrame() 

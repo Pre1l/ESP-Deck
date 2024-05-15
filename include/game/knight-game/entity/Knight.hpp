@@ -4,7 +4,7 @@
 #include "Entity.hpp"
 #include <TFT_eSPI.h>
 #include <display/DisplayManager.hpp>
-#include "Animation.hpp"
+#include "game/knight-game/animation/Animation.hpp"
 
 class Knight : public Entity
 {

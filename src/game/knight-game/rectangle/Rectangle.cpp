@@ -1,4 +1,4 @@
-#include "game/knight-game/Rectangle.hpp"
+#include "game/knight-game/rectangle/Rectangle.hpp"
 #include <HardwareSerial.h>
 
 uint8_t Rectangle::nextId = 0;

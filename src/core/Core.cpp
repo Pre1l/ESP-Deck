@@ -63,7 +63,6 @@ void loop()
     unsigned long deltaTime = currentMillis - previousMillis + 1;
 
     currentGame->update(deltaTime);
-    
 
     previousMillis = currentMillis;
 }
