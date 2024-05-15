@@ -23,6 +23,7 @@ class Animation
 
     protected:
         void pushAnimationFrame();
+        void reset(); 
 };
 
 #endif // ANIMATION_HPP

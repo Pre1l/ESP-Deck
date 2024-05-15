@@ -28,3 +28,9 @@ void CallbackAnimation::update(float deltaTime)
         pushAnimationFrame();
     }
 }
+
+void CallbackAnimation::stop() 
+{
+    reset();
+    callbackInProgress = false;
+}
