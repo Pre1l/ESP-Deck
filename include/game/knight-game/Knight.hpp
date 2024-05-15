@@ -14,6 +14,7 @@ class Knight : public Entity
         bool jumpRequest = false;
         bool runLeftRequest = false;
         bool runRightRequest = false;
+        bool facingRight = true;
         bool invert = false;
 
     public:

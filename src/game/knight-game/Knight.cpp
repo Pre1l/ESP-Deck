@@ -2,6 +2,7 @@
 
 #include "bitmap/knight-game/KnightIdleBitmap.hpp"
 #include <game/knight-game/KnightGame.hpp>
+#include "bitmap/knight-game/KnightJumpBitmap.hpp"
 
 Knight::Knight(Vector2D position) 
 : Entity(position, Vector2D(0, 0)),
@@ -9,7 +10,7 @@ Knight::Knight(Vector2D position)
 {
     knightSprite.createSprite(54, 64);
     knightSprite.setSwapBytes(true);
-    knightSprite.pushImage(0, 0, 216, 64, knightIdleBitmap);
+    knightSprite.fillRect(0, 0, 54, 64, TFT_CYAN);
 }
 
 void Knight::update(float deltaTime) {
@@ -35,12 +36,18 @@ void Knight::update(float deltaTime) {
     Vector2D deltaVelocity = velocity.copy().multiply(deltaTime);
 
     if (deltaVelocity.getY() > 0) {
-        display.fillRect(getPosition().getIntX(), ceil(getPosition().getY()) - 1, 54, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
+        display.fillRect(ceil(getPosition().getIntX()), ceil(getPosition().getY()) - 1, 55, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
     } else if (deltaVelocity.getY() < 0) {
-        display.fillRect(getPosition().getIntX(), ceil(getPosition().getY() + 64 + deltaVelocity.getIntY()) - 1, 54, ceil(-deltaVelocity.getY()), TFT_BLACK);
+        display.fillRect(ceil(getPosition().getIntX()), ceil(getPosition().getY() + 64 + deltaVelocity.getIntY()) - 1, 55, ceil(-deltaVelocity.getY()), TFT_BLACK);
     }
 
-    display.fillRect(ceil(getPosition().getIntX()), getPosition().getIntY(), ceil(deltaVelocity.getX()), 64, TFT_BLACK);
+    if (deltaVelocity.getX() > 0) {
+        display.fillRect(ceil(getPosition().getIntX()) - 1, ceil(getPosition().getIntY()), ceil(deltaVelocity.getX()) + 1, 65, TFT_BLACK);
+        facingRight = true;
+    } else if (deltaVelocity.getX() < 0) {
+        display.fillRect(ceil(getPosition().getIntX()) + 54 + ceil(deltaVelocity.getX()) - 1, ceil(getPosition().getIntY()), ceil(-deltaVelocity.getX()) + 1, 65, TFT_BLACK);
+        facingRight = false;
+    }
 
     getPosition().addX(deltaVelocity.getX());
 

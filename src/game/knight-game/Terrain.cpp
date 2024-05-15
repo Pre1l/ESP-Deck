@@ -11,5 +11,5 @@ Terrain::Terrain(Vector2D* position, float width, float height, int16_t color)
 void Terrain::render() 
 {
     Vector2D position = *getPosition();
-    DisplayManager::getDisplay().fillRect(position.getIntX(), position.getIntY(), getWidth(), getHeight(), color);
+    DisplayManager::getDisplay().fillRect(position.getIntX() + 1, position.getIntY() + 1, getWidth() - 2, getHeight() - 2, color);
 }
