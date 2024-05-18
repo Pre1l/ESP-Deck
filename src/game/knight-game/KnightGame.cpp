@@ -4,10 +4,18 @@ KnightGame* KnightGame::instance = nullptr;
 
 KnightGame::KnightGame() 
 {
-    knight = new Knight(Vector2D(133, 0));
-    terrains.push_back(Terrain(new Vector2D(0, 300), 480, 20, TFT_WHITE));
-    terrains.push_back(Terrain(new Vector2D(0, 0), 20, 300, TFT_WHITE));
-    terrains.push_back(Terrain(new Vector2D(460, 0), 20, 300, TFT_WHITE));
+    knight = new Knight(Vector2D(163, 0));
+
+    terrains.push_back(Terrain(new Vector2D(0, 300), 480, 20, 0, TFT_WHITE));
+    terrains.push_back(Terrain(new Vector2D(0, 0), 20, 300, 0, TFT_WHITE));
+    terrains.push_back(Terrain(new Vector2D(460, 0), 20, 300, 0, TFT_WHITE));
+
+    terrains.push_back(Terrain(new Vector2D(100, 280), 40, 20, 0, TFT_WHITE));
+    terrains.push_back(Terrain(new Vector2D(200, 240), 40, 20, 0, TFT_WHITE));
+    terrains.push_back(Terrain(new Vector2D(300, 200), 160, 20, 0, TFT_WHITE));
+
+    terrains.push_back(Terrain(new Vector2D(100, 80), 40, 20, 0, TFT_WHITE));
+    terrains.push_back(Terrain(new Vector2D(170, 140), 40, 20, 0, TFT_WHITE));
 }
 
 KnightGame* KnightGame::getInstance() 
@@ -21,6 +29,11 @@ KnightGame* KnightGame::getInstance()
 
 void KnightGame::update(float deltaTime) 
 {
+    float knightX = -(knight->getPosition().getX() - 163);
+    for (Terrain& terrain : getTerrains()) {
+        terrain.render(knightX);
+    }
+
     knight->update(deltaTime);
 }
 

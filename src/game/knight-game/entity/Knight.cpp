@@ -32,7 +32,7 @@ void Knight::update(float deltaTime) {
     }
     handleVelocity(deltaTime);
     handleAnimation(deltaTime);
-    knightSprite.pushSprite(getPosition().getIntX(), getPosition().getIntY());
+    knightSprite.pushSprite(163, getPosition().getIntY());
 }
 
 void Knight::handleVelocity(float deltaTime) 
@@ -103,16 +103,16 @@ void Knight::clearAfterImage(Vector2D& deltaVelocity)
     TFT_eSPI& display = DisplayManager::getDisplay();
 
     if (deltaVelocity.getY() > 0) {
-        display.fillRect(ceil(getPosition().getIntX()), ceil(getPosition().getY()) - 1, 55, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
+        display.fillRect(/*ceil(getPosition().getIntX())*/163, ceil(getPosition().getY()) - 1, 54, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
     } else if (deltaVelocity.getY() < 0) {
-        display.fillRect(ceil(getPosition().getIntX()), ceil(getPosition().getY() + 64 + deltaVelocity.getIntY()) - 1, 55, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
+        display.fillRect(/*ceil(getPosition().getIntX())*/163, ceil(getPosition().getY() + 64 + deltaVelocity.getIntY()) - 1, 54, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
     }
 
-    if (deltaVelocity.getX() > 0) {
+    /*if (deltaVelocity.getX() > 0) {
         display.fillRect(ceil(getPosition().getIntX()) - 1, ceil(getPosition().getIntY()), ceil(deltaVelocity.getX()) + 1, 65, TFT_BLACK);
     } else if (deltaVelocity.getX() < 0) {
         display.fillRect(ceil(getPosition().getIntX()) + 54 + ceil(deltaVelocity.getX()) - 1, ceil(getPosition().getIntY()), ceil(-deltaVelocity.getX()) + 1, 65, TFT_BLACK);
-    }
+    }*/
 }
 
 void Knight::handleAnimation(float deltaTime) 
