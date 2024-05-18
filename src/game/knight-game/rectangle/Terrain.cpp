@@ -10,7 +10,9 @@ Terrain::Terrain(Vector2D* position, float width, float height, float offsetX, i
 void Terrain::render(float offsetX) 
 {
     float movementX = offsetX - lastOffsetX;
-    lastOffsetX = offsetX;
+
+    int ceilMovementX = ceil(movementX);
+    int floorMovementX = floor(movementX);
 
     Vector2D position = *getPosition();
 
@@ -18,16 +20,18 @@ void Terrain::render(float offsetX)
 
     int offsetPosX = round(position.getX() + lastOffsetX);
     int posY = position.getIntY();
-    int width = getWidth();
-    int height = getHeight();
+    int width = floor(getWidth());
+    int height = floor(getHeight());
 
     if (movementX != 0) {
         if (movementX > 0) {
-            display.fillRect(offsetPosX - 10, posY, movementX + 12, height, TFT_BLACK);
+            display.fillRect(offsetPosX + ceilMovementX, posY, width, height, color);
+            display.fillRect(offsetPosX - 1, posY, ceilMovementX + 2, height, TFT_BLACK);
         } else if (movementX < 0) {
-            display.fillRect(offsetPosX + width + movementX - 2, posY, -movementX + 10, height, TFT_BLACK);
+            display.fillRect(offsetPosX + floorMovementX, posY, width, height, color);
+            display.fillRect(offsetPosX + width + ceilMovementX - 1, posY, -floorMovementX + 2, height, TFT_BLACK);
         }
-
-        display.fillRect(offsetPosX + movementX + 2, posY + 2, width - 4, height - 4, color);
     }
+
+    lastOffsetX = offsetX;
 }

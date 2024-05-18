@@ -1,4 +1,5 @@
 #include "math/Vector2D.hpp"
+#include <cmath>
 
 Vector2D::Vector2D(float x, float y) : x(x), y(y) {}
 
@@ -14,12 +15,12 @@ float Vector2D::getY()
 
 int Vector2D::getIntX() 
 {
-	return static_cast<int>(x);
+	return round(x);
 }
 
 int Vector2D::getIntY() 
 {
-  	return static_cast<int>(y);
+  	return round(y);
 }
 
 Vector2D& Vector2D::setX(float x) 

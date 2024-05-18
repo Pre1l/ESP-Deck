@@ -12,7 +12,7 @@
 Knight::Knight(Vector2D position) 
 : Entity(position, Vector2D(0, 0)),
   AnimationObserver(CallbackAnimation(knightAttackBitmap, 0, 54, 64, 5, 110, knightSprite, this)),
-  hitbox(&getPosition(), 54, 64),
+  hitbox(&getPosition(), 56, 66),
   knightAnimation(knightIdleBitmap, 0, 54, 64, 4, 200, knightSprite)
 {
     knightSprite.createSprite(54, 64);
@@ -32,7 +32,7 @@ void Knight::update(float deltaTime) {
     }
     handleVelocity(deltaTime);
     handleAnimation(deltaTime);
-    knightSprite.pushSprite(163, getPosition().getIntY());
+    knightSprite.pushSprite(215, getPosition().getIntY() + 1);
 }
 
 void Knight::handleVelocity(float deltaTime) 
@@ -103,9 +103,9 @@ void Knight::clearAfterImage(Vector2D& deltaVelocity)
     TFT_eSPI& display = DisplayManager::getDisplay();
 
     if (deltaVelocity.getY() > 0) {
-        display.fillRect(/*ceil(getPosition().getIntX())*/163, ceil(getPosition().getY()) - 1, 54, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
+        display.fillRect(/*ceil(getPosition().getIntX())*/214, ceil(getPosition().getY()) - 1, 54, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
     } else if (deltaVelocity.getY() < 0) {
-        display.fillRect(/*ceil(getPosition().getIntX())*/163, ceil(getPosition().getY() + 64 + deltaVelocity.getIntY()) - 1, 54, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
+        display.fillRect(/*ceil(getPosition().getIntX())*/214, ceil(getPosition().getY() + 64 + deltaVelocity.getIntY()) - 1, 54, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
     }
 
     /*if (deltaVelocity.getX() > 0) {

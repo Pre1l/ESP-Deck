@@ -4,7 +4,7 @@ KnightGame* KnightGame::instance = nullptr;
 
 KnightGame::KnightGame() 
 {
-    knight = new Knight(Vector2D(163, 0));
+    knight = new Knight(Vector2D(214, 0));
 
     terrains.push_back(Terrain(new Vector2D(0, 300), 480, 20, 0, TFT_WHITE));
     terrains.push_back(Terrain(new Vector2D(0, 0), 20, 300, 0, TFT_WHITE));
@@ -29,12 +29,12 @@ KnightGame* KnightGame::getInstance()
 
 void KnightGame::update(float deltaTime) 
 {
-    float knightX = -(knight->getPosition().getX() - 163);
+    knight->update(deltaTime);
+
+    float knightX = -(knight->getPosition().getX() - 214);
     for (Terrain& terrain : getTerrains()) {
         terrain.render(knightX);
     }
-
-    knight->update(deltaTime);
 }
 
 void KnightGame::keyPressed(int key)
