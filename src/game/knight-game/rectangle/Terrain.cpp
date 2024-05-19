@@ -5,31 +5,30 @@ Terrain::Terrain(Vector2D* position, float width, float height, float offsetX, i
 : Rectangle(position, width, height)
 {
     this->color = color;
+
+    TFT_eSPI& display = DisplayManager::getDisplay();
+    display.fillRect(getPosition()->getIntX(), getPosition()->getIntY(), getWidth(), getHeight(), color);
 }
 
 void Terrain::render(float offsetX) 
 {
-    float movementX = offsetX - lastOffsetX;
-
-    int ceilMovementX = ceil(movementX);
-    int floorMovementX = floor(movementX);
-
     Vector2D position = *getPosition();
-
     TFT_eSPI& display = DisplayManager::getDisplay();
 
-    int offsetPosX = round(position.getX() + lastOffsetX);
+    float movementX = offsetX - lastOffsetX;
+    int ceilMovementX = ceil(abs(movementX));;
+    int offsetPosX = ceil(position.getX() + lastOffsetX);
     int posY = position.getIntY();
-    int width = floor(getWidth());
-    int height = floor(getHeight());
+    int width = ceil(getWidth());
+    int height = ceil(getHeight());
 
     if (movementX != 0) {
         if (movementX > 0) {
-            display.fillRect(offsetPosX + ceilMovementX, posY, width, height, color);
             display.fillRect(offsetPosX - 1, posY, ceilMovementX + 2, height, TFT_BLACK);
+            display.fillRect(offsetPosX + width - ceilMovementX - 3, posY, ceilMovementX + 3, height, color); 
         } else if (movementX < 0) {
-            display.fillRect(offsetPosX + floorMovementX, posY, width, height, color);
-            display.fillRect(offsetPosX + width + ceilMovementX - 1, posY, -floorMovementX + 2, height, TFT_BLACK);
+            display.fillRect(offsetPosX + width - ceilMovementX - 1, posY, ceilMovementX + 2, height, TFT_BLACK);
+            display.fillRect(offsetPosX, posY, ceilMovementX + 3, height, color);
         }
     }
 

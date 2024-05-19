@@ -103,9 +103,9 @@ void Knight::clearAfterImage(Vector2D& deltaVelocity)
     TFT_eSPI& display = DisplayManager::getDisplay();
 
     if (deltaVelocity.getY() > 0) {
-        display.fillRect(/*ceil(getPosition().getIntX())*/214, ceil(getPosition().getY()) - 1, 54, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
+        display.fillRect(/*ceil(getPosition().getIntX())*/ 215, ceil(getPosition().getY()), 54, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
     } else if (deltaVelocity.getY() < 0) {
-        display.fillRect(/*ceil(getPosition().getIntX())*/214, ceil(getPosition().getY() + 64 + deltaVelocity.getIntY()) - 1, 54, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
+        display.fillRect(/*ceil(getPosition().getIntX())*/ 215, ceil(getPosition().getY() + 64 + deltaVelocity.getIntY()), 54, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
     }
 
     /*if (deltaVelocity.getX() > 0) {

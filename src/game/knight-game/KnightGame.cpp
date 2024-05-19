@@ -6,11 +6,8 @@ KnightGame::KnightGame()
 {
     knight = new Knight(Vector2D(214, 0));
 
-    terrains.push_back(Terrain(new Vector2D(0, 300), 480, 20, 0, TFT_WHITE));
-    terrains.push_back(Terrain(new Vector2D(0, 0), 20, 300, 0, TFT_WHITE));
-    terrains.push_back(Terrain(new Vector2D(460, 0), 20, 300, 0, TFT_WHITE));
+    terrains.push_back(Terrain(new Vector2D(-500, 300), 1320, 20, 0, TFT_WHITE));
 
-    terrains.push_back(Terrain(new Vector2D(100, 280), 40, 20, 0, TFT_WHITE));
     terrains.push_back(Terrain(new Vector2D(200, 240), 40, 20, 0, TFT_WHITE));
     terrains.push_back(Terrain(new Vector2D(300, 200), 160, 20, 0, TFT_WHITE));
 
