@@ -8,13 +8,14 @@ class AnimationObserver;
 class CallbackAnimation : public Animation 
 {
     public:
-        bool callbackInProgress = false;
+        bool animationInProgress = false;
 
     private:
         AnimationObserver* observer;
+        int callbackFrameIndex;
 
     public:
-        CallbackAnimation(const unsigned short* animationBitmap, int yIndex, int animationFrameWidth, int animationFrameHeight, int animationFrameAmount, int animationInterval, TFT_eSprite& outputSprite, AnimationObserver* observer);
+        CallbackAnimation(const unsigned short* animationBitmap, int yIndex, int animationFrameWidth, int animationFrameHeight, int animationFrameAmount, int callbackFrameIndex, int animationInterval, TFT_eSprite& outputSprite, AnimationObserver* observer);
         void notifyObserver();
         void update(float deltaTime) override;
         void stop();

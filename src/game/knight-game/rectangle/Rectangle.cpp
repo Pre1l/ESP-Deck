@@ -32,7 +32,7 @@ uint8_t Rectangle::getId()
     return id;
 }
 
-float Rectangle::calculateCollision(Rectangle& other, int direction) 
+float Rectangle::calculateCollision(Rectangle& other, int direction, bool returnOverlap) 
 {
     Vector2D pos = *getPosition();
     float x = pos.getX();
@@ -58,6 +58,13 @@ float Rectangle::calculateCollision(Rectangle& other, int direction)
         float overlapRight = x + width - oX;
         float overlapX = (overlapLeft < overlapRight) ? overlapLeft : overlapRight;
 
+        if (!returnOverlap) {
+            if (overlapX != 0)
+                return 1;
+
+            return 0;
+        }
+
         if (overlapX == width || overlapX == oWidth) {
             return 0;
         }
@@ -66,6 +73,13 @@ float Rectangle::calculateCollision(Rectangle& other, int direction)
         float overlapTop = oY + oHeight - y;
         float overlapBottom = y + height - oY;
         float overlapY = (overlapTop < overlapBottom) ? overlapTop : overlapBottom;
+
+        if (!returnOverlap) {
+            if (overlapY != 0)
+                return 1;
+
+            return 0;
+        }
 
         if (overlapY == height || overlapY == oHeight) {
             return 0;

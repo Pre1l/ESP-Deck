@@ -2,28 +2,36 @@
 
 #include "game/knight-game/animation/AnimationObserver.hpp"
 
-CallbackAnimation::CallbackAnimation(const unsigned short* animationBitmap, int yIndex, int animationFrameWidth, int animationFrameHeight, int animationFrameAmount, int animationInterval, TFT_eSprite& outputSprite, AnimationObserver* observer) 
+CallbackAnimation::CallbackAnimation(const unsigned short* animationBitmap, int yIndex, int animationFrameWidth, int animationFrameHeight, int animationFrameAmount, int callbackFrameIndex, int animationInterval, TFT_eSprite& outputSprite, AnimationObserver* observer) 
 : Animation(animationBitmap, yIndex, animationFrameWidth, animationFrameHeight, animationFrameAmount, animationInterval, outputSprite),
   observer(observer)
 {
-
+    if (callbackFrameIndex < 0 || callbackFrameIndex >= animationFrameAmount) {
+        this->callbackFrameIndex = animationFrameAmount - 1;
+    } else {
+        this->callbackFrameIndex = callbackFrameIndex;
+    }
 }
 
 void CallbackAnimation::notifyObserver() 
 {
-    callbackInProgress = false;
     observer->animationCallback();
 }
 
 void CallbackAnimation::update(float deltaTime) 
 {
-    callbackInProgress = true;
+    animationInProgress = true;
     animationIndex += deltaTime/animationInterval;
     if (animationIndex >= currentAnimationIndex + 1) {
-        if (animationIndex > animationFrameAmount) {
-            animationIndex -= animationFrameAmount;
+        if (floor(animationIndex) == callbackFrameIndex) {
             notifyObserver();
         }
+
+        if (animationIndex > animationFrameAmount) {
+            animationIndex -= animationFrameAmount;
+            animationInProgress = false;
+        }
+
         currentAnimationIndex = floor(animationIndex);
         pushAnimationFrame();
     }
@@ -32,5 +40,5 @@ void CallbackAnimation::update(float deltaTime)
 void CallbackAnimation::stop() 
 {
     reset();
-    callbackInProgress = false;
+    animationInProgress = false;
 }

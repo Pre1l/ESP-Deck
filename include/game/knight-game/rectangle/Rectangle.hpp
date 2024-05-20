@@ -23,7 +23,7 @@ class Rectangle
         float getWidth();
         float getHeight();
         uint8_t getId();
-        float calculateCollision(Rectangle& other, int direction);
+        float calculateCollision(Rectangle& other, int direction, bool returnOverlap);
 
     protected:
         Rectangle(Vector2D* position, float width, float height);

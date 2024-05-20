@@ -11,7 +11,7 @@ class Entity
         Vector2D velocity;
 
     public:
-        virtual void update(float deltaTime);
+        virtual void update(float deltaTime) = 0;
         Vector2D& getPosition();
         Vector2D& getVelocity();
 

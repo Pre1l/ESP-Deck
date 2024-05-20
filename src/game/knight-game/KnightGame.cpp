@@ -69,11 +69,11 @@ void KnightGame::keyReleased(int key)
     }
 }
 
-float KnightGame::calculateCollision(Rectangle& rectangle, int direction) 
+float KnightGame::calculateCollision(Rectangle& rectangle, int direction, bool returnOverlap) 
 {
     for (Rectangle& terrain : getTerrains()) {
         if (rectangle.getId() != terrain.getId()) {
-            float overlap = rectangle.calculateCollision(terrain, direction);
+            float overlap = rectangle.calculateCollision(terrain, direction, returnOverlap);
 
             if (overlap != 0) {
                 return overlap;
@@ -84,7 +84,7 @@ float KnightGame::calculateCollision(Rectangle& rectangle, int direction)
     Rectangle& knightHitbox = getKnight()->getHitbox();
 
     if (rectangle.getId() != knightHitbox.getId()) {
-        float overlap = rectangle.calculateCollision(knightHitbox, direction);
+        float overlap = rectangle.calculateCollision(knightHitbox, direction, returnOverlap);
 
         if (overlap != 0) {
             return overlap;

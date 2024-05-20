@@ -24,7 +24,7 @@ class KnightGame : public Game
         void onGameClosed() override;
         std::vector<Terrain>& getTerrains();
         Knight* getKnight();
-        float calculateCollision(Rectangle& rectangle, int direction);
+        float calculateCollision(Rectangle& rectangle, int direction, bool returnOverlap);
 
     private:
         KnightGame();

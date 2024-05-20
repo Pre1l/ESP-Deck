@@ -11,16 +11,17 @@ class Knight : public Entity, public AnimationObserver
 {
     private:
         TFT_eSprite knightSprite = TFT_eSprite(&DisplayManager::tft);
+        TFT_eSprite slashSprite = TFT_eSprite(&DisplayManager::tft);
         Hitbox hitbox;
         Animation knightAnimation;
-        bool onGround = false;
-        bool running = false;
         bool jumpRequest = false;
         bool runLeftRequest = false;
         bool runRightRequest = false;
         bool attackRequest = false;
+
+        bool onGround = false;
+        bool running = false;
         bool facingRight = true;
-        bool invert = false;
 
     public:
         Knight(Vector2D position);

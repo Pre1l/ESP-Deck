@@ -10,11 +10,6 @@ Entity::Entity(Vector2D& position, Vector2D velocity)
 
 }
 
-void Entity::update(float deltaTime) 
-{
-    getPosition().add(velocity.copy().multiply(deltaTime));
-}
-
 Vector2D& Entity::getPosition() 
 {
     return position;
