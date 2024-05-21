@@ -9,11 +9,12 @@
 #include "bitmap/knight-game/KnightJumpBitmap.hpp"
 #include <game/knight-game/animation/CallbackAnimation.hpp>
 #include <game/knight-game/animation/AnimationObserver.hpp>
+#include <memory>
 
-Knight::Knight(Vector2D position) 
+Knight::Knight(std::shared_ptr<Vector2D> position) 
 : Entity(position, Vector2D(0, 0)),
   AnimationObserver(CallbackAnimation(knightAttackBitmap, 0, 54, 64, 5, 3, 110, knightSprite, this)),
-  hitbox(&getPosition(), 56, 66),
+  hitbox(getPosition(), 56, 66),
   knightAnimation(knightIdleBitmap, 0, 54, 64, 4, 200, knightSprite)
 {
     knightSprite.createSprite(54, 64);
@@ -34,13 +35,13 @@ void Knight::update(float deltaTime) {
     }
     handleVelocity(deltaTime);
     handleAnimation(deltaTime);
-    knightSprite.pushSprite(215, getPosition().getIntY() + 1);
+    knightSprite.pushSprite(215, getPosition()->getIntY() + 1);
 }
 
 void Knight::handleVelocity(float deltaTime) 
 {
     Hitbox& hitbox = getHitbox();
-    KnightGame* knightGame = KnightGame::getInstance();
+     std::shared_ptr<KnightGame> knightGame = KnightGame::getInstance();
     Vector2D& velocity = getVelocity();
 
     velocity.addY(0.05);
@@ -72,28 +73,28 @@ void Knight::handleVelocity(float deltaTime)
     Vector2D deltaVelocity = velocity.copy().multiply(deltaTime);
     clearAfterImage(deltaVelocity);
 
-    getPosition().addX(deltaVelocity.getX());
+    getPosition()->addX(deltaVelocity.getX());
     float overlapX = knightGame->calculateCollision(hitbox, Rectangle::COLLISION_X, true);
 
     if (deltaVelocity.getX() > 0 && overlapX != 0) {
-        getPosition().subtractX(overlapX);
+        getPosition()->subtractX(overlapX);
         velocity.setX(0);
         running = false;
     } else if (deltaVelocity.getX() < 0 && overlapX != 0) {
-        getPosition().addX(overlapX);
+        getPosition()->addX(overlapX);
         velocity.setX(0);
         running = false;
     }
 
-    getPosition().addY(deltaVelocity.getY());
+    getPosition()->addY(deltaVelocity.getY());
     float overlapY = knightGame->calculateCollision(hitbox, Rectangle::COLLISION_Y, true);
 
     if (deltaVelocity.getY() > 0 && overlapY != 0) {
-        getPosition().subtractY(overlapY);
+        getPosition()->subtractY(overlapY);
         velocity.setY(0);
         onGround = true;
     } else if (deltaVelocity.getY() < 0 && overlapY != 0) {
-        getPosition().addY(overlapY);
+        getPosition()->addY(overlapY);
         velocity.setY(0);
     } else {
         onGround = false;
@@ -105,15 +106,15 @@ void Knight::clearAfterImage(Vector2D& deltaVelocity)
     TFT_eSPI& display = DisplayManager::getDisplay();
 
     if (deltaVelocity.getY() > 0) {
-        display.fillRect(/*ceil(getPosition().getIntX())*/ 215, ceil(getPosition().getY()), 54, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
+        display.fillRect(/*ceil(getPosition()->getIntX())*/ 215, ceil(getPosition()->getY()), 54, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
     } else if (deltaVelocity.getY() < 0) {
-        display.fillRect(/*ceil(getPosition().getIntX())*/ 215, ceil(getPosition().getY() + 64 + deltaVelocity.getIntY()), 54, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
+        display.fillRect(/*ceil(getPosition()->getIntX())*/ 215, ceil(getPosition()->getY() + 64 + deltaVelocity.getIntY()), 54, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
     }
 
     /*if (deltaVelocity.getX() > 0) {
-        display.fillRect(ceil(getPosition().getIntX()) - 1, ceil(getPosition().getIntY()), ceil(deltaVelocity.getX()) + 1, 65, TFT_BLACK);
+        display.fillRect(ceil(getPosition()->getIntX()) - 1, ceil(getPosition()->getIntY()), ceil(deltaVelocity.getX()) + 1, 65, TFT_BLACK);
     } else if (deltaVelocity.getX() < 0) {
-        display.fillRect(ceil(getPosition().getIntX()) + 54 + ceil(deltaVelocity.getX()) - 1, ceil(getPosition().getIntY()), ceil(-deltaVelocity.getX()) + 1, 65, TFT_BLACK);
+        display.fillRect(ceil(getPosition()->getIntX()) + 54 + ceil(deltaVelocity.getX()) - 1, ceil(getPosition()->getIntY()), ceil(-deltaVelocity.getX()) + 1, 65, TFT_BLACK);
     }*/
 }
 
@@ -151,8 +152,8 @@ void Knight::handleAnimation(float deltaTime)
 
 void Knight::animationCallback()
 {
-    float slashSpriteWidth = 26;
-    Vector2D* position = new Vector2D(getPosition().getX(), getPosition().getY());
+    /*float slashSpriteWidth = 26;
+    Vector2D* position = new Vector2D(getPosition()->getX(), getPosition()->getY());
     position->addX(56);;
     Hitbox slashHitbox(position, 26, 66);
 
@@ -171,11 +172,13 @@ void Knight::animationCallback()
         slashSprite.createSprite(slashSpriteWidth, 53);
         slashSprite.pushImage(0, 0, 26, 53, slashBitmap);
         slashSprite.pushSprite(214 + 56, position->getIntY());
+        slashSprite.fillRect(0, 0, 26, 53, TFT_BLACK);
+        slashSprite.pushSprite(214 + 56, position->getIntY());
         slashSprite.deleteSprite();
-    }
+    }*/
 }
 
-void Knight::attack() 
+void Knight::attack()
 {
     if (onGround) {
         attackRequest = true;

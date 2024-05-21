@@ -1,9 +1,10 @@
 #include "game/knight-game/rectangle/Rectangle.hpp"
 #include <HardwareSerial.h>
+#include <memory>
 
 uint8_t Rectangle::nextId = 0;
 
-Rectangle::Rectangle(Vector2D* position, float width, float height) 
+Rectangle::Rectangle(std::shared_ptr<Vector2D> position, float width, float height) 
 : position(position)
 {
     this->width = width;
@@ -12,7 +13,7 @@ Rectangle::Rectangle(Vector2D* position, float width, float height)
     nextId++;
 }
 
-Vector2D* Rectangle::getPosition() 
+std::shared_ptr<Vector2D> Rectangle::getPosition() 
 {
     return position;
 }

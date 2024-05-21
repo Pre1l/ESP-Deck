@@ -11,23 +11,24 @@
 class KnightGame : public Game 
 {
     private:
-        static KnightGame* instance;
+        static std::shared_ptr<KnightGame> instance;
 
         std::vector<Terrain> terrains;
-        Knight* knight;
+        Knight knight;
 
     public:
-        static KnightGame* getInstance();
+        static std::shared_ptr<KnightGame> getInstance();
         void update(float deltaTime) override;
         void keyPressed(int key) override;
         void keyReleased(int key) override;
         void onGameClosed() override;
         std::vector<Terrain>& getTerrains();
-        Knight* getKnight();
+        Knight& getKnight();
         float calculateCollision(Rectangle& rectangle, int direction, bool returnOverlap);
 
     private:
         KnightGame();
+        friend class GameFactory;
 };
 
 #endif // KNIGHT_GAME_HPP

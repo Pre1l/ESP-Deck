@@ -1,24 +1,23 @@
 #include "game/knight-game/KnightGame.hpp"
 
-KnightGame* KnightGame::instance = nullptr;
+std::shared_ptr<KnightGame> KnightGame::instance = nullptr;
 
 KnightGame::KnightGame() 
+: knight(std::make_shared<Vector2D>(214, 0))
 {
-    knight = new Knight(Vector2D(214, 0));
+    terrains.push_back(Terrain(std::make_shared<Vector2D>(-500, 300), 1320, 20, 0, TFT_WHITE));
 
-    terrains.push_back(Terrain(new Vector2D(-500, 300), 1320, 20, 0, TFT_WHITE));
+    terrains.push_back(Terrain(std::make_shared<Vector2D>(200, 240), 40, 20, 0, TFT_WHITE));
+    terrains.push_back(Terrain(std::make_shared<Vector2D>(300, 200), 160, 20, 0, TFT_WHITE));
 
-    terrains.push_back(Terrain(new Vector2D(200, 240), 40, 20, 0, TFT_WHITE));
-    terrains.push_back(Terrain(new Vector2D(300, 200), 160, 20, 0, TFT_WHITE));
-
-    terrains.push_back(Terrain(new Vector2D(100, 80), 40, 20, 0, TFT_WHITE));
-    terrains.push_back(Terrain(new Vector2D(170, 140), 40, 20, 0, TFT_WHITE));
+    terrains.push_back(Terrain(std::make_shared<Vector2D>(100, 80), 40, 20, 0, TFT_WHITE));
+    terrains.push_back(Terrain(std::make_shared<Vector2D>(170, 140), 40, 20, 0, TFT_WHITE));
 }
 
-KnightGame* KnightGame::getInstance() 
+std::shared_ptr<KnightGame> KnightGame::getInstance() 
 {
     if (instance == nullptr) {
-        instance = new KnightGame();
+        instance = std::shared_ptr<KnightGame>(new KnightGame());
     }
 
     return instance;
@@ -26,9 +25,9 @@ KnightGame* KnightGame::getInstance()
 
 void KnightGame::update(float deltaTime) 
 {
-    knight->update(deltaTime);
+    knight.update(deltaTime);
 
-    float knightX = -(knight->getPosition().getX() - 214);
+    float knightX = -(knight.getPosition()->getX() - 214);
     for (Terrain& terrain : getTerrains()) {
         terrain.render(knightX);
     }
@@ -36,35 +35,35 @@ void KnightGame::update(float deltaTime)
 
 void KnightGame::keyPressed(int key)
 {
-    Vector2D& velocity = knight->getVelocity();
-    Knight* knight = getKnight();
+    Knight& knight = getKnight();
+    Vector2D& velocity = knight.getVelocity();
 
     switch (key) {
         case 0:
-            knight->runRight();
+            knight.runRight();
             break;
         case 1:
-            knight->jump();
+            knight.jump();
             break;
         case 2:
-            knight->runLeft();
+            knight.runLeft();
             break;
         case 4:
-            knight->attack();
+            knight.attack();
     }
 }
 
 void KnightGame::keyReleased(int key)
 {
-    Vector2D& velocity = knight->getVelocity();
-    Knight* knight = getKnight();
+    Knight& knight = getKnight();
+    Vector2D& velocity = knight.getVelocity();
 
     switch (key) {
         case 0:
-            knight->stopRunRight();
+            knight.stopRunRight();
             break;
         case 2:
-            knight->stopRunLeft();
+            knight.stopRunLeft();
             break;
     }
 }
@@ -81,7 +80,7 @@ float KnightGame::calculateCollision(Rectangle& rectangle, int direction, bool r
         }
     }
 
-    Rectangle& knightHitbox = getKnight()->getHitbox();
+    Rectangle& knightHitbox = getKnight().getHitbox();
 
     if (rectangle.getId() != knightHitbox.getId()) {
         float overlap = rectangle.calculateCollision(knightHitbox, direction, returnOverlap);
@@ -99,7 +98,7 @@ void KnightGame::onGameClosed()
 
 }
 
-Knight* KnightGame::getKnight() 
+Knight& KnightGame::getKnight() 
 {
     return knight;
 } 

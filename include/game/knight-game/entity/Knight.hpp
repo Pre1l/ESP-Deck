@@ -24,7 +24,7 @@ class Knight : public Entity, public AnimationObserver
         bool facingRight = true;
 
     public:
-        Knight(Vector2D position);
+        Knight(std::shared_ptr<Vector2D> position);
         void update(float deltaTime) override;
         void animationCallback() override;
         Hitbox& getHitbox();

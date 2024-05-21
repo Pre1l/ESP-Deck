@@ -4,7 +4,7 @@
 #include "game/Game.hpp"
 #include "game/menu/Menu.hpp"
 #include "game/snake/Snake.hpp"
-#include "game/knight-game/KnightGame.hpp"
+#include "game/GameFactory.hpp"
 #include "display/DisplayManager.hpp"
 #include "TFT_eSPI.h"
 #include <EEPROM.h>
@@ -55,7 +55,7 @@ void loop()
         if (currentGame != nullptr) {
             currentGame->onGameClosed();
         }
-        currentGame.reset(KnightGame::getInstance());
+        currentGame = GameFactory::createUniqueKnightGame();
         menuButtonPressed = false;
     }
 

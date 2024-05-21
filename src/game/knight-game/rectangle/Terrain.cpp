@@ -1,7 +1,7 @@
 #include "game/knight-game/rectangle/Terrain.hpp"
 #include <display/DisplayManager.hpp>
 
-Terrain::Terrain(Vector2D* position, float width, float height, float offsetX, int16_t color) 
+Terrain::Terrain(std::shared_ptr<Vector2D> position, float width, float height, float offsetX, int16_t color) 
 : Rectangle(position, width, height)
 {
     this->color = color;
