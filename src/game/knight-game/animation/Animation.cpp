@@ -25,13 +25,13 @@ void Animation::update(float deltaTime)
 
 void Animation::setNewAnimation(const unsigned short* animationBitmap, int yIndex, int animationFrameAmount, int animationInterval) 
 {
+    this->animationInterval = animationInterval;
     if (animationBitmap == this->animationBitmap && yIndex == this->yIndex)
         return;
         
     this->animationBitmap = animationBitmap;
     this->yIndex = yIndex;
     this->animationFrameAmount = animationFrameAmount;
-    this->animationInterval = animationInterval;
 
     reset();
     pushAnimationFrame();

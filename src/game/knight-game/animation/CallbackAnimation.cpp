@@ -18,6 +18,11 @@ void CallbackAnimation::notifyObserver()
     observer->animationCallback();
 }
 
+void CallbackAnimation::notifyObserverAnimationFinished() 
+{
+    observer->animationFinishedCallback();
+}
+
 void CallbackAnimation::update(float deltaTime) 
 {
     animationInProgress = true;
@@ -30,6 +35,7 @@ void CallbackAnimation::update(float deltaTime)
         if (animationIndex > animationFrameAmount) {
             animationIndex -= animationFrameAmount;
             animationInProgress = false;
+            notifyObserverAnimationFinished();
         }
 
         currentAnimationIndex = floor(animationIndex);

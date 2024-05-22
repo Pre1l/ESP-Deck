@@ -13,29 +13,46 @@
 
 Knight::Knight(std::shared_ptr<Vector2D> position) 
 : Entity(position, Vector2D(0, 0)),
-  AnimationObserver(CallbackAnimation(knightAttackBitmap, 0, 54, 64, 5, 3, 110, knightSprite, this)),
+  AnimationObserver(CallbackAnimation(knightAttackBitmap, 0, 64, 64, 6, 4, 0, attackSprite, this)),
   hitbox(getPosition(), 56, 66),
   knightAnimation(knightIdleBitmap, 0, 54, 64, 4, 200, knightSprite)
 {
     knightSprite.createSprite(54, 64);
     knightSprite.setSwapBytes(true);
     knightSprite.fillRect(0, 0, 54, 64, TFT_CYAN);
-    slashSprite.setSwapBytes(true);
+    attackSprite.createSprite(64, 64);
+    attackSprite.setSwapBytes(true);
 }
 
 void Knight::update(float deltaTime) {
     if (attackRequest) {
         attackRequest = false;
-        if (facingRight) {
-            callbackAnimation.setNewAnimation(knightAttackBitmap, 0, 5, 110);
-        } else {
-            callbackAnimation.setNewAnimation(knightAttackBitmap, 1, 5, 110);
+
+        Hitbox attackHitbox(std::make_shared<Vector2D>(getPosition()->getX() + 56, getPosition()->getY()), 8, 66);
+        if (KnightGame::getInstance()->calculateCollision(attackHitbox, Rectangle::COLLISION_X, false) == 0) {
+            callbackAnimation.setNewAnimation(knightAttackBitmap, 0, 5, 90);
+            callbackAnimation.update(deltaTime);
         }
-        callbackAnimation.update(deltaTime);
     }
+
     handleVelocity(deltaTime);
     handleAnimation(deltaTime);
+
+    if (callbackAnimation.animationInProgress) {
+        pushAttackSprite();
+    } else {
+        pushSprite();
+    }
+}
+
+void Knight::pushSprite() 
+{
     knightSprite.pushSprite(215, getPosition()->getIntY() + 1);
+}
+
+void Knight::pushAttackSprite() 
+{
+    attackSprite.pushSprite(215, getPosition()->getIntY() + 1);
 }
 
 void Knight::handleVelocity(float deltaTime) 
@@ -47,8 +64,8 @@ void Knight::handleVelocity(float deltaTime)
     velocity.addY(0.05);
     if (jumpRequest == true) {
         velocity.subtractY(0.7);
-        callbackAnimation.stop();
         jumpRequest = false;
+        stopCallbackAnimation();
     }
 
 
@@ -58,13 +75,13 @@ void Knight::handleVelocity(float deltaTime)
     } else if (runRightRequest) {
         velocity.setX(0.2);
         facingRight = true;
-        callbackAnimation.stop();
         running = true;
+        stopCallbackAnimation();
     } else if (runLeftRequest) {
         velocity.setX(-0.2);
         facingRight = false;
-        callbackAnimation.stop();
         running = true;
+        stopCallbackAnimation();
     } else {
         velocity.setX(0);
         running = false;
@@ -98,6 +115,14 @@ void Knight::handleVelocity(float deltaTime)
         velocity.setY(0);
     } else {
         onGround = false;
+    }
+}
+
+void Knight::stopCallbackAnimation() 
+{
+    if (callbackAnimation.animationInProgress) {
+        callbackAnimation.stop();
+        clearCallbackAnimationAfterImage();
     }
 }
 
@@ -152,30 +177,18 @@ void Knight::handleAnimation(float deltaTime)
 
 void Knight::animationCallback()
 {
-    /*float slashSpriteWidth = 26;
-    Vector2D* position = new Vector2D(getPosition()->getX(), getPosition()->getY());
-    position->addX(56);;
-    Hitbox slashHitbox(position, 26, 66);
+    // Do damage
+}
 
-    float overlap = KnightGame::getInstance()->calculateCollision(slashHitbox, Rectangle::COLLISION_X, false);
-    if (overlap == 1) {
-        float overlapX = KnightGame::getInstance()->calculateCollision(slashHitbox, Rectangle::COLLISION_X, true);
+void Knight::animationFinishedCallback() 
+{
+    clearCallbackAnimationAfterImage();
+}
 
-        if (overlapX == 0) {
-            slashSpriteWidth = 0;
-        } else {
-            slashSpriteWidth = 26 - overlapX;
-        }
-    }
-    
-    if (slashSpriteWidth > 0) {
-        slashSprite.createSprite(slashSpriteWidth, 53);
-        slashSprite.pushImage(0, 0, 26, 53, slashBitmap);
-        slashSprite.pushSprite(214 + 56, position->getIntY());
-        slashSprite.fillRect(0, 0, 26, 53, TFT_BLACK);
-        slashSprite.pushSprite(214 + 56, position->getIntY());
-        slashSprite.deleteSprite();
-    }*/
+void Knight::clearCallbackAnimationAfterImage() 
+{
+    attackSprite.fillRect(0, 0, 64, 64, TFT_BLACK);
+    pushAttackSprite();
 }
 
 void Knight::attack()

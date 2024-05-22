@@ -10,6 +10,7 @@ class AnimationObserver
 
     public:
         virtual void animationCallback() = 0;
+        virtual void animationFinishedCallback() = 0;
         virtual ~AnimationObserver() {}
 
     protected:

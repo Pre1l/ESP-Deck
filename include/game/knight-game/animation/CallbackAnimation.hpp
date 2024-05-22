@@ -16,9 +16,12 @@ class CallbackAnimation : public Animation
 
     public:
         CallbackAnimation(const unsigned short* animationBitmap, int yIndex, int animationFrameWidth, int animationFrameHeight, int animationFrameAmount, int callbackFrameIndex, int animationInterval, TFT_eSprite& outputSprite, AnimationObserver* observer);
-        void notifyObserver();
         void update(float deltaTime) override;
         void stop();
+        
+    private:
+        void notifyObserver();
+        void notifyObserverAnimationFinished();
 };
 
 #endif // CALLBACK_ANIMATION_HPP

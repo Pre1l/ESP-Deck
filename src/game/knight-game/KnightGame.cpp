@@ -1,4 +1,5 @@
 #include "game/knight-game/KnightGame.hpp"
+#include "bitmap/knight-game/SlimeBitmap.hpp"
 
 std::shared_ptr<KnightGame> KnightGame::instance = nullptr;
 
@@ -25,6 +26,8 @@ std::shared_ptr<KnightGame> KnightGame::getInstance()
 
 void KnightGame::update(float deltaTime) 
 {
+    TFT_eSPI& display = DisplayManager::getDisplay();
+
     knight.update(deltaTime);
 
     float knightX = -(knight.getPosition()->getX() - 214);
