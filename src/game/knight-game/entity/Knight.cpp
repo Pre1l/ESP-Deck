@@ -13,7 +13,7 @@
 
 Knight::Knight(std::shared_ptr<Vector2D> position) 
 : Entity(position, Vector2D(0, 0)),
-  AnimationObserver(CallbackAnimation(knightAttackBitmap, 0, 64, 64, 6, 4, 0, attackSprite, this)),
+  AnimationObserver(CallbackAnimation(knightAttackBitmap, 0, 64, 64, 6, 4, 90, attackSprite, this)),
   hitbox(getPosition(), 56, 66),
   knightAnimation(knightIdleBitmap, 0, 54, 64, 4, 200, knightSprite)
 {
@@ -28,8 +28,8 @@ void Knight::update(float deltaTime) {
     if (attackRequest) {
         attackRequest = false;
 
-        Hitbox attackHitbox(std::make_shared<Vector2D>(getPosition()->getX() + 56, getPosition()->getY()), 8, 66);
-        if (KnightGame::getInstance()->calculateCollision(attackHitbox, Rectangle::COLLISION_X, false) == 0) {
+        Hitbox attackHitbox(std::make_shared<Vector2D>(getPosition()->getX() + 56, getPosition()->getY()), 9, 66);
+        if (KnightGame::getInstance()->calculateTerrainCollision(attackHitbox, Rectangle::COLLISION_X, false) == 0) {
             callbackAnimation.setNewAnimation(knightAttackBitmap, 0, 5, 90);
             callbackAnimation.update(deltaTime);
         }
@@ -68,7 +68,6 @@ void Knight::handleVelocity(float deltaTime)
         stopCallbackAnimation();
     }
 
-
     if (runRightRequest && runLeftRequest) {
         velocity.setX(0);
         running = false;
@@ -91,7 +90,7 @@ void Knight::handleVelocity(float deltaTime)
     clearAfterImage(deltaVelocity);
 
     getPosition()->addX(deltaVelocity.getX());
-    float overlapX = knightGame->calculateCollision(hitbox, Rectangle::COLLISION_X, true);
+    float overlapX = knightGame->calculateTerrainCollision(hitbox, Rectangle::COLLISION_X, true);
 
     if (deltaVelocity.getX() > 0 && overlapX != 0) {
         getPosition()->subtractX(overlapX);
@@ -104,7 +103,7 @@ void Knight::handleVelocity(float deltaTime)
     }
 
     getPosition()->addY(deltaVelocity.getY());
-    float overlapY = knightGame->calculateCollision(hitbox, Rectangle::COLLISION_Y, true);
+    float overlapY = knightGame->calculateTerrainCollision(hitbox, Rectangle::COLLISION_Y, true);
 
     if (deltaVelocity.getY() > 0 && overlapY != 0) {
         getPosition()->subtractY(overlapY);
@@ -187,8 +186,7 @@ void Knight::animationFinishedCallback()
 
 void Knight::clearCallbackAnimationAfterImage() 
 {
-    attackSprite.fillRect(0, 0, 64, 64, TFT_BLACK);
-    pushAttackSprite();
+    DisplayManager::getDisplay().fillRect(215 + 54, getPosition()->getIntY() + 1, 10, 64, TFT_BLACK);
 }
 
 void Knight::attack()
