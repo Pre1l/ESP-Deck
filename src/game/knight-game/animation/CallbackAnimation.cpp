@@ -23,6 +23,12 @@ void CallbackAnimation::notifyObserverAnimationFinished()
     observer->animationFinishedCallback();
 }
 
+void CallbackAnimation::setNewAnimation(const unsigned short* animationBitmap, int yIndex, int animationFrameAmount, int callbackFrameIndex, int animationInterval) 
+{
+    this->callbackFrameIndex = callbackFrameIndex;
+    Animation::setNewAnimation(animationBitmap, yIndex, animationFrameAmount, animationInterval);
+}
+
 void CallbackAnimation::update(float deltaTime) 
 {
     animationInProgress = true;

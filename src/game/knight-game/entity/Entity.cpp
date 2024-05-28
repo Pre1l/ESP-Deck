@@ -3,11 +3,11 @@
 #include <iostream>
 #include <HardwareSerial.h>
 
-Entity::Entity(std::shared_ptr<Vector2D> position, Vector2D velocity) 
+Entity::Entity(std::shared_ptr<Vector2D> position, Hitbox hitbox) 
 : position(position),
-  velocity(velocity)
+  hitbox(hitbox)
 {
-
+    
 }
 
 std::shared_ptr<Vector2D> Entity::getPosition() 
@@ -15,7 +15,7 @@ std::shared_ptr<Vector2D> Entity::getPosition()
     return position;
 }
 
-Vector2D& Entity::getVelocity() 
+Hitbox& Entity::getHitbox() 
 {
-    return velocity;
+    return hitbox;
 }

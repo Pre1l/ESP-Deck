@@ -43,13 +43,13 @@ void KnightGame::keyPressed(int key)
 
     switch (key) {
         case 0:
-            knight.runRight();
+            knight.startRunning(knight.RIGHT);
             break;
         case 1:
             knight.jump();
             break;
         case 2:
-            knight.runLeft();
+            knight.startRunning(knight.LEFT);
             break;
         case 4:
             knight.attack();
@@ -63,16 +63,16 @@ void KnightGame::keyReleased(int key)
 
     switch (key) {
         case 0:
-            knight.stopRunRight();
+            knight.stopRunning(knight.RIGHT);
             break;
         case 2:
-            knight.stopRunLeft();
+            knight.stopRunning(knight.LEFT);
             break;
     }
 }
 
-/*float KnightGame::calculateCollision(Rectangle& rectangle, int direction, bool returnOverlap) 
-{
+float KnightGame::calculateCollision(Rectangle& rectangle, int direction, bool returnOverlap) 
+{ 
     for (Rectangle& terrain : getTerrains()) {
         if (rectangle.getId() != terrain.getId()) {
             float overlap = rectangle.calculateCollision(terrain, direction, returnOverlap);
@@ -94,7 +94,7 @@ void KnightGame::keyReleased(int key)
     }
 
     return 0;
-}*/
+}
 
 float KnightGame::calculateTerrainCollision(Rectangle& rectangle, int direction, bool returnOverlap) 
 {

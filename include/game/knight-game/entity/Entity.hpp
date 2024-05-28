@@ -8,15 +8,15 @@ class Entity
 {
     private:
         std::shared_ptr<Vector2D> position;
-        Vector2D velocity;
+        Hitbox hitbox;
 
     public:
         virtual void update(float deltaTime) = 0;
+        Hitbox& getHitbox();
         std::shared_ptr<Vector2D> getPosition();
-        Vector2D& getVelocity();
 
     protected:
-        Entity(std::shared_ptr<Vector2D> position, Vector2D velocity);
+        Entity(std::shared_ptr<Vector2D> position, Hitbox hitbox);
 };
 
 #endif // ENTITY_HPP

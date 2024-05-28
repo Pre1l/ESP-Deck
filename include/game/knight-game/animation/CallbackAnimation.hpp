@@ -18,6 +18,7 @@ class CallbackAnimation : public Animation
         CallbackAnimation(const unsigned short* animationBitmap, int yIndex, int animationFrameWidth, int animationFrameHeight, int animationFrameAmount, int callbackFrameIndex, int animationInterval, TFT_eSprite& outputSprite, AnimationObserver* observer);
         void update(float deltaTime) override;
         void stop();
+        void setNewAnimation(const unsigned short* animationBitmap, int yIndex, int animationFrameAmount, int callbackFrameIndex, int animationInterval);
         
     private:
         void notifyObserver();
