@@ -6,7 +6,7 @@
 #include "game/knight-game/animation/AnimationObserver.hpp"
 #include "Entity.hpp"
 
-class CombatEntity : public Entity, public AnimationObserver, public std::enable_shared_from_this<CombatEntity>
+class CombatEntity : public Entity, public AnimationObserver
 {
     public:
         const static int RIGHT = 0;
@@ -35,7 +35,7 @@ class CombatEntity : public Entity, public AnimationObserver, public std::enable
         bool attackRequest = false;
 
     public:
-        void update(float deltaTime);
+        void update(float offsetX, float deltaTime);
         void animationCallback() override;
         void animationFinishedCallback() override;
         Vector2D& getVelocity();

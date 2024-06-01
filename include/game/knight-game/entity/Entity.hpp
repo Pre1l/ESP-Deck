@@ -11,7 +11,7 @@ class Entity
         Hitbox hitbox;
 
     public:
-        virtual void update(float deltaTime) = 0;
+        virtual void update(float offsetX, float deltaTime) = 0;
         Hitbox& getHitbox();
         std::shared_ptr<Vector2D> getPosition();
 

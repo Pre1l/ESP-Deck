@@ -1,15 +1,16 @@
 #include "game/knight-game/KnightGame.hpp"
+#include <game/knight-game/entity/Slime.hpp>
 
 std::shared_ptr<KnightGame> KnightGame::instance = nullptr;
 
 KnightGame::KnightGame() 
 {
     setKnight(std::make_shared<Knight>(std::make_shared<Vector2D>(214, 0)));
-    terrains.push_back(Terrain(std::make_shared<Vector2D>(-500, 300), 1320, 20, 0, TFT_WHITE));
+    addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(0, 0)));
 
+    terrains.push_back(Terrain(std::make_shared<Vector2D>(-500, 300), 1320, 20, 0, TFT_WHITE));
     terrains.push_back(Terrain(std::make_shared<Vector2D>(200, 240), 40, 20, 0, TFT_WHITE));
     terrains.push_back(Terrain(std::make_shared<Vector2D>(300, 200), 160, 20, 0, TFT_WHITE));
-
     terrains.push_back(Terrain(std::make_shared<Vector2D>(100, 80), 40, 20, 0, TFT_WHITE));
     terrains.push_back(Terrain(std::make_shared<Vector2D>(170, 140), 40, 20, 0, TFT_WHITE));
 }
@@ -26,12 +27,12 @@ std::shared_ptr<KnightGame> KnightGame::getInstance()
 void KnightGame::update(float deltaTime) 
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
+    float knightX = -(getKnight()->getPosition()->getX() - 214);
 
     for (std::shared_ptr<CombatEntity> combatEntity : getCombatEntities()) {
-        combatEntity->update(deltaTime);
+        combatEntity->update(knightX, deltaTime);
     }
 
-    float knightX = -(getKnight()->getPosition()->getX() - 214);
     for (Terrain& terrain : getTerrains()) {
         terrain.render(knightX);
     }
@@ -90,9 +91,9 @@ std::vector<std::shared_ptr<CombatEntity>>& KnightGame::getCombatEntities()
 
 float KnightGame::calculateCollision(Rectangle& rectangle, int direction, bool returnOverlap) 
 { 
-    for (Rectangle& terrain : getTerrains()) {
-        if (rectangle.getId() != terrain.getId()) {
-            float overlap = rectangle.calculateCollision(terrain, direction, returnOverlap);
+    for (Rectangle& terrainHitbox : getTerrains()) {
+        if (rectangle.getId() != terrainHitbox.getId()) {
+            float overlap = rectangle.calculateCollision(terrainHitbox, direction, returnOverlap);
 
             if (overlap != 0) {
                 return overlap;
@@ -100,13 +101,15 @@ float KnightGame::calculateCollision(Rectangle& rectangle, int direction, bool r
         }
     }
 
-    Rectangle& knightHitbox = getKnight()->getHitbox();
+    for (std::shared_ptr<CombatEntity> combatEntity : getCombatEntities()) {
+        Hitbox& combatEntityHitbox = combatEntity->getHitbox();
 
-    if (rectangle.getId() != knightHitbox.getId()) {
-        float overlap = rectangle.calculateCollision(knightHitbox, direction, returnOverlap);
+        if (rectangle.getId() != combatEntityHitbox.getId()) {
+            float overlap = rectangle.calculateCollision(combatEntityHitbox, direction, returnOverlap);
 
-        if (overlap != 0) {
-            return overlap;
+            if (overlap != 0) {
+                return overlap;
+            }
         }
     }
 

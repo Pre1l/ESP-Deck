@@ -16,7 +16,7 @@ CombatEntity::CombatEntity(std::shared_ptr<Vector2D> position, int animationWidt
     getAttackSprite().createSprite(attackAnimationWidth, animationHeight);
 }
 
-void CombatEntity::update(float deltaTime)
+void CombatEntity::update(float offsetX, float deltaTime)
 {
     if (attackRequest) {
         attackRequest = false;
@@ -29,6 +29,9 @@ void CombatEntity::update(float deltaTime)
 
     handleVelocity(deltaTime);
     handleAnimation(deltaTime);
+
+    if (offset)
+        clearAfterImageOffset(offsetX);
 
     if (callbackAnimation.animationInProgress) {
         pushAttackSprite();
@@ -143,9 +146,9 @@ void CombatEntity::clearAfterImage(Vector2D& deltaVelocity)
     TFT_eSPI& display = DisplayManager::getDisplay();
 
     if (deltaVelocity.getY() > 0) {
-        display.fillRect(getPosition()->getIntX(), ceil(getPosition()->getY()), animationWidth, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
+        display.fillRect(getPosition()->getIntX() + 1, ceil(getPosition()->getY()), animationWidth, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
     } else if (deltaVelocity.getY() < 0) {
-        display.fillRect(getPosition()->getIntX(), ceil(getPosition()->getY() + animationHeight + deltaVelocity.getIntY()), animationWidth, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
+        display.fillRect(getPosition()->getIntX() + 1, ceil(getPosition()->getY() + animationHeight + deltaVelocity.getIntY()), animationWidth, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
     }
 
     if (deltaVelocity.getX() > 0) {
