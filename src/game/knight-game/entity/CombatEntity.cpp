@@ -29,9 +29,7 @@ void CombatEntity::update(float offsetX, float deltaTime)
 
     handleVelocity(deltaTime);
     handleAnimation(deltaTime);
-
-    if (offset)
-        clearAfterImageOffset(offsetX);
+    clearAfterImageOffset(offsetX);
 
     if (callbackAnimation.animationInProgress) {
         pushAttackSprite();
@@ -127,14 +125,14 @@ void CombatEntity::clearAfterImageOffset(float offsetX)
     int ceilMovementX = ceil(abs(movementX));;
     int offsetPosX = ceil(position.getX() + lastOffsetX);
     int posY = position.getIntY();
-    int width = ceil(getAnimationWidth());
-    int height = ceil(getAnimationHeight());
+    int width = getAnimationWidth();
+    int height = getAnimationHeight();
 
     if (movementX != 0) {
         if (movementX > 0) {
-            display.fillRect(offsetPosX - 1, posY, ceilMovementX + 2, height, TFT_BLACK);
+            display.fillRect(offsetPosX - 1, posY, ceilMovementX + 2, height + 1, TFT_BLACK);
         } else if (movementX < 0) {
-            display.fillRect(offsetPosX + width - ceilMovementX - 1, posY, ceilMovementX + 2, height, TFT_BLACK);
+            display.fillRect(offsetPosX + width - ceilMovementX - 1, posY, ceilMovementX + 2, height + 1, TFT_BLACK);
         }
     }
 
@@ -146,15 +144,15 @@ void CombatEntity::clearAfterImage(Vector2D& deltaVelocity)
     TFT_eSPI& display = DisplayManager::getDisplay();
 
     if (deltaVelocity.getY() > 0) {
-        display.fillRect(getPosition()->getIntX() + 1, ceil(getPosition()->getY()), animationWidth, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
+        display.fillRect(getPosition()->getIntX() + lastOffsetX + 1, ceil(getPosition()->getY()), animationWidth, ceil(deltaVelocity.getIntY()) + 1, TFT_BLACK);
     } else if (deltaVelocity.getY() < 0) {
-        display.fillRect(getPosition()->getIntX() + 1, ceil(getPosition()->getY() + animationHeight + deltaVelocity.getIntY()), animationWidth, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
+        display.fillRect(getPosition()->getIntX() + lastOffsetX + 1, ceil(getPosition()->getY() + animationHeight + deltaVelocity.getIntY()), animationWidth, ceil(-deltaVelocity.getY()) + 1, TFT_BLACK);
     }
 
     if (deltaVelocity.getX() > 0) {
-        display.fillRect(getPosition()->getIntX() - 1, ceil(getPosition()->getIntY()), ceil(deltaVelocity.getX()) + 1, animationHeight + 1, TFT_BLACK);
+        display.fillRect(getPosition()->getIntX() + lastOffsetX - 1, ceil(getPosition()->getIntY()), ceil(deltaVelocity.getX()) + 1, animationHeight + 1, TFT_BLACK);
     } else if (deltaVelocity.getX() < 0) {
-        display.fillRect(getPosition()->getIntX() + animationWidth + ceil(deltaVelocity.getX()) - 1, ceil(getPosition()->getIntY()), ceil(-deltaVelocity.getX()) + 1, animationHeight + 1, TFT_BLACK);
+        display.fillRect(getPosition()->getIntX() + lastOffsetX + animationWidth + ceil(deltaVelocity.getX()) - 1, ceil(getPosition()->getIntY()), ceil(-deltaVelocity.getX()) + 1, animationHeight + 1, TFT_BLACK);
     }
 }
 

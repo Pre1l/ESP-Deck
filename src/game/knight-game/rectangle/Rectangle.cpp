@@ -54,7 +54,7 @@ float Rectangle::calculateCollision(Rectangle& other, int direction, bool return
         return 0;
     }
 
-    if (direction == 0 && collideX) {
+    if (direction == COLLISION_X && collideX) {
         float overlapLeft = oX + oWidth - x;
         float overlapRight = x + width - oX;
         float overlapX = (overlapLeft < overlapRight) ? overlapLeft : overlapRight;
@@ -69,8 +69,15 @@ float Rectangle::calculateCollision(Rectangle& other, int direction, bool return
         if (overlapX == width || overlapX == oWidth) {
             return 0;
         }
+
+        if (overlapX < 0) {
+            return overlapX - 0.01;
+        } else if (overlapX > 0) {
+            return overlapX + 0.01;
+        }
+
         return overlapX;
-    } else if (direction == 1 && collideY) {
+    } else if (direction == COLLISION_Y && collideY) {
         float overlapTop = oY + oHeight - y;
         float overlapBottom = y + height - oY;
         float overlapY = (overlapTop < overlapBottom) ? overlapTop : overlapBottom;
@@ -85,6 +92,13 @@ float Rectangle::calculateCollision(Rectangle& other, int direction, bool return
         if (overlapY == height || overlapY == oHeight) {
             return 0;
         }
+
+        if (overlapY < 0) {
+            return overlapY - 0.01;
+        } else if (overlapY > 0) {
+            return overlapY + 0.01;
+        }
+
         return overlapY;
     }
 
