@@ -1,11 +1,10 @@
 #include "game/knight-game/KnightGame.hpp"
-#include "bitmap/knight-game/SlimeBitmap.hpp"
 
 std::shared_ptr<KnightGame> KnightGame::instance = nullptr;
 
 KnightGame::KnightGame() 
-: knight(std::make_shared<Vector2D>(214, 0))
 {
+    setKnight(std::make_shared<Knight>(std::make_shared<Vector2D>(214, 0)));
     terrains.push_back(Terrain(std::make_shared<Vector2D>(-500, 300), 1320, 20, 0, TFT_WHITE));
 
     terrains.push_back(Terrain(std::make_shared<Vector2D>(200, 240), 40, 20, 0, TFT_WHITE));
@@ -28,9 +27,11 @@ void KnightGame::update(float deltaTime)
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
 
-    knight.update(deltaTime);
+    for (std::shared_ptr<CombatEntity> combatEntity : getCombatEntities()) {
+        combatEntity->update(deltaTime);
+    }
 
-    float knightX = -(knight.getPosition()->getX() - 214);
+    float knightX = -(getKnight()->getPosition()->getX() - 214);
     for (Terrain& terrain : getTerrains()) {
         terrain.render(knightX);
     }
@@ -38,37 +39,53 @@ void KnightGame::update(float deltaTime)
 
 void KnightGame::keyPressed(int key)
 {
-    Knight& knight = getKnight();
-    Vector2D& velocity = knight.getVelocity();
+    std::shared_ptr<Knight> knight = getKnight();
+    Vector2D& velocity = knight->getVelocity();
 
     switch (key) {
         case 0:
-            knight.startRunning(knight.RIGHT);
+            knight->startRunning(Knight::RIGHT);
             break;
         case 1:
-            knight.jump();
+            knight->jump();
             break;
         case 2:
-            knight.startRunning(knight.LEFT);
+            knight->startRunning(Knight::LEFT);
             break;
         case 4:
-            knight.attack();
+            knight->attack();
     }
+}
+
+void KnightGame::setKnight(std::shared_ptr<Knight> knight) 
+{
+    this->knight = knight;
+    addCombatEntity(knight);
 }
 
 void KnightGame::keyReleased(int key)
 {
-    Knight& knight = getKnight();
-    Vector2D& velocity = knight.getVelocity();
+    std::shared_ptr<Knight> knight = getKnight();
+    Vector2D& velocity = knight->getVelocity();
 
     switch (key) {
         case 0:
-            knight.stopRunning(knight.RIGHT);
+            knight->stopRunning(Knight::RIGHT);
             break;
         case 2:
-            knight.stopRunning(knight.LEFT);
+            knight->stopRunning(Knight::LEFT);
             break;
     }
+}
+
+void KnightGame::addCombatEntity(std::shared_ptr<CombatEntity> combatEntity) 
+{
+    getCombatEntities().push_back(combatEntity);
+}
+
+std::vector<std::shared_ptr<CombatEntity>>& KnightGame::getCombatEntities()
+{
+    return combatEntities;
 }
 
 float KnightGame::calculateCollision(Rectangle& rectangle, int direction, bool returnOverlap) 
@@ -83,7 +100,7 @@ float KnightGame::calculateCollision(Rectangle& rectangle, int direction, bool r
         }
     }
 
-    Rectangle& knightHitbox = getKnight().getHitbox();
+    Rectangle& knightHitbox = getKnight()->getHitbox();
 
     if (rectangle.getId() != knightHitbox.getId()) {
         float overlap = rectangle.calculateCollision(knightHitbox, direction, returnOverlap);
@@ -116,7 +133,7 @@ void KnightGame::onGameClosed()
 
 }
 
-Knight& KnightGame::getKnight() 
+std::shared_ptr<Knight> KnightGame::getKnight() 
 {
     return knight;
 } 

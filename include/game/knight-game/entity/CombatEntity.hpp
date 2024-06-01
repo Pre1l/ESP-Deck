@@ -6,11 +6,11 @@
 #include "game/knight-game/animation/AnimationObserver.hpp"
 #include "Entity.hpp"
 
-class CombatEntity : public Entity, public AnimationObserver
+class CombatEntity : public Entity, public AnimationObserver, public std::enable_shared_from_this<CombatEntity>
 {
     public:
-        const int RIGHT = 0;
-        const int LEFT = 1;
+        const static int RIGHT = 0;
+        const static int LEFT = 1;
 
     protected:
         bool onGround = false;
@@ -26,7 +26,9 @@ class CombatEntity : public Entity, public AnimationObserver
         int animationWidth;
         int animationHeight;
         int attackAnimationWidth;
+        float lastOffsetX;
 
+        bool offset = true;
         bool jumpRequest = false;
         bool runLeftRequest = false;
         bool runRightRequest = false;
@@ -43,6 +45,8 @@ class CombatEntity : public Entity, public AnimationObserver
         int getAnimationHeight();
         int getAttackAnimationWidth();
         Animation& getMovementAnimation();
+        void clearAfterImageOffset(float offsetX);
+        void disableOffset();
 
         void jump();
         void startRunning(int direction);

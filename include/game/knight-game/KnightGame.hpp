@@ -14,7 +14,8 @@ class KnightGame : public Game
         static std::shared_ptr<KnightGame> instance;
 
         std::vector<Terrain> terrains;
-        Knight knight;
+        std::vector<std::shared_ptr<CombatEntity>> combatEntities;
+        std::shared_ptr<Knight> knight;
 
     public:
         static std::shared_ptr<KnightGame> getInstance();
@@ -23,13 +24,19 @@ class KnightGame : public Game
         void keyReleased(int key) override;
         void onGameClosed() override;
         std::vector<Terrain>& getTerrains();
-        Knight& getKnight();
+        std::shared_ptr<Knight> getKnight();
         float calculateTerrainCollision(Rectangle& rectangle, int direction, bool returnOverlap);
         float calculateCollision(Rectangle& rectangle, int direction, bool returnOverlap);
+        void addCombatEntity(std::shared_ptr<CombatEntity> combatEntity);
+        std::vector<std::shared_ptr<CombatEntity>>& getCombatEntities();
 
     private:
         KnightGame();
+        void setKnight(std::shared_ptr<Knight> knight);
         friend class GameFactory;
+
+        KnightGame(const KnightGame&) = delete;
+        KnightGame& operator=(const KnightGame&) = delete;
 };
 
 #endif // KNIGHT_GAME_HPP

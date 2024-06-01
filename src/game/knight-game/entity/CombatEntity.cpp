@@ -107,6 +107,37 @@ void CombatEntity::stopCallbackAnimation()
     }
 }
 
+void CombatEntity::disableOffset() 
+{
+    offset = false;
+}
+
+void CombatEntity::clearAfterImageOffset(float offsetX) 
+{
+    if (!offset)
+        return;
+
+    Vector2D position = *getPosition();
+    TFT_eSPI& display = DisplayManager::getDisplay();
+
+    float movementX = offsetX - lastOffsetX;
+    int ceilMovementX = ceil(abs(movementX));;
+    int offsetPosX = ceil(position.getX() + lastOffsetX);
+    int posY = position.getIntY();
+    int width = ceil(getAnimationWidth());
+    int height = ceil(getAnimationHeight());
+
+    if (movementX != 0) {
+        if (movementX > 0) {
+            display.fillRect(offsetPosX - 1, posY, ceilMovementX + 2, height, TFT_BLACK);
+        } else if (movementX < 0) {
+            display.fillRect(offsetPosX + width - ceilMovementX - 1, posY, ceilMovementX + 2, height, TFT_BLACK);
+        }
+    }
+
+    lastOffsetX = offsetX;
+}
+
 void CombatEntity::clearAfterImage(Vector2D& deltaVelocity) 
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
@@ -154,13 +185,25 @@ void CombatEntity::clearCallbackAnimationAfterImage()
 void CombatEntity::pushMovementSprite() 
 {
     std::shared_ptr<Vector2D> position = getPosition();
-    movementSprite.pushSprite(position->getIntX() + 1, position->getIntY() + 1);
+
+    /*if (!offset) {
+        movementSprite.pushSprite(position->getIntX() + 1, position->getIntY() + 1);
+        return;
+    }*/
+
+    movementSprite.pushSprite(position->getIntX() + lastOffsetX + 1, position->getIntY() + 1);
 }
 
 void CombatEntity::pushAttackSprite() 
 {
     std::shared_ptr<Vector2D> position = getPosition();
-    attackSprite.pushSprite(position->getIntX() + 1, position->getIntY() + 1);
+
+    if (!offset) {
+        attackSprite.pushSprite(position->getIntX() + 1, position->getIntY() + 1);
+        return;
+    }
+
+    attackSprite.pushSprite(position->getIntX() + lastOffsetX + 1, position->getIntY() + 1);
 }
 
 void CombatEntity::attack()

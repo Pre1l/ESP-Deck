@@ -4,7 +4,6 @@
 #include "bitmap/knight-game/KnightRunRightBitmap.hpp"
 #include "bitmap/knight-game/KnightRunLeftBitmap.hpp"
 #include "bitmap/knight-game/KnightAttackBitmap.hpp"
-#include "bitmap/knight-game/SlashBitmap.hpp"
 #include <game/knight-game/KnightGame.hpp>
 #include "bitmap/knight-game/KnightJumpBitmap.hpp"
 #include <game/knight-game/animation/CallbackAnimation.hpp>
@@ -14,6 +13,7 @@
 Knight::Knight(std::shared_ptr<Vector2D> position) 
 : CombatEntity(position, 54, 64, 64, Vector2D(0, 0))
 {
+    disableOffset();
     getMovementAnimation().setNewAnimation(knightIdleBitmap, 0, 4, 200);
     callbackAnimation.setNewAnimation(knightAttackBitmap, 0, 6, 4, 90);
 }
