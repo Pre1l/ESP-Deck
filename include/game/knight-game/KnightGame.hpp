@@ -25,8 +25,9 @@ class KnightGame : public Game
         void onGameClosed() override;
         std::vector<Terrain>& getTerrains();
         std::shared_ptr<Knight> getKnight();
-        float calculateTerrainCollision(Rectangle& rectangle, int direction, bool returnOverlap);
-        float calculateCollision(Rectangle& rectangle, int direction, bool returnOverlap);
+        float calculateTerrainCollision(Rectangle& rectangle, Rectangle::CollisionAxis axis, bool returnOverlap);
+        float calculateCollision(Rectangle& rectangle, Rectangle::CollisionAxis axis, bool returnOverlap);
+        std::shared_ptr<CombatEntity> calculateCombatEntityCollision(Rectangle& rectangle, Rectangle::CollisionAxis axis);
         void addCombatEntity(std::shared_ptr<CombatEntity> combatEntity);
         std::vector<std::shared_ptr<CombatEntity>>& getCombatEntities();
 

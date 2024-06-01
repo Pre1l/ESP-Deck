@@ -9,15 +9,35 @@
 class CombatEntity : public Entity, public AnimationObserver
 {
     public:
-        const static int RIGHT = 0;
-        const static int LEFT = 1;
+        enum class EntityType {
+            KNIGHT,
+            SLIME
+        };
 
-    protected:
-        bool onGround = false;
-        bool running = false;
-        int facingDirection = RIGHT;
+        enum class Direction {
+            RIGHT,
+            LEFT
+        };
 
     private:
+        struct CombatEntityConfig
+        {
+            float health;
+            float armor;
+            float attackDamage;
+            float speedX;
+            float jumpSpeed;
+        };
+
+    protected:
+        CombatEntityConfig config;
+        EntityType type;
+
+    private:
+        bool onGround = false;
+        bool running = false;
+        Direction facingDirection = Direction::RIGHT;
+
         Vector2D velocity;
         TFT_eSprite attackSprite = TFT_eSprite(&DisplayManager::tft);
         TFT_eSprite movementSprite = TFT_eSprite(&DisplayManager::tft);
@@ -26,7 +46,7 @@ class CombatEntity : public Entity, public AnimationObserver
         int animationWidth;
         int animationHeight;
         int attackAnimationWidth;
-        float lastOffsetX;
+        float lastOffsetX = 0;
 
         bool offset = true;
         bool jumpRequest = false;
@@ -49,12 +69,18 @@ class CombatEntity : public Entity, public AnimationObserver
         void disableOffset();
 
         void jump();
-        void startRunning(int direction);
-        void stopRunning(int direction);
+        void startRunning(Direction direction);
+        void stopRunning(Direction direction);
         void attack();
+
+        bool isRunning();
+        bool isOnGround();
+        bool isFacingRight();
+        bool isFacingLeft();
 
     protected:
         CombatEntity(std::shared_ptr<Vector2D> position, int animationWidth, int animationHeight, int attackAnimationWidth, Vector2D velocity);
+        virtual void collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) = 0;
         virtual void clearAfterImage(Vector2D& deltaVelocity);
         virtual void handleVelocity(float deltaTime);
         virtual void handleAnimation(float deltaTime);
@@ -63,6 +89,7 @@ class CombatEntity : public Entity, public AnimationObserver
         virtual void stopCallbackAnimation();
         virtual void clearCallbackAnimationAfterImage();
         virtual void setAnimation() = 0;
+        //virtual void takeDamage(float amount);
 };
 
 #endif // COMBAT_ENTITY_HPP

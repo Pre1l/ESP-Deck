@@ -45,13 +45,13 @@ void KnightGame::keyPressed(int key)
 
     switch (key) {
         case 0:
-            knight->startRunning(Knight::RIGHT);
+            knight->startRunning(Knight::Direction::RIGHT);
             break;
         case 1:
             knight->jump();
             break;
         case 2:
-            knight->startRunning(Knight::LEFT);
+            knight->startRunning(Knight::Direction::LEFT);
             break;
         case 4:
             knight->attack();
@@ -71,10 +71,10 @@ void KnightGame::keyReleased(int key)
 
     switch (key) {
         case 0:
-            knight->stopRunning(Knight::RIGHT);
+            knight->stopRunning(Knight::Direction::RIGHT);
             break;
         case 2:
-            knight->stopRunning(Knight::LEFT);
+            knight->stopRunning(Knight::Direction::LEFT);
             break;
     }
 }
@@ -89,15 +89,14 @@ std::vector<std::shared_ptr<CombatEntity>>& KnightGame::getCombatEntities()
     return combatEntities;
 }
 
-float KnightGame::calculateCollision(Rectangle& rectangle, int direction, bool returnOverlap) 
+float KnightGame::calculateCollision(Rectangle& rectangle, Rectangle::CollisionAxis axis, bool returnOverlap) 
 { 
     for (Rectangle& terrainHitbox : getTerrains()) {
         if (rectangle.getId() != terrainHitbox.getId()) {
-            float overlap = rectangle.calculateCollision(terrainHitbox, direction, returnOverlap);
+            float overlap = rectangle.calculateCollision(terrainHitbox, axis, returnOverlap);
 
-            if (overlap != 0) {
+            if (overlap != 0)
                 return overlap;
-            }
         }
     }
 
@@ -105,26 +104,40 @@ float KnightGame::calculateCollision(Rectangle& rectangle, int direction, bool r
         Hitbox& combatEntityHitbox = combatEntity->getHitbox();
 
         if (rectangle.getId() != combatEntityHitbox.getId()) {
-            float overlap = rectangle.calculateCollision(combatEntityHitbox, direction, returnOverlap);
+            float overlap = rectangle.calculateCollision(combatEntityHitbox, axis, returnOverlap);
 
-            if (overlap != 0) {
+            if (overlap != 0)
                 return overlap;
-            }
         }
     }
 
     return 0;
 }
 
-float KnightGame::calculateTerrainCollision(Rectangle& rectangle, int direction, bool returnOverlap) 
+std::shared_ptr<CombatEntity> KnightGame::calculateCombatEntityCollision(Rectangle& rectangle, Rectangle::CollisionAxis axis) 
+{ 
+    for (std::shared_ptr<CombatEntity> combatEntity : getCombatEntities()) {
+        Hitbox& combatEntityHitbox = combatEntity->getHitbox();
+
+        if (rectangle.getId() != combatEntityHitbox.getId()) {
+            int overlap = rectangle.calculateCollision(combatEntityHitbox, axis, false);
+
+            if (overlap == 1)
+                return combatEntity;
+        }
+    }
+
+    return nullptr;
+}
+
+float KnightGame::calculateTerrainCollision(Rectangle& rectangle, Rectangle::CollisionAxis axis, bool returnOverlap) 
 {
     for (Rectangle& terrain : getTerrains()) {
         if (rectangle.getId() != terrain.getId()) {
-            float overlap = rectangle.calculateCollision(terrain, direction, returnOverlap);
+            float overlap = rectangle.calculateCollision(terrain, axis, returnOverlap);
 
-            if (overlap != 0) {
+            if (overlap != 0)
                 return overlap;
-            }
         }
     }
 

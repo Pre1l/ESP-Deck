@@ -33,7 +33,7 @@ uint8_t Rectangle::getId()
     return id;
 }
 
-float Rectangle::calculateCollision(Rectangle& other, int direction, bool returnOverlap) 
+float Rectangle::calculateCollision(Rectangle& other, CollisionAxis axis, bool returnOverlap) 
 {
     Vector2D pos = *getPosition();
     float x = pos.getX();
@@ -54,7 +54,7 @@ float Rectangle::calculateCollision(Rectangle& other, int direction, bool return
         return 0;
     }
 
-    if (direction == COLLISION_X && collideX) {
+    if (axis == CollisionAxis::X && collideX) {
         float overlapLeft = oX + oWidth - x;
         float overlapRight = x + width - oX;
         float overlapX = (overlapLeft < overlapRight) ? overlapLeft : overlapRight;
@@ -71,13 +71,13 @@ float Rectangle::calculateCollision(Rectangle& other, int direction, bool return
         }
 
         if (overlapX < 0) {
-            return overlapX - 0.01;
+            return overlapX - 0.0001;
         } else if (overlapX > 0) {
-            return overlapX + 0.01;
+            return overlapX + 0.0001;
         }
 
         return overlapX;
-    } else if (direction == COLLISION_Y && collideY) {
+    } else if (axis == CollisionAxis::Y && collideY) {
         float overlapTop = oY + oHeight - y;
         float overlapBottom = y + height - oY;
         float overlapY = (overlapTop < overlapBottom) ? overlapTop : overlapBottom;
@@ -94,9 +94,9 @@ float Rectangle::calculateCollision(Rectangle& other, int direction, bool return
         }
 
         if (overlapY < 0) {
-            return overlapY - 0.01;
+            return overlapY - 0.0001;
         } else if (overlapY > 0) {
-            return overlapY + 0.01;
+            return overlapY + 0.0001;
         }
 
         return overlapY;

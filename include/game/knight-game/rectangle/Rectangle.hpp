@@ -8,8 +8,10 @@
 class Rectangle 
 {
     public:
-        static const int COLLISION_X = 0;
-        static const int COLLISION_Y = 1;
+        enum class CollisionAxis {
+            X,
+            Y
+        };
 
     private:
         static uint8_t nextId;
@@ -24,7 +26,7 @@ class Rectangle
         float getWidth();
         float getHeight();
         uint8_t getId();
-        float calculateCollision(Rectangle& other, int direction, bool returnOverlap);
+        float calculateCollision(Rectangle& other, CollisionAxis axis, bool returnOverlap);
 
     protected:
         Rectangle(std::shared_ptr<Vector2D> position, float width, float height);

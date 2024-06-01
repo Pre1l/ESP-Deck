@@ -22,7 +22,7 @@ void CombatEntity::update(float offsetX, float deltaTime)
         attackRequest = false;
 
         Hitbox attackHitbox(std::make_shared<Vector2D>(getPosition()->getX() + animationWidth + 2, getPosition()->getY()), attackAnimationWidth - animationWidth, animationHeight + 2);
-        if (KnightGame::getInstance()->calculateTerrainCollision(attackHitbox, Rectangle::COLLISION_X, false) == 0) {
+        if (KnightGame::getInstance()->calculateTerrainCollision(attackHitbox, Rectangle::CollisionAxis::X, false) == 0) {
             callbackAnimation.update(deltaTime);
         }
     }
@@ -40,13 +40,13 @@ void CombatEntity::update(float offsetX, float deltaTime)
 
 void CombatEntity::handleVelocity(float deltaTime) 
 {
+    std::shared_ptr<KnightGame> knightGame = KnightGame::getInstance();
     Hitbox& hitbox = getHitbox();
-     std::shared_ptr<KnightGame> knightGame = KnightGame::getInstance();
     Vector2D& velocity = getVelocity();
 
     velocity.addY(0.05);
     if (jumpRequest == true) {
-        velocity.subtractY(0.7);
+        velocity.subtractY(config.jumpSpeed);
         jumpRequest = false;
         stopCallbackAnimation();
     }
@@ -55,13 +55,13 @@ void CombatEntity::handleVelocity(float deltaTime)
         velocity.setX(0);
         running = false;
     } else if (runRightRequest) {
-        velocity.setX(0.2);
-        facingDirection = RIGHT;
+        velocity.setX(config.speedX);
+        facingDirection = Direction::RIGHT;
         running = true;
         stopCallbackAnimation();
     } else if (runLeftRequest) {
-        velocity.setX(-0.2);
-        facingDirection = LEFT;
+        velocity.setX(-config.speedX);
+        facingDirection = Direction::LEFT;
         running = true;
         stopCallbackAnimation();
     } else {
@@ -73,28 +73,30 @@ void CombatEntity::handleVelocity(float deltaTime)
     clearAfterImage(deltaVelocity);
 
     getPosition()->addX(deltaVelocity.getX());
-    float overlapX = knightGame->calculateCollision(hitbox, Rectangle::COLLISION_X, true);
+    float overlapX = knightGame->calculateCollision(hitbox, Rectangle::CollisionAxis::X, true);
 
-    if (deltaVelocity.getX() > 0 && overlapX != 0) {
-        getPosition()->subtractX(overlapX);
-        velocity.setX(0);
-        running = false;
-    } else if (deltaVelocity.getX() < 0 && overlapX != 0) {
-        getPosition()->addX(overlapX);
+    if (deltaVelocity.getX() != 0 && overlapX != 0) {
+        std::shared_ptr<CombatEntity> collisionCombatEntity = knightGame->calculateCombatEntityCollision(hitbox, Rectangle::CollisionAxis::X);
+        if (collisionCombatEntity != nullptr)
+            collisionWithCombatEntity(collisionCombatEntity, Rectangle::CollisionAxis::X);
+
+        deltaVelocity.getX() > 0 ? getPosition()->subtractX(overlapX) : getPosition()->addX(overlapX);
         velocity.setX(0);
         running = false;
     }
 
     getPosition()->addY(deltaVelocity.getY());
-    float overlapY = knightGame->calculateCollision(hitbox, Rectangle::COLLISION_Y, true);
+    float overlapY = knightGame->calculateCollision(hitbox, Rectangle::CollisionAxis::Y, true);
 
-    if (deltaVelocity.getY() > 0 && overlapY != 0) {
-        getPosition()->subtractY(overlapY);
+    if (deltaVelocity.getY() != 0 && overlapY != 0) {
+        std::shared_ptr<CombatEntity> collisionCombatEntity = knightGame->calculateCombatEntityCollision(hitbox, Rectangle::CollisionAxis::Y);
+        if (collisionCombatEntity != nullptr)
+            collisionWithCombatEntity(collisionCombatEntity, Rectangle::CollisionAxis::Y);
+
+        deltaVelocity.getY() > 0 ? getPosition()->subtractY(overlapY) : getPosition()->addY(overlapY);
         velocity.setY(0);
-        onGround = true;
-    } else if (deltaVelocity.getY() < 0 && overlapY != 0) {
-        getPosition()->addY(overlapY);
-        velocity.setY(0);
+        if (deltaVelocity.getY() > 0)
+            onGround = true;
     } else {
         onGround = false;
     }
@@ -130,9 +132,9 @@ void CombatEntity::clearAfterImageOffset(float offsetX)
 
     if (movementX != 0) {
         if (movementX > 0) {
-            display.fillRect(offsetPosX - 1, posY, ceilMovementX + 2, height + 1, TFT_BLACK);
+            display.fillRect(offsetPosX - 2, posY, ceilMovementX + 3, height + 1, TFT_BLACK);
         } else if (movementX < 0) {
-            display.fillRect(offsetPosX + width - ceilMovementX - 1, posY, ceilMovementX + 2, height + 1, TFT_BLACK);
+            display.fillRect(offsetPosX + width - ceilMovementX - 2, posY, ceilMovementX + 3, height + 1, TFT_BLACK);
         }
     }
 
@@ -187,11 +189,6 @@ void CombatEntity::pushMovementSprite()
 {
     std::shared_ptr<Vector2D> position = getPosition();
 
-    /*if (!offset) {
-        movementSprite.pushSprite(position->getIntX() + 1, position->getIntY() + 1);
-        return;
-    }*/
-
     movementSprite.pushSprite(position->getIntX() + lastOffsetX + 1, position->getIntY() + 1);
 }
 
@@ -209,28 +206,28 @@ void CombatEntity::pushAttackSprite()
 
 void CombatEntity::attack()
 {
-    if (onGround) {
+    if (isOnGround()) {
         attackRequest = true;
-        stopRunning(LEFT);
-        stopRunning(RIGHT);
+        stopRunning(Direction::RIGHT);
+        stopRunning(Direction::LEFT);
     }
 }
 
 void CombatEntity::jump() 
 {
-    if (onGround) {
+    if (isOnGround()) {
         jumpRequest = true;
     }
 }
 
-void CombatEntity::startRunning(int direction) 
+void CombatEntity::startRunning(Direction direction) 
 {
-    direction == RIGHT ? runRightRequest = true : runLeftRequest = true;
+    direction == Direction::RIGHT ? runRightRequest = true : runLeftRequest = true;
 }
 
-void CombatEntity::stopRunning(int direction) 
+void CombatEntity::stopRunning(Direction direction) 
 {
-    direction == RIGHT ? runRightRequest = false : runLeftRequest = false;
+    direction == Direction::RIGHT ? runRightRequest = false : runLeftRequest = false;
 }
 
 Animation& CombatEntity::getMovementAnimation() 
@@ -266,4 +263,24 @@ TFT_eSprite& CombatEntity::getAttackSprite()
 TFT_eSprite& CombatEntity::getMovementSprite() 
 {
     return movementSprite;
+}
+
+bool CombatEntity::isRunning() 
+{
+    return running;
+}
+
+bool CombatEntity::isOnGround() 
+{
+    return onGround;
+}
+
+bool CombatEntity::isFacingRight()
+{
+    return facingDirection == Direction::RIGHT;
+}
+
+bool CombatEntity::isFacingLeft()
+{
+    return facingDirection == Direction::LEFT;
 }
