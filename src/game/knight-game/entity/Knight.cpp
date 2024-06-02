@@ -13,10 +13,11 @@
 Knight::Knight(std::shared_ptr<Vector2D> position) 
 : CombatEntity(position, 54, 64, 64, Vector2D(0, 0))
 {
-    type = EntityType::KNIGHT;
+    type = Type::KNIGHT;
 
-    config.speedX = 0.2;
-    config.jumpSpeed = 0.7;
+    stats.speedX = 0.2;
+    stats.jumpSpeed = 0.7;
+    stats.attackDamage = 25;
     
     disableOffset();
     getMovementAnimation().setNewAnimation(knightIdleBitmap, 0, 4, 200);
@@ -33,7 +34,7 @@ void Knight::pushAttackSprite()
     getAttackSprite().pushSprite(215, getPosition()->getIntY() + 1);
 }
 
-void Knight::clearAfterImage(Vector2D& deltaVelocity) 
+void Knight::clearAfterImageVelocity(Vector2D& deltaVelocity) 
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
 
@@ -59,7 +60,7 @@ void Knight::setAnimation()
     }
 }
 
-void Knight::clearCallbackAnimationAfterImage() 
+void Knight::clearAfterImageCallbackAnimation() 
 {
     DisplayManager::getDisplay().fillRect(215 + 54, getPosition()->getIntY() + 1, 10, 64, TFT_BLACK);
 }

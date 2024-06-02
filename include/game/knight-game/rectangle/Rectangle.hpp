@@ -22,11 +22,13 @@ class Rectangle
         uint8_t id;
 
     public:
-        std::shared_ptr<Vector2D> getPosition();
+        virtual std::shared_ptr<Vector2D> getPosition();
         float getWidth();
         float getHeight();
         uint8_t getId();
+
         float calculateCollision(Rectangle& other, CollisionAxis axis, bool returnOverlap);
+        bool calculateCollision(Rectangle& other);
 
     protected:
         Rectangle(std::shared_ptr<Vector2D> position, float width, float height);

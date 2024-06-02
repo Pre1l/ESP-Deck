@@ -5,7 +5,9 @@ CombatEntity::CombatEntity(std::shared_ptr<Vector2D> position, int animationWidt
 : Entity(position, Hitbox(position, animationWidth + 2, animationHeight + 2)),
   AnimationObserver(CallbackAnimation({}, 0, attackAnimationWidth, animationHeight, 0, 0, 0, attackSprite, this)),
   movementAnimation({}, 0, animationWidth, animationHeight, 0, 0, movementSprite),
-  velocity(velocity)
+  velocity(velocity),
+  attackHitboxRight(getPosition(), attackAnimationWidth - animationWidth, animationHeight + 2, animationWidth + 2),
+  attackHitboxLeft(getPosition(), attackAnimationWidth - animationWidth, animationHeight + 2, -attackAnimationWidth + animationWidth - 2)
 {
     this->animationWidth = animationWidth;
     this->animationHeight = animationHeight;
@@ -21,7 +23,8 @@ void CombatEntity::update(float offsetX, float deltaTime)
     if (attackRequest) {
         attackRequest = false;
 
-        Hitbox attackHitbox(std::make_shared<Vector2D>(getPosition()->getX() + animationWidth + 2, getPosition()->getY()), attackAnimationWidth - animationWidth, animationHeight + 2);
+        ProxyHitbox& attackHitbox = isFacingRight() ? attackHitboxRight : attackHitboxLeft;
+
         if (KnightGame::getInstance()->calculateTerrainCollision(attackHitbox, Rectangle::CollisionAxis::X, false) == 0) {
             callbackAnimation.update(deltaTime);
         }
@@ -46,7 +49,7 @@ void CombatEntity::handleVelocity(float deltaTime)
 
     velocity.addY(0.05);
     if (jumpRequest == true) {
-        velocity.subtractY(config.jumpSpeed);
+        velocity.subtractY(stats.jumpSpeed);
         jumpRequest = false;
         stopCallbackAnimation();
     }
@@ -55,12 +58,12 @@ void CombatEntity::handleVelocity(float deltaTime)
         velocity.setX(0);
         running = false;
     } else if (runRightRequest) {
-        velocity.setX(config.speedX);
+        velocity.setX(stats.speedX);
         facingDirection = Direction::RIGHT;
         running = true;
         stopCallbackAnimation();
     } else if (runLeftRequest) {
-        velocity.setX(-config.speedX);
+        velocity.setX(-stats.speedX);
         facingDirection = Direction::LEFT;
         running = true;
         stopCallbackAnimation();
@@ -70,7 +73,7 @@ void CombatEntity::handleVelocity(float deltaTime)
     }
 
     Vector2D deltaVelocity = velocity.copy().multiply(deltaTime);
-    clearAfterImage(deltaVelocity);
+    clearAfterImageVelocity(deltaVelocity);
 
     getPosition()->addX(deltaVelocity.getX());
     float overlapX = knightGame->calculateCollision(hitbox, Rectangle::CollisionAxis::X, true);
@@ -106,7 +109,7 @@ void CombatEntity::stopCallbackAnimation()
 {
     if (callbackAnimation.animationInProgress) {
         callbackAnimation.stop();
-        clearCallbackAnimationAfterImage();
+        clearAfterImageCallbackAnimation();
     }
 }
 
@@ -141,7 +144,7 @@ void CombatEntity::clearAfterImageOffset(float offsetX)
     lastOffsetX = offsetX;
 }
 
-void CombatEntity::clearAfterImage(Vector2D& deltaVelocity) 
+void CombatEntity::clearAfterImageVelocity(Vector2D& deltaVelocity) 
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
 
@@ -172,15 +175,22 @@ void CombatEntity::handleAnimation(float deltaTime)
 
 void CombatEntity::animationCallback()
 {
-    // Do damage to Entities in attackhitbox
+    std::shared_ptr<KnightGame> knightGame = KnightGame::getInstance();
+    ProxyHitbox& attackHitbox = isFacingRight() ? attackHitboxRight : attackHitboxLeft;
+
+    std::vector<std::shared_ptr<CombatEntity>> collidingCombatEntities = knightGame->calculateCombatEntitiesCollision(attackHitbox);
+
+    for (std::shared_ptr<CombatEntity> combatEntity : collidingCombatEntities) {
+        combatEntity->takeDamage(stats.attackDamage);
+    }
 }
 
 void CombatEntity::animationFinishedCallback() 
 {
-    clearCallbackAnimationAfterImage();
+    clearAfterImageCallbackAnimation();
 }
 
-void CombatEntity::clearCallbackAnimationAfterImage() 
+void CombatEntity::clearAfterImageCallbackAnimation() 
 {
     DisplayManager::getDisplay().fillRect(getPosition()->getIntX() + animationWidth, getPosition()->getIntY() + 1, attackAnimationWidth - animationWidth /*+ 1*/, animationHeight, TFT_BLACK);
 }
@@ -190,6 +200,19 @@ void CombatEntity::pushMovementSprite()
     std::shared_ptr<Vector2D> position = getPosition();
 
     movementSprite.pushSprite(position->getIntX() + lastOffsetX + 1, position->getIntY() + 1);
+}
+
+void CombatEntity::takeDamage(float amount) 
+{
+    stats.health -= amount - amount*stats.armor/100;
+    if (stats.health <= 0) {
+        die();
+    }
+}
+
+void CombatEntity::die() 
+{
+    startRunning(Direction::LEFT);
 }
 
 void CombatEntity::pushAttackSprite() 
@@ -283,4 +306,9 @@ bool CombatEntity::isFacingRight()
 bool CombatEntity::isFacingLeft()
 {
     return facingDirection == Direction::LEFT;
+}
+
+CombatEntity::Type CombatEntity::getType() 
+{
+    return type;
 }

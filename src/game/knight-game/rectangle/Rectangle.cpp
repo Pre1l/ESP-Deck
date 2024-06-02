@@ -33,6 +33,26 @@ uint8_t Rectangle::getId()
     return id;
 }
 
+bool Rectangle::calculateCollision(Rectangle& other) 
+{
+    Vector2D pos = *getPosition();
+    float x = pos.getX();
+    float y = pos.getY();
+    float width = getWidth();
+    float height = getHeight();
+
+    Vector2D oPos = *other.getPosition();
+    float oX = oPos.getX();
+    float oY = oPos.getY();
+    float oWidth  = other.getWidth();
+    float oHeight = other.getHeight();
+
+    bool collideX = (x < oX + oWidth) && (x + width > oX);
+    bool collideY = (y < oY + oHeight) && (y + height > oY);
+
+    return collideX && collideY;
+}
+
 float Rectangle::calculateCollision(Rectangle& other, CollisionAxis axis, bool returnOverlap) 
 {
     Vector2D pos = *getPosition();

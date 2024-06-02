@@ -130,6 +130,24 @@ std::shared_ptr<CombatEntity> KnightGame::calculateCombatEntityCollision(Rectang
     return nullptr;
 }
 
+std::vector<std::shared_ptr<CombatEntity>> KnightGame::calculateCombatEntitiesCollision(Rectangle& rectangle) 
+{
+    std::vector<std::shared_ptr<CombatEntity>> collidingCombatEntities;
+
+    for (std::shared_ptr<CombatEntity> combatEntity : getCombatEntities()) {
+        Hitbox& combatEntityHitbox = combatEntity->getHitbox();
+
+        if (rectangle.getId() != combatEntityHitbox.getId()) {
+            int overlap = rectangle.calculateCollision(combatEntityHitbox);
+
+            if (overlap == 1)
+                collidingCombatEntities.push_back(combatEntity);
+        }
+    }
+
+    return collidingCombatEntities;
+}
+
 float KnightGame::calculateTerrainCollision(Rectangle& rectangle, Rectangle::CollisionAxis axis, bool returnOverlap) 
 {
     for (Rectangle& terrain : getTerrains()) {

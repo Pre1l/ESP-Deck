@@ -5,11 +5,12 @@
 #include <display/DisplayManager.hpp>
 #include "game/knight-game/animation/AnimationObserver.hpp"
 #include "Entity.hpp"
+#include <game/knight-game/rectangle/ProxyHitbox.hpp>
 
 class CombatEntity : public Entity, public AnimationObserver
 {
     public:
-        enum class EntityType {
+        enum class Type {
             KNIGHT,
             SLIME
         };
@@ -20,7 +21,7 @@ class CombatEntity : public Entity, public AnimationObserver
         };
 
     private:
-        struct CombatEntityConfig
+        struct CombatEntityStats
         {
             float health;
             float armor;
@@ -30,8 +31,8 @@ class CombatEntity : public Entity, public AnimationObserver
         };
 
     protected:
-        CombatEntityConfig config;
-        EntityType type;
+        CombatEntityStats stats;
+        Type type;
 
     private:
         bool onGround = false;
@@ -55,9 +56,10 @@ class CombatEntity : public Entity, public AnimationObserver
         bool attackRequest = false;
 
     public:
-        void update(float offsetX, float deltaTime);
+        void update(float offsetX, float deltaTime) override;
         void animationCallback() override;
         void animationFinishedCallback() override;
+
         Vector2D& getVelocity();
         TFT_eSprite& getAttackSprite();
         TFT_eSprite& getMovementSprite();
@@ -65,8 +67,9 @@ class CombatEntity : public Entity, public AnimationObserver
         int getAnimationHeight();
         int getAttackAnimationWidth();
         Animation& getMovementAnimation();
-        void clearAfterImageOffset(float offsetX);
-        void disableOffset();
+        Type getType();
+        ProxyHitbox attackHitboxRight;
+        ProxyHitbox attackHitboxLeft;
 
         void jump();
         void startRunning(Direction direction);
@@ -80,16 +83,23 @@ class CombatEntity : public Entity, public AnimationObserver
 
     protected:
         CombatEntity(std::shared_ptr<Vector2D> position, int animationWidth, int animationHeight, int attackAnimationWidth, Vector2D velocity);
+
+        void disableOffset();
+
         virtual void collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) = 0;
-        virtual void clearAfterImage(Vector2D& deltaVelocity);
+        virtual void setAnimation() = 0;
+
+        virtual void clearAfterImageVelocity(Vector2D& deltaVelocity);
+        virtual void clearAfterImageOffset(float offsetX);
+        virtual void clearAfterImageCallbackAnimation();
+
         virtual void handleVelocity(float deltaTime);
         virtual void handleAnimation(float deltaTime);
         virtual void pushMovementSprite();
         virtual void pushAttackSprite();
         virtual void stopCallbackAnimation();
-        virtual void clearCallbackAnimationAfterImage();
-        virtual void setAnimation() = 0;
-        //virtual void takeDamage(float amount);
+        virtual void takeDamage(float amount);
+        virtual void die();
 };
 
 #endif // COMBAT_ENTITY_HPP

@@ -6,12 +6,13 @@
 Slime::Slime(std::shared_ptr<Vector2D> position) 
 : CombatEntity(position, 30, 16, 30, Vector2D(0, 0))
 {
-    type = EntityType::SLIME;
+    type = Type::SLIME;
 
-    config.speedX = 0.05;
+    stats.speedX = 0.05;
+    stats.health = 50;
+    stats.armor = 50;
 
     getMovementAnimation().setNewAnimation(slimeIdleBitmap, 0, 8, 150);
-    startRunning(Direction::RIGHT);
 }
 
 void Slime::setAnimation() 
@@ -26,5 +27,5 @@ void Slime::setAnimation()
 
 void Slime::collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) 
 {
-    
+
 }

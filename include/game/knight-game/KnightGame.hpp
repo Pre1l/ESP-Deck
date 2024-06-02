@@ -23,13 +23,17 @@ class KnightGame : public Game
         void keyPressed(int key) override;
         void keyReleased(int key) override;
         void onGameClosed() override;
+
         std::vector<Terrain>& getTerrains();
         std::shared_ptr<Knight> getKnight();
+        std::vector<std::shared_ptr<CombatEntity>>& getCombatEntities();
+
         float calculateTerrainCollision(Rectangle& rectangle, Rectangle::CollisionAxis axis, bool returnOverlap);
         float calculateCollision(Rectangle& rectangle, Rectangle::CollisionAxis axis, bool returnOverlap);
         std::shared_ptr<CombatEntity> calculateCombatEntityCollision(Rectangle& rectangle, Rectangle::CollisionAxis axis);
+        std::vector<std::shared_ptr<CombatEntity>> calculateCombatEntitiesCollision(Rectangle& rectangle);
+
         void addCombatEntity(std::shared_ptr<CombatEntity> combatEntity);
-        std::vector<std::shared_ptr<CombatEntity>>& getCombatEntities();
 
     private:
         KnightGame();
