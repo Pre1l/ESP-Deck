@@ -88,6 +88,7 @@ class CombatEntity : public Entity, public AnimationObserver
 
         virtual void collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) = 0;
         virtual void setAnimation() = 0;
+        virtual void setAttackAnimation() = 0;
 
         virtual void clearAfterImageVelocity(Vector2D& deltaVelocity);
         virtual void clearAfterImageOffset(float offsetX);

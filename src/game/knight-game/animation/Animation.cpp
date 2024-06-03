@@ -41,6 +41,7 @@ void Animation::reset()
 {
     animationIndex = 0;
     currentAnimationIndex = 0;
+    pushAnimationFrame();
 }
 
 void Animation::pushAnimationFrame() 

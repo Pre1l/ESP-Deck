@@ -10,6 +10,7 @@ class Slime : public CombatEntity
 
     private:
         void setAnimation() override;
+        void setAttackAnimation() override;
         void collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) override;
 };
 

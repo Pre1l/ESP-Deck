@@ -10,7 +10,7 @@ Slime::Slime(std::shared_ptr<Vector2D> position)
 
     stats.speedX = 0.05;
     stats.health = 50;
-    stats.armor = 50;
+    stats.armor = 10;
 
     getMovementAnimation().setNewAnimation(slimeIdleBitmap, 0, 8, 150);
 }
@@ -23,6 +23,11 @@ void Slime::setAnimation()
     }
 
     getMovementAnimation().setNewAnimation(slimeIdleBitmap, 0, 8, 150);
+}
+
+void Slime::setAttackAnimation() 
+{
+
 }
 
 void Slime::collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) 

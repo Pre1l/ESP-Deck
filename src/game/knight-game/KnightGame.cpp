@@ -6,7 +6,9 @@ std::shared_ptr<KnightGame> KnightGame::instance = nullptr;
 KnightGame::KnightGame() 
 {
     setKnight(std::make_shared<Knight>(std::make_shared<Vector2D>(214, 0)));
-    addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(0, 0)));
+    addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(10, 0)));
+    addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(335, 0)));
+    addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(105, 0)));
 
     terrains.push_back(Terrain(std::make_shared<Vector2D>(-500, 300), 1320, 20, 0, TFT_WHITE));
     terrains.push_back(Terrain(std::make_shared<Vector2D>(200, 240), 40, 20, 0, TFT_WHITE));

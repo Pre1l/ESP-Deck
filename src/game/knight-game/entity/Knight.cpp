@@ -31,7 +31,12 @@ void Knight::pushMovementSprite()
 
 void Knight::pushAttackSprite() 
 {
-    getAttackSprite().pushSprite(215, getPosition()->getIntY() + 1);
+    if (isFacingRight()) {
+        getAttackSprite().pushSprite(215, getPosition()->getIntY() + 1);
+        return;        
+    }
+
+    getAttackSprite().pushSprite(205, getPosition()->getIntY() + 1);
 }
 
 void Knight::clearAfterImageVelocity(Vector2D& deltaVelocity) 
@@ -60,9 +65,18 @@ void Knight::setAnimation()
     }
 }
 
+void Knight::setAttackAnimation() 
+{
+    isFacingRight() ? callbackAnimation.setNewAnimation(knightAttackBitmap, 0, 6, 4, 90) : callbackAnimation.setNewAnimation(knightAttackBitmap, 1, 6, 4, 90);
+}
+
 void Knight::clearAfterImageCallbackAnimation() 
 {
-    DisplayManager::getDisplay().fillRect(215 + 54, getPosition()->getIntY() + 1, 10, 64, TFT_BLACK);
+    if (isFacingRight()) {
+        DisplayManager::getDisplay().fillRect(215 + 54, getPosition()->getIntY() + 1, 10, 64, TFT_BLACK);
+    }
+
+    DisplayManager::getDisplay().fillRect(205, getPosition()->getIntY() + 1, 10, 64, TFT_BLACK);
 }
 
 void Knight::collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) 
