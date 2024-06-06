@@ -2,6 +2,8 @@
 
 #include <game/knight-game/KnightGame.hpp>
 
+uint8_t CombatEntity::nextId = 0;
+
 CombatEntity::CombatEntity(std::shared_ptr<Vector2D> position, int animationWidth, int animationHeight, int attackAnimationWidth, Vector2D velocity) 
 : Entity(position, Hitbox(position, animationWidth + 2, animationHeight + 2)),
   attackAnimation({}, 0, attackAnimationWidth, animationHeight, 0, 0, 0, attackSprite, this),
@@ -14,6 +16,9 @@ CombatEntity::CombatEntity(std::shared_ptr<Vector2D> position, int animationWidt
     this->animationWidth = animationWidth;
     this->animationHeight = animationHeight;
     this->attackAnimationWidth = attackAnimationWidth;
+    this->id = nextId;
+    nextId++;
+
     getMovementSprite().setSwapBytes(true);
     getMovementSprite().createSprite(animationWidth, animationHeight);
     getAttackSprite().setSwapBytes(true);
@@ -23,8 +28,11 @@ CombatEntity::CombatEntity(std::shared_ptr<Vector2D> position, int animationWidt
 
 void CombatEntity::update(float offsetX, float deltaTime)
 {
+    clearAfterImageOffset(offsetX);
+
     if (dead) {
         pushDeathSprite();
+        deathAnimation.update(deltaTime);
         return;
     }
 
@@ -41,13 +49,17 @@ void CombatEntity::update(float offsetX, float deltaTime)
 
     handleVelocity(deltaTime);
     handleAnimation(deltaTime);
-    clearAfterImageOffset(offsetX);
 
     if (attackAnimation.animationInProgress == true) {
         pushAttackSprite();
     } else {
         pushMovementSprite();
     }
+}
+
+CallbackAnimation& CombatEntity::getDeathAnimation() 
+{
+    return deathAnimation;
 }
 
 CallbackAnimation& CombatEntity::getAttackAnimation() 
@@ -175,6 +187,11 @@ void CombatEntity::clearAfterImageVelocity(Vector2D& deltaVelocity)
     }
 }
 
+uint8_t CombatEntity::getId() 
+{
+    return id;
+}
+
 void CombatEntity::handleAnimation(float deltaTime) 
 {
     if (attackAnimation.animationInProgress) {
@@ -191,7 +208,8 @@ void CombatEntity::animationCallback()
 {
     if (dead) {
         clearAfterImageDeath();
-        delete this;
+        std::shared_ptr<CombatEntity> selfPtr(this, [](CombatEntity*){});
+        KnightGame::getInstance()->markCombatEntityForRemoval(selfPtr);
     }
 
     std::shared_ptr<KnightGame> knightGame = KnightGame::getInstance();
@@ -219,6 +237,11 @@ void CombatEntity::clearAfterImageAttackAnimation()
     DisplayManager::getDisplay().fillRect(getPosition()->getIntX() - attackAnimationWidth + animationWidth, getPosition()->getIntY() + 1, attackAnimationWidth - animationWidth /*+ 1*/, animationHeight, TFT_BLACK);
 }
 
+void CombatEntity::clearAfterImageDeath() 
+{
+    DisplayManager::getDisplay().fillRect(getPosition()->getIntX() + lastOffsetX + 1, getPosition()->getIntY() + 1, animationWidth, animationHeight, TFT_BLACK);
+}
+
 void CombatEntity::pushMovementSprite() 
 {
     std::shared_ptr<Vector2D> position = getPosition();
@@ -237,6 +260,8 @@ void CombatEntity::takeDamage(float amount)
 void CombatEntity::die() 
 {
     dead = true;
+    getMovementSprite().deleteSprite();
+    getAttackSprite().deleteSprite();
     getDeathSprite().createSprite(getAnimationWidth(), getAnimationHeight());
     setDeathAnimation();
 }
@@ -255,7 +280,9 @@ void CombatEntity::pushAttackSprite()
 
 void CombatEntity::pushDeathSprite() 
 {
+    std::shared_ptr<Vector2D> position = getPosition();
 
+    deathSprite.pushSprite(position->getIntX() + lastOffsetX + 1, position->getIntY() + 1);
 }
 
 void CombatEntity::attack()

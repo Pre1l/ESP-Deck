@@ -35,17 +35,22 @@ class CombatEntity : public Entity, public AnimationObserver
         Type type;
 
     private:
-        bool onGround = false;
-        bool running = false;
-        Direction facingDirection = Direction::RIGHT;
+        static uint8_t nextId;
+        uint8_t id;
 
+        Direction facingDirection = Direction::RIGHT;
         Vector2D velocity;
+
         TFT_eSprite attackSprite = TFT_eSprite(&DisplayManager::tft);
         TFT_eSprite deathSprite = TFT_eSprite(&DisplayManager::tft);
         TFT_eSprite movementSprite = TFT_eSprite(&DisplayManager::tft);
+
         Animation movementAnimation;
         CallbackAnimation attackAnimation;
         CallbackAnimation deathAnimation;
+
+        ProxyHitbox attackHitboxRight;
+        ProxyHitbox attackHitboxLeft;
 
         int animationWidth;
         int animationHeight;
@@ -54,6 +59,9 @@ class CombatEntity : public Entity, public AnimationObserver
 
         bool offset = true;
         bool dead = false;
+        bool onGround = false;
+        bool running = false;
+
         bool jumpRequest = false;
         bool runLeftRequest = false;
         bool runRightRequest = false;
@@ -65,16 +73,8 @@ class CombatEntity : public Entity, public AnimationObserver
         void animationFinishedCallback() override;
 
         Vector2D& getVelocity();
-        TFT_eSprite& getAttackSprite();
-        TFT_eSprite& getMovementSprite();
-        TFT_eSprite& getDeathSprite();
-        int getAnimationWidth();
-        int getAnimationHeight();
-        int getAttackAnimationWidth();
-        Animation& getMovementAnimation();
         Type getType();
-        ProxyHitbox attackHitboxRight;
-        ProxyHitbox attackHitboxLeft;
+        uint8_t getId();
 
         void jump();
         void startRunning(Direction direction);
@@ -88,9 +88,17 @@ class CombatEntity : public Entity, public AnimationObserver
 
     protected:
         CombatEntity(std::shared_ptr<Vector2D> position, int animationWidth, int animationHeight, int attackAnimationWidth, Vector2D velocity);
+        void disableOffset();
 
         CallbackAnimation& getAttackAnimation();
-        void disableOffset();
+        CallbackAnimation& getDeathAnimation();
+        Animation& getMovementAnimation();
+        TFT_eSprite& getAttackSprite();
+        TFT_eSprite& getMovementSprite();
+        TFT_eSprite& getDeathSprite();
+        int getAnimationWidth();
+        int getAnimationHeight();
+        int getAttackAnimationWidth();
 
         virtual void collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) = 0;
         virtual void setAnimation() = 0;

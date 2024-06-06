@@ -12,6 +12,7 @@ class Knight : public CombatEntity
     private:
         void setAnimation() override;
         void setAttackAnimation() override;
+        void setDeathAnimation() override;
         void clearAfterImageVelocity(Vector2D& deltaVelocity) override;
         void clearAfterImageAttackAnimation() override;
         void pushAttackSprite() override;

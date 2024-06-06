@@ -18,7 +18,7 @@ void EspDeckMenu::renderMenu()
     display.drawString("ESP-Deck", 105, 35);
     DisplayManager::resetFont();
     display.setTextSize(1);
-    display.drawString("Update Build 59", 105, 95);
+    display.drawString("Update Build 61", 105, 95);
     DisplayManager::resetFont();
 }
 

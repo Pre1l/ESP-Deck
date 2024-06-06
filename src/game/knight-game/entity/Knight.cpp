@@ -65,6 +65,11 @@ void Knight::setAnimation()
     }
 }
 
+void Knight::setDeathAnimation() 
+{
+    
+}
+
 void Knight::setAttackAnimation() 
 {
     isFacingRight() ? getAttackAnimation().setNewAnimation(knightAttackBitmap, 0, 6, 4, 90) : getAttackAnimation().setNewAnimation(knightAttackBitmap, 1, 6, 4, 90);

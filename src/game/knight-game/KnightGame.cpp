@@ -6,7 +6,7 @@ std::shared_ptr<KnightGame> KnightGame::instance = nullptr;
 KnightGame::KnightGame() 
 {
     setKnight(std::make_shared<Knight>(std::make_shared<Vector2D>(214, 0)));
-    addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(10, 0)));
+    addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(10, 100)));
     addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(335, 0)));
     addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(105, 0)));
 
@@ -30,6 +30,8 @@ void KnightGame::update(float deltaTime)
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
     float knightX = -(getKnight()->getPosition()->getX() - 214);
+
+    removeMarkedCombatEntities();
 
     for (std::shared_ptr<CombatEntity> combatEntity : getCombatEntities()) {
         combatEntity->update(knightX, deltaTime);
@@ -84,6 +86,23 @@ void KnightGame::keyReleased(int key)
 void KnightGame::addCombatEntity(std::shared_ptr<CombatEntity> combatEntity) 
 {
     getCombatEntities().push_back(combatEntity);
+}
+
+void KnightGame::markCombatEntityForRemoval(std::shared_ptr<CombatEntity> combatEntity) {
+    combatEntitiesToRemove.push(combatEntity);
+}
+
+void KnightGame::removeMarkedCombatEntities() 
+{
+    while (!combatEntitiesToRemove.empty()) {
+        auto combatEntityToRemove = combatEntitiesToRemove.front();
+        combatEntitiesToRemove.pop();
+        
+        auto it = std::find(combatEntities.begin(), combatEntities.end(), combatEntityToRemove);
+        if (it != combatEntities.end()) {
+            combatEntities.erase(it);
+        }
+    }
 }
 
 std::vector<std::shared_ptr<CombatEntity>>& KnightGame::getCombatEntities()
@@ -166,7 +185,7 @@ float KnightGame::calculateTerrainCollision(Rectangle& rectangle, Rectangle::Col
 
 void KnightGame::onGameClosed() 
 {
-
+    instance.reset();
 }
 
 std::shared_ptr<Knight> KnightGame::getKnight() 
