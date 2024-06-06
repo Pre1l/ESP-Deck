@@ -13,7 +13,7 @@ class Knight : public CombatEntity
         void setAnimation() override;
         void setAttackAnimation() override;
         void clearAfterImageVelocity(Vector2D& deltaVelocity) override;
-        void clearAfterImageCallbackAnimation() override;
+        void clearAfterImageAttackAnimation() override;
         void pushAttackSprite() override;
         void pushMovementSprite() override;
         void collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) override;

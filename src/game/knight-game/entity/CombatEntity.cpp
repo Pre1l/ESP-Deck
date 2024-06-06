@@ -4,7 +4,8 @@
 
 CombatEntity::CombatEntity(std::shared_ptr<Vector2D> position, int animationWidth, int animationHeight, int attackAnimationWidth, Vector2D velocity) 
 : Entity(position, Hitbox(position, animationWidth + 2, animationHeight + 2)),
-  AnimationObserver(CallbackAnimation({}, 0, attackAnimationWidth, animationHeight, 0, 0, 0, attackSprite, this)),
+  attackAnimation({}, 0, attackAnimationWidth, animationHeight, 0, 0, 0, attackSprite, this),
+  deathAnimation({}, 0, animationWidth, animationHeight, 0, 0, 0, deathSprite, this),
   movementAnimation({}, 0, animationWidth, animationHeight, 0, 0, movementSprite),
   velocity(velocity),
   attackHitboxRight(getPosition(), attackAnimationWidth - animationWidth, animationHeight + 2, animationWidth + 2),
@@ -17,10 +18,16 @@ CombatEntity::CombatEntity(std::shared_ptr<Vector2D> position, int animationWidt
     getMovementSprite().createSprite(animationWidth, animationHeight);
     getAttackSprite().setSwapBytes(true);
     getAttackSprite().createSprite(attackAnimationWidth, animationHeight);
+    getDeathSprite().setSwapBytes(true);
 }
 
 void CombatEntity::update(float offsetX, float deltaTime)
 {
+    if (dead) {
+        pushDeathSprite();
+        return;
+    }
+
     if (attackRequest) {
         attackRequest = false;
 
@@ -28,7 +35,7 @@ void CombatEntity::update(float offsetX, float deltaTime)
 
         if (KnightGame::getInstance()->calculateTerrainCollision(attackHitbox, Rectangle::CollisionAxis::X, false) == 0) {
             setAttackAnimation();
-            callbackAnimation.update(deltaTime);
+            attackAnimation.update(deltaTime);
         }
     }
 
@@ -36,11 +43,16 @@ void CombatEntity::update(float offsetX, float deltaTime)
     handleAnimation(deltaTime);
     clearAfterImageOffset(offsetX);
 
-    if (callbackAnimation.animationInProgress == true) {
+    if (attackAnimation.animationInProgress == true) {
         pushAttackSprite();
     } else {
         pushMovementSprite();
     }
+}
+
+CallbackAnimation& CombatEntity::getAttackAnimation() 
+{
+    return attackAnimation;
 }
 
 void CombatEntity::handleVelocity(float deltaTime) 
@@ -109,9 +121,9 @@ void CombatEntity::handleVelocity(float deltaTime)
 
 void CombatEntity::stopCallbackAnimation() 
 {
-    if (callbackAnimation.animationInProgress) {
-        callbackAnimation.stop();
-        clearAfterImageCallbackAnimation();
+    if (attackAnimation.animationInProgress) {
+        attackAnimation.stop();
+        clearAfterImageAttackAnimation();
     }
 }
 
@@ -165,8 +177,8 @@ void CombatEntity::clearAfterImageVelocity(Vector2D& deltaVelocity)
 
 void CombatEntity::handleAnimation(float deltaTime) 
 {
-    if (callbackAnimation.animationInProgress) {
-        callbackAnimation.update(deltaTime);
+    if (attackAnimation.animationInProgress) {
+        attackAnimation.update(deltaTime);
         return;
     }
 
@@ -177,6 +189,11 @@ void CombatEntity::handleAnimation(float deltaTime)
 
 void CombatEntity::animationCallback()
 {
+    if (dead) {
+        clearAfterImageDeath();
+        delete this;
+    }
+
     std::shared_ptr<KnightGame> knightGame = KnightGame::getInstance();
     ProxyHitbox& attackHitbox = isFacingRight() ? attackHitboxRight : attackHitboxLeft;
 
@@ -189,10 +206,10 @@ void CombatEntity::animationCallback()
 
 void CombatEntity::animationFinishedCallback() 
 {
-    clearAfterImageCallbackAnimation();
+    clearAfterImageAttackAnimation();
 }
 
-void CombatEntity::clearAfterImageCallbackAnimation() 
+void CombatEntity::clearAfterImageAttackAnimation() 
 {
     if (isFacingRight()) {
         DisplayManager::getDisplay().fillRect(getPosition()->getIntX() + animationWidth, getPosition()->getIntY() + 1, attackAnimationWidth - animationWidth /*+ 1*/, animationHeight, TFT_BLACK);
@@ -219,7 +236,9 @@ void CombatEntity::takeDamage(float amount)
 
 void CombatEntity::die() 
 {
-    startRunning(Direction::LEFT);
+    dead = true;
+    getDeathSprite().createSprite(getAnimationWidth(), getAnimationHeight());
+    setDeathAnimation();
 }
 
 void CombatEntity::pushAttackSprite() 
@@ -232,6 +251,11 @@ void CombatEntity::pushAttackSprite()
     }
 
     attackSprite.pushSprite(position->getIntX() + lastOffsetX + animationWidth + 1 - attackAnimationWidth, position->getIntY() + 1);
+}
+
+void CombatEntity::pushDeathSprite() 
+{
+
 }
 
 void CombatEntity::attack()
@@ -293,6 +317,11 @@ TFT_eSprite& CombatEntity::getAttackSprite()
 TFT_eSprite& CombatEntity::getMovementSprite() 
 {
     return movementSprite;
+}
+
+TFT_eSprite& CombatEntity::getDeathSprite() 
+{
+    return deathSprite;
 }
 
 bool CombatEntity::isRunning() 

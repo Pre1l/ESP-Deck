@@ -21,7 +21,7 @@ Knight::Knight(std::shared_ptr<Vector2D> position)
     
     disableOffset();
     getMovementAnimation().setNewAnimation(knightIdleBitmap, 0, 4, 200);
-    callbackAnimation.setNewAnimation(knightAttackBitmap, 0, 6, 4, 90);
+    getAttackAnimation().setNewAnimation(knightAttackBitmap, 0, 6, 4, 90);
 }
 
 void Knight::pushMovementSprite() 
@@ -67,10 +67,10 @@ void Knight::setAnimation()
 
 void Knight::setAttackAnimation() 
 {
-    isFacingRight() ? callbackAnimation.setNewAnimation(knightAttackBitmap, 0, 6, 4, 90) : callbackAnimation.setNewAnimation(knightAttackBitmap, 1, 6, 4, 90);
+    isFacingRight() ? getAttackAnimation().setNewAnimation(knightAttackBitmap, 0, 6, 4, 90) : getAttackAnimation().setNewAnimation(knightAttackBitmap, 1, 6, 4, 90);
 }
 
-void Knight::clearAfterImageCallbackAnimation() 
+void Knight::clearAfterImageAttackAnimation() 
 {
     if (isFacingRight()) {
         DisplayManager::getDisplay().fillRect(215 + 54, getPosition()->getIntY() + 1, 10, 64, TFT_BLACK);

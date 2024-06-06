@@ -41,8 +41,11 @@ class CombatEntity : public Entity, public AnimationObserver
 
         Vector2D velocity;
         TFT_eSprite attackSprite = TFT_eSprite(&DisplayManager::tft);
+        TFT_eSprite deathSprite = TFT_eSprite(&DisplayManager::tft);
         TFT_eSprite movementSprite = TFT_eSprite(&DisplayManager::tft);
         Animation movementAnimation;
+        CallbackAnimation attackAnimation;
+        CallbackAnimation deathAnimation;
 
         int animationWidth;
         int animationHeight;
@@ -50,6 +53,7 @@ class CombatEntity : public Entity, public AnimationObserver
         float lastOffsetX = 0;
 
         bool offset = true;
+        bool dead = false;
         bool jumpRequest = false;
         bool runLeftRequest = false;
         bool runRightRequest = false;
@@ -63,6 +67,7 @@ class CombatEntity : public Entity, public AnimationObserver
         Vector2D& getVelocity();
         TFT_eSprite& getAttackSprite();
         TFT_eSprite& getMovementSprite();
+        TFT_eSprite& getDeathSprite();
         int getAnimationWidth();
         int getAnimationHeight();
         int getAttackAnimationWidth();
@@ -84,20 +89,24 @@ class CombatEntity : public Entity, public AnimationObserver
     protected:
         CombatEntity(std::shared_ptr<Vector2D> position, int animationWidth, int animationHeight, int attackAnimationWidth, Vector2D velocity);
 
+        CallbackAnimation& getAttackAnimation();
         void disableOffset();
 
         virtual void collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) = 0;
         virtual void setAnimation() = 0;
         virtual void setAttackAnimation() = 0;
+        virtual void setDeathAnimation() = 0;
 
         virtual void clearAfterImageVelocity(Vector2D& deltaVelocity);
         virtual void clearAfterImageOffset(float offsetX);
-        virtual void clearAfterImageCallbackAnimation();
+        virtual void clearAfterImageAttackAnimation();
+        virtual void clearAfterImageDeath();
 
         virtual void handleVelocity(float deltaTime);
         virtual void handleAnimation(float deltaTime);
         virtual void pushMovementSprite();
         virtual void pushAttackSprite();
+        virtual void pushDeathSprite();
         virtual void stopCallbackAnimation();
         virtual void takeDamage(float amount);
         virtual void die();
