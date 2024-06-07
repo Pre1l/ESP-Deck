@@ -108,6 +108,8 @@ void CombatEntity::handleVelocity(float deltaTime)
         std::shared_ptr<CombatEntity> collisionCombatEntity = knightGame->calculateCombatEntityCollision(hitbox, Rectangle::CollisionAxis::X);
         if (collisionCombatEntity != nullptr)
             collisionWithCombatEntity(collisionCombatEntity, Rectangle::CollisionAxis::X);
+        else
+            collisionWithTerrain(Rectangle::CollisionAxis::X);
 
         deltaVelocity.getX() > 0 ? getPosition()->subtractX(overlapX) : getPosition()->addX(overlapX);
         velocity.setX(0);
@@ -121,6 +123,8 @@ void CombatEntity::handleVelocity(float deltaTime)
         std::shared_ptr<CombatEntity> collisionCombatEntity = knightGame->calculateCombatEntityCollision(hitbox, Rectangle::CollisionAxis::Y);
         if (collisionCombatEntity != nullptr)
             collisionWithCombatEntity(collisionCombatEntity, Rectangle::CollisionAxis::Y);
+        else
+            collisionWithTerrain(Rectangle::CollisionAxis::Y);
 
         deltaVelocity.getY() > 0 ? getPosition()->subtractY(overlapY) : getPosition()->addY(overlapY);
         velocity.setY(0);

@@ -14,6 +14,14 @@ Slime::Slime(std::shared_ptr<Vector2D> position)
     stats.armor = 10;
 
     getMovementAnimation().setNewAnimation(slimeIdleBitmap, 0, 8, 150);
+    int randomDirection = random(0, 2);
+    randomDirection == 0 ? startRunning(Direction::RIGHT) : startRunning(Direction::LEFT);
+}
+
+void Slime::animationCallback() 
+{
+    CombatEntity::animationCallback();
+    isFacingRight() ? startRunning(Direction::RIGHT) : startRunning(Direction::LEFT);
 }
 
 void Slime::setAnimation() 
@@ -28,7 +36,7 @@ void Slime::setAnimation()
 
 void Slime::setAttackAnimation()
 {
-
+    getAttackAnimation().setNewAnimation(slimeDeathBitmap, 0, 4, 3, 100);
 }
 
 void Slime::setDeathAnimation() 
@@ -38,5 +46,33 @@ void Slime::setDeathAnimation()
 
 void Slime::collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) 
 {
+    if (axis != Rectangle::CollisionAxis::X)
+        return;
 
+    if (collisionCombatEntity->getType() == Type::KNIGHT) {
+        attack();
+        return;
+    }
+    
+    if (isFacingRight()) {
+        stopRunning(Direction::RIGHT);
+        startRunning(Direction::LEFT);
+    } else {
+        stopRunning(Direction::LEFT);
+        startRunning(Direction::RIGHT);
+    }
+}
+
+void Slime::collisionWithTerrain(Rectangle::CollisionAxis axis) 
+{
+    if (axis != Rectangle::CollisionAxis::X)
+        return;
+        
+    if (isFacingRight()) {
+            stopRunning(Direction::RIGHT);
+            startRunning(Direction::LEFT);
+        } else {
+            stopRunning(Direction::LEFT);
+            startRunning(Direction::RIGHT);
+        }
 }

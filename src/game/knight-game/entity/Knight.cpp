@@ -18,6 +18,8 @@ Knight::Knight(std::shared_ptr<Vector2D> position)
     stats.speedX = 0.2;
     stats.jumpSpeed = 0.7;
     stats.attackDamage = 25;
+    stats.health = 100;
+    stats.armor = 90;
     
     disableOffset();
     getMovementAnimation().setNewAnimation(knightIdleBitmap, 0, 4, 200);
@@ -67,7 +69,7 @@ void Knight::setAnimation()
 
 void Knight::setDeathAnimation() 
 {
-    
+
 }
 
 void Knight::setAttackAnimation() 
@@ -85,6 +87,11 @@ void Knight::clearAfterImageAttackAnimation()
 }
 
 void Knight::collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) 
+{
+
+}
+
+void Knight::collisionWithTerrain(Rectangle::CollisionAxis axis) 
 {
 
 }

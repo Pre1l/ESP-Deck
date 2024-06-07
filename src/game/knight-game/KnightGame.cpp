@@ -10,11 +10,13 @@ KnightGame::KnightGame()
     addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(335, 0)));
     addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(105, 0)));
 
-    terrains.push_back(Terrain(std::make_shared<Vector2D>(-500, 300), 1320, 20, 0, TFT_WHITE));
+    terrains.push_back(Terrain(std::make_shared<Vector2D>(-500, 300), 1300, 20, 0, TFT_WHITE));
     terrains.push_back(Terrain(std::make_shared<Vector2D>(200, 240), 40, 20, 0, TFT_WHITE));
     terrains.push_back(Terrain(std::make_shared<Vector2D>(300, 200), 160, 20, 0, TFT_WHITE));
     terrains.push_back(Terrain(std::make_shared<Vector2D>(100, 80), 40, 20, 0, TFT_WHITE));
     terrains.push_back(Terrain(std::make_shared<Vector2D>(170, 140), 40, 20, 0, TFT_WHITE));
+    terrains.push_back(Terrain(std::make_shared<Vector2D>(-500, 0), 40, 300, 0, TFT_WHITE));
+    terrains.push_back(Terrain(std::make_shared<Vector2D>(760, 0), 40, 300, 0, TFT_WHITE));
 }
 
 std::shared_ptr<KnightGame> KnightGame::getInstance() 

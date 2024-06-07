@@ -18,6 +18,7 @@ class Knight : public CombatEntity
         void pushAttackSprite() override;
         void pushMovementSprite() override;
         void collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) override;
+        void collisionWithTerrain(Rectangle::CollisionAxis axis) override;
 };
 
 #endif // KNIGHT_HPP

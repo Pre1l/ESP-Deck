@@ -69,8 +69,8 @@ class CombatEntity : public Entity, public AnimationObserver
 
     public:
         void update(float offsetX, float deltaTime) override;
-        void animationCallback() override;
-        void animationFinishedCallback() override;
+        virtual void animationCallback() override;
+        virtual void animationFinishedCallback() override;
 
         Vector2D& getVelocity();
         Type getType();
@@ -101,6 +101,7 @@ class CombatEntity : public Entity, public AnimationObserver
         int getAttackAnimationWidth();
 
         virtual void collisionWithCombatEntity(std::shared_ptr<CombatEntity> collisionCombatEntity, Rectangle::CollisionAxis axis) = 0;
+        virtual void collisionWithTerrain(Rectangle::CollisionAxis axis) = 0;
         virtual void setAnimation() = 0;
         virtual void setAttackAnimation() = 0;
         virtual void setDeathAnimation() = 0;
