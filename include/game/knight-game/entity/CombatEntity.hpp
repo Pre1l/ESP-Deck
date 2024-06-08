@@ -55,9 +55,7 @@ class CombatEntity : public Entity, public AnimationObserver
         int animationWidth;
         int animationHeight;
         int attackAnimationWidth;
-        float lastOffsetX = 0;
 
-        bool offset = true;
         bool dead = false;
         bool onGround = false;
         bool running = false;
@@ -88,7 +86,6 @@ class CombatEntity : public Entity, public AnimationObserver
 
     protected:
         CombatEntity(std::shared_ptr<Vector2D> position, int animationWidth, int animationHeight, int attackAnimationWidth, Vector2D velocity);
-        void disableOffset();
 
         CallbackAnimation& getAttackAnimation();
         CallbackAnimation& getDeathAnimation();
@@ -107,7 +104,6 @@ class CombatEntity : public Entity, public AnimationObserver
         virtual void setDeathAnimation() = 0;
 
         virtual void clearAfterImageVelocity(Vector2D& deltaVelocity);
-        virtual void clearAfterImageOffset(float offsetX);
         virtual void clearAfterImageAttackAnimation();
         virtual void clearAfterImageDeath();
 

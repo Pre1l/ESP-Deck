@@ -28,7 +28,7 @@ CombatEntity::CombatEntity(std::shared_ptr<Vector2D> position, int animationWidt
 
 void CombatEntity::update(float offsetX, float deltaTime)
 {
-    clearAfterImageOffset(offsetX);
+    Entity::update(offsetX, deltaTime);
 
     if (dead) {
         pushDeathSprite();
@@ -132,7 +132,7 @@ void CombatEntity::handleVelocity(float deltaTime)
             onGround = true;
     } else {
         onGround = false;
-    }
+    }  
 }
 
 void CombatEntity::stopCallbackAnimation() 
@@ -143,51 +143,20 @@ void CombatEntity::stopCallbackAnimation()
     }
 }
 
-void CombatEntity::disableOffset() 
-{
-    offset = false;
-}
-
-void CombatEntity::clearAfterImageOffset(float offsetX) 
-{
-    if (!offset)
-        return;
-
-    Vector2D position = *getPosition();
-    TFT_eSPI& display = DisplayManager::getDisplay();
-
-    float movementX = offsetX - lastOffsetX;
-    int ceilMovementX = ceil(abs(movementX));;
-    int offsetPosX = ceil(position.getX() + lastOffsetX);
-    int posY = position.getIntY();
-    int width = getAnimationWidth();
-    int height = getAnimationHeight();
-
-    if (movementX != 0) {
-        if (movementX > 0) {
-            display.fillRect(offsetPosX - 2, posY, ceilMovementX + 3, height + 1, TFT_BLACK);
-        } else if (movementX < 0) {
-            display.fillRect(offsetPosX + width - ceilMovementX - 2, posY, ceilMovementX + 3, height + 1, TFT_BLACK);
-        }
-    }
-
-    lastOffsetX = offsetX;
-}
-
 void CombatEntity::clearAfterImageVelocity(Vector2D& deltaVelocity) 
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
 
     if (deltaVelocity.getY() > 0) {
-        display.fillRect(round(getPosition()->getX() + lastOffsetX) + 1, round(getPosition()->getY()), animationWidth, round(deltaVelocity.getY()) + 1, TFT_BLACK);
+        display.fillRect(round(getPosition()->getX() + getOffsetX()) + 1, round(getPosition()->getY()), animationWidth, round(deltaVelocity.getY()) + 1, TFT_BLACK);
     } else if (deltaVelocity.getY() < 0) {
-        display.fillRect(round(getPosition()->getX() + lastOffsetX) + 1, round(getPosition()->getY() + animationHeight + deltaVelocity.getY()), animationWidth, round(-deltaVelocity.getY()) + 1, TFT_BLACK);
+        display.fillRect(round(getPosition()->getX() + getOffsetX()) + 1, round(getPosition()->getY() + animationHeight + deltaVelocity.getY()), animationWidth, round(-deltaVelocity.getY()) + 1, TFT_BLACK);
     }
 
     if (deltaVelocity.getX() > 0) {
-        display.fillRect(round(getPosition()->getX() + lastOffsetX) - 2, round(getPosition()->getY()), round(deltaVelocity.getX()) + 4, animationHeight + 1, TFT_BLACK);
+        display.fillRect(round(getPosition()->getX() + getOffsetX() - 1.5), round(getPosition()->getY()), round(deltaVelocity.getX()) + 3, animationHeight + 1, TFT_BLACK);
     } else if (deltaVelocity.getX() < 0) {
-        display.fillRect(round(getPosition()->getX() + lastOffsetX + animationWidth + deltaVelocity.getX()) - 2, round(getPosition()->getY()), round(-deltaVelocity.getX()) + 4, animationHeight + 1, TFT_BLACK);
+        display.fillRect(round(getPosition()->getX() + getOffsetX() + animationWidth + deltaVelocity.getX() - 1.5), round(getPosition()->getY()), round(-deltaVelocity.getX()) + 3, animationHeight + 1, TFT_BLACK);
     }
 }
 
@@ -243,14 +212,14 @@ void CombatEntity::clearAfterImageAttackAnimation()
 
 void CombatEntity::clearAfterImageDeath() 
 {
-    DisplayManager::getDisplay().fillRect(getPosition()->getIntX() + lastOffsetX + 1, getPosition()->getIntY() + 1, animationWidth, animationHeight, TFT_BLACK);
+    DisplayManager::getDisplay().fillRect(getPosition()->getIntX() + getOffsetX() + 1, getPosition()->getIntY() + 1, animationWidth, animationHeight, TFT_BLACK);
 }
 
 void CombatEntity::pushMovementSprite() 
 {
     std::shared_ptr<Vector2D> position = getPosition();
 
-    movementSprite.pushSprite(position->getIntX() + lastOffsetX + 1, position->getIntY() + 1);
+    movementSprite.pushSprite(position->getIntX() + getOffsetX() + 1, position->getIntY() + 1);
 }
 
 void CombatEntity::takeDamage(float amount) 
@@ -275,18 +244,18 @@ void CombatEntity::pushAttackSprite()
     std::shared_ptr<Vector2D> position = getPosition();
 
     if (isFacingRight()) {
-        attackSprite.pushSprite(position->getIntX() + lastOffsetX + 1, position->getIntY() + 1);
+        attackSprite.pushSprite(position->getIntX() + getOffsetX() + 1, position->getIntY() + 1);
         return;
     }
 
-    attackSprite.pushSprite(position->getIntX() + lastOffsetX + animationWidth + 1 - attackAnimationWidth, position->getIntY() + 1);
+    attackSprite.pushSprite(position->getIntX() + getOffsetX() + animationWidth + 1 - attackAnimationWidth, position->getIntY() + 1);
 }
 
 void CombatEntity::pushDeathSprite() 
 {
     std::shared_ptr<Vector2D> position = getPosition();
 
-    deathSprite.pushSprite(position->getIntX() + lastOffsetX + 1, position->getIntY() + 1);
+    deathSprite.pushSprite(position->getIntX() + getOffsetX() + 1, position->getIntY() + 1);
 }
 
 void CombatEntity::attack()
