@@ -1,14 +1,19 @@
 #include "game/knight-game/KnightGame.hpp"
+
 #include <game/knight-game/entity/Slime.hpp>
 
 std::shared_ptr<KnightGame> KnightGame::instance = nullptr;
 
 KnightGame::KnightGame() 
 {
+    DisplayManager::getDisplay().fillScreen(TFT_BLACK);
+
     setKnight(std::make_shared<Knight>(std::make_shared<Vector2D>(214, 0)));
     addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(10, 100)));
     addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(335, 0)));
     addCombatEntity(std::make_shared<Slime>(std::make_shared<Vector2D>(105, 0)));
+
+    //spikes.push_back(Spike(std::make_shared<Vector2D>(50, 288), 20));
 
     terrains.push_back(Terrain(std::make_shared<Vector2D>(-500, 300), 1300, 20, 0, TFT_WHITE));
     terrains.push_back(Terrain(std::make_shared<Vector2D>(200, 240), 40, 20, 0, TFT_WHITE));
@@ -37,6 +42,10 @@ void KnightGame::update(float deltaTime)
 
     for (std::shared_ptr<CombatEntity> combatEntity : getCombatEntities()) {
         combatEntity->update(knightX, deltaTime);
+    }
+
+    for (Spike& spike : getSpikes()) {
+        spike.update(knightX, deltaTime);
     }
 
     for (Terrain& terrain : getTerrains()) {
@@ -110,6 +119,11 @@ void KnightGame::removeMarkedCombatEntities()
 std::vector<std::shared_ptr<CombatEntity>>& KnightGame::getCombatEntities()
 {
     return combatEntities;
+}
+
+std::vector<Spike>& KnightGame::getSpikes() 
+{
+    return spikes;
 }
 
 float KnightGame::calculateCollision(Rectangle& rectangle, Rectangle::CollisionAxis axis, bool returnOverlap) 

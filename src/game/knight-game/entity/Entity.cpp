@@ -41,17 +41,17 @@ void Entity::clearAfterImageOffset(float offsetX)
     TFT_eSPI& display = DisplayManager::getDisplay();
 
     float movementX = offsetX - lastOffsetX;
-    int ceilMovementX = ceil(abs(movementX));;
-    int offsetPosX = ceil(position.getX() + lastOffsetX);
+    int ceilMovementX = ceil(abs(movementX));
+    int offsetPosX = round(position.getX() + lastOffsetX);
     int posY = position.getIntY();
     int width = getDrawWidth();
     int height = getDrawHeight();
 
     if (movementX != 0) {
         if (movementX > 0) {
-            display.fillRect(offsetPosX - 2, posY, ceilMovementX + 3, height + 1, TFT_BLACK);
+            display.fillRect(offsetPosX, posY, ceilMovementX + 3, height + 1, TFT_BLACK);
         } else if (movementX < 0) {
-            display.fillRect(offsetPosX + width - ceilMovementX - 2, posY, ceilMovementX + 3, height + 1, TFT_BLACK);
+            display.fillRect(offsetPosX + width - ceilMovementX, posY, ceilMovementX + 3, height + 1, TFT_BLACK);
         }
     }
 

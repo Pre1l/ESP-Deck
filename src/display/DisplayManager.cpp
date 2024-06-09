@@ -7,7 +7,7 @@ TFT_eSPI DisplayManager::tft = TFT_eSPI();
 void DisplayManager::initialize() 
 {
     tft.init();
-    tft.setRotation(1);
+    tft.setRotation(3);
     tft.fillScreen(TFT_BLACK);
     tft.setSwapBytes(true);
     tft.setFreeFont(FF25);

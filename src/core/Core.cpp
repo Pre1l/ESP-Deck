@@ -9,12 +9,12 @@
 #include "TFT_eSPI.h"
 #include <EEPROM.h>
 
-#define RIGHT_PIN 9
-#define UP_PIN 10
-#define LEFT_PIN 11
+#define RIGHT_PIN 10
+#define UP_PIN 11
+#define LEFT_PIN 13
 #define DOWN_PIN 12
-#define ACTION_PIN 13
-#define MENU_PIN 46
+#define ACTION_PIN 46
+#define MENU_PIN 9
 int keyPins[] = {RIGHT_PIN, UP_PIN, LEFT_PIN, DOWN_PIN, ACTION_PIN};
 
 TaskHandle_t core0TaskHandle;
@@ -55,7 +55,7 @@ void loop()
         if (currentGame != nullptr) {
             currentGame->onGameClosed();
         }
-        currentGame = GameFactory::createUniqueKnightGame();
+        currentGame.reset(new Menu());
         menuButtonPressed = false;
     }
 

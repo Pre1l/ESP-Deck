@@ -5,6 +5,9 @@
 #include "game/menu/GameMenu.hpp"
 #include "game/menu/EspDeckMenu.hpp"
 #include "game/merge/MergeMenu.hpp"
+#include "game/flappyBird/FlappyBirdMenu.hpp"
+#include "game/knight-game/KnightMenu.hpp"
+#include "game/lightsOut/LightsOutMenu.hpp"
 
 int Menu::menuReturnIndex = 0;
 
@@ -21,6 +24,9 @@ Menu::Menu()
     GameMenu::init();
     gameMenus.push_back(std::unique_ptr<GameMenu>(new EspDeckMenu()));
     gameMenus.push_back(std::unique_ptr<GameMenu>(new SnakeMenu()));
+    gameMenus.push_back(std::unique_ptr<GameMenu>(new FlappyBirdMenu()));
+    gameMenus.push_back(std::unique_ptr<GameMenu>(new KnightMenu()));
+    gameMenus.push_back(std::unique_ptr<GameMenu>(new LightsOutMenu()));
     gameMenus.push_back(std::unique_ptr<GameMenu>(new MergeMenu()));
     menuButtonAmount = gameMenus.size();
     for (int i = 0; i < menuButtonAmount; i++) {

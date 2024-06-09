@@ -154,9 +154,9 @@ void CombatEntity::clearAfterImageVelocity(Vector2D& deltaVelocity)
     }
 
     if (deltaVelocity.getX() > 0) {
-        display.fillRect(round(getPosition()->getX() + getOffsetX() - 1.5), round(getPosition()->getY()), round(deltaVelocity.getX()) + 3, animationHeight + 1, TFT_BLACK);
+        display.fillRect(round(getPosition()->getX() + getOffsetX()), round(getPosition()->getY()), round(deltaVelocity.getX()) + 3, animationHeight + 1, TFT_BLACK);
     } else if (deltaVelocity.getX() < 0) {
-        display.fillRect(round(getPosition()->getX() + getOffsetX() + animationWidth + deltaVelocity.getX() - 1.5), round(getPosition()->getY()), round(-deltaVelocity.getX()) + 3, animationHeight + 1, TFT_BLACK);
+        display.fillRect(round(getPosition()->getX() + getOffsetX() + animationWidth + deltaVelocity.getX()), round(getPosition()->getY()), round(-deltaVelocity.getX()) + 3, animationHeight + 1, TFT_BLACK);
     }
 }
 

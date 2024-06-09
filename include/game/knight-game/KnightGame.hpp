@@ -8,6 +8,7 @@
 #include "display/DisplayManager.hpp"
 #include "game/knight-game/entity/Knight.hpp"
 #include "game/knight-game/rectangle/Terrain.hpp"
+#include "entity/Spike.hpp"
 
 class KnightGame : public Game 
 {
@@ -15,6 +16,7 @@ class KnightGame : public Game
         static std::shared_ptr<KnightGame> instance;
 
         std::vector<Terrain> terrains;
+        std::vector<Spike> spikes;
         std::vector<std::shared_ptr<CombatEntity>> combatEntities;
         std::queue<std::shared_ptr<CombatEntity>> combatEntitiesToRemove;
         std::shared_ptr<Knight> knight;
@@ -32,6 +34,7 @@ class KnightGame : public Game
         void markCombatEntityForRemoval(std::shared_ptr<CombatEntity> combatEntity);
 
         std::vector<Terrain>& getTerrains();
+        std::vector<Spike>& getSpikes();
         std::shared_ptr<Knight> getKnight();
         std::vector<std::shared_ptr<CombatEntity>>& getCombatEntities();
 
