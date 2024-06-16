@@ -7,6 +7,7 @@
 #include "bitmap/TrophyDarkGreenBitmap.hpp"
 #include "font/Fonts.hpp"
 #include <core/Core.hpp>
+#include <iostream>
 
 Snake::Snake(int gamemode)
 {
@@ -22,6 +23,7 @@ Snake::~Snake()
 void Snake::init(bool renderBackground) 
 {
     direction = 0;
+    lastDelayTime = 0;
     lastMovedDirection = 0;
     gameOver = false;
     snakeTiles.clear();
@@ -87,14 +89,23 @@ void Snake::init(bool renderBackground)
 
 void Snake::update(float deltaTime)
 {
-    if (!gameOver) {
-        switch (gamemode) {
-            case 0: delay(300); break;
-            case 1: delay(160); break;
-            case 2: delay(1.5 * (120 - Snake::snakeTiles.size()) + 200); break;
-        }
-        moveSnake();
+    if (gameOver)
+        return;
+
+    int delayTime;
+
+    switch (gamemode) {
+        case 0: delayTime = round(300 - deltaTime + lastDelayTime); break;
+        case 1: delayTime = round(160 - deltaTime + lastDelayTime); break;
+        case 2: delayTime = round(1.5 * (120 - Snake::snakeTiles.size()) + 200 - deltaTime + lastDelayTime); break;
     }
+
+    lastDelayTime = delayTime;
+
+    if (delayTime >= 0)
+        delay(delayTime);
+
+    moveSnake();
 }
 
 void Snake::onGameClosed() 

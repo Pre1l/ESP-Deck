@@ -19,12 +19,13 @@ class Vector2D
         Vector2D& setY(float y);
         Vector2D& addX(float value);
         Vector2D& addY(float value);
-        Vector2D& add(Vector2D vector);
-        Vector2D& subtract(Vector2D vector);
+        Vector2D& add(Vector2D& other);
+        Vector2D& subtract(Vector2D& other);
         Vector2D copy();
         Vector2D& subtractX(float value);
         Vector2D& subtractY(float value);
         Vector2D& multiply(float value);
+        bool equals(const Vector2D& other) const;
 };
 
 #endif // VECTOR2D_HPP

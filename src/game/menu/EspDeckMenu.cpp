@@ -1,5 +1,5 @@
 #include "game/menu/EspDeckMenu.hpp"
-#include "bitmap/CityBackgroundBitmap.hpp"
+#include "bitmap/BurningSkyscraperBitmap.hpp"
 #include "font/Fonts.hpp"
 
 EspDeckMenu::EspDeckMenu() 
@@ -9,7 +9,7 @@ EspDeckMenu::EspDeckMenu()
 
 void EspDeckMenu::renderMenu()
 {
-    backgroundSprite.pushImage(0, 0, 480, 320, cityBackgroundBitmap);
+    backgroundSprite.pushImage(0, 0, 480, 320, burningSkyscraperBitmap);
     backgroundSprite.pushSprite(60, 1);
 
     TFT_eSPI& display = DisplayManager::getDisplay();
@@ -17,8 +17,9 @@ void EspDeckMenu::renderMenu()
     display.setFreeFont(FF31);
     display.drawString("ESP-Deck", 105, 35);
     DisplayManager::resetFont();
+    display.setTextColor(0xfa67);
     display.setTextSize(1);
-    display.drawString("Update Build 66", 105, 95);
+    display.drawString("Update Build 67", 105, 95);
     DisplayManager::resetFont();
 }
 

@@ -15,10 +15,10 @@ Menu::Menu()
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
     display.fillRect(0, 0, 60, 320, 0x18e3);
-    drawMenuOutline(0, 0, 60, 320, true, false);
-    drawMenuOutline(59, 0, 421, 320, false, true);
+    drawMenuOutline(59, 0, 421, 320, false, false);
+    drawMenuOutline(0, 0, 60, 320, true, true);
 
-    focusOnSideMenu = false;
+    focusOnSideMenu = true;
     menuIndex = menuReturnIndex;
 
     GameMenu::init();
@@ -87,7 +87,7 @@ void Menu::drawMenuOutline(int x, int y, int width, int height, bool roundEdges,
     uint16_t color;
 
     if (status) {
-        color = 0xACB9;
+        color = 0xf820;
     } else {
         color = 0x18e3;
     }
@@ -141,6 +141,6 @@ void Menu::unhighlightSelectedButton()
 void Menu::highlightSelectedButton() 
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
-    display.drawRoundRect(9, menuIndex*51 + 12, 42, 42, 4, 0xACB9);
-    display.drawRoundRect(7, menuIndex*51 + 10, 46, 46, -2, 0xACB9);
+    display.drawRoundRect(9, menuIndex*51 + 12, 42, 42, 4, 0xf820);
+    display.drawRoundRect(7, menuIndex*51 + 10, 46, 46, -2, 0xf820);
 }

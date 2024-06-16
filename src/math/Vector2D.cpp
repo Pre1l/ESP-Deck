@@ -51,18 +51,18 @@ Vector2D& Vector2D::addY(float value)
 	return *this;
 }
 
-Vector2D& Vector2D::add(Vector2D vector) 
+Vector2D& Vector2D::add(Vector2D& other) 
 {
-	y += vector.getY();
-	x += vector.getX();
+	y += other.getY();
+	x += other.getX();
 
 	return *this;
 }
 
-Vector2D& Vector2D::subtract(Vector2D vector) 
+Vector2D& Vector2D::subtract(Vector2D& other) 
 {
-	y -= vector.getY();
-	x -= vector.getX();
+	y -= other.getY();
+	x -= other.getX();
 
 	return *this;
 }
@@ -92,4 +92,9 @@ Vector2D& Vector2D::multiply(float value)
 	y *= value;
 	
 	return *this;
+}
+
+bool Vector2D::equals(const Vector2D& other) const
+{
+	return x == other.x && y == other.y;
 }
