@@ -1,11 +1,11 @@
-#include "game/flappyBird/FlappyBirdMenu.hpp"
-#include "bitmap/flappyBird/SkyBackgroundBitmap.hpp"
+#include "game/flappy-bird/FlappyBirdMenu.hpp"
+#include "bitmap/flappy-bird/SkyBackgroundBitmap.hpp"
 #include "bitmap/TrophyGoldenBitmap.hpp"
-#include "bitmap/flappyBird/FloorBitmap.hpp"
+#include "bitmap/flappy-bird/FloorBitmap.hpp"
 #include "core/Core.hpp"
 #include <Arduino.h>
 #include <memory>
-#include "game/flappyBird/FlappyBird.hpp"
+#include "game/flappy-bird/FlappyBird.hpp"
 #include "font/Fonts.hpp"
 #include "display/DisplayManager.hpp"
 #include <game/menu/Menu.hpp>

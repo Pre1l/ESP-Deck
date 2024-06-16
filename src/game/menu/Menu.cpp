@@ -5,9 +5,9 @@
 #include "game/menu/GameMenu.hpp"
 #include "game/menu/EspDeckMenu.hpp"
 #include "game/merge/MergeMenu.hpp"
-#include "game/flappyBird/FlappyBirdMenu.hpp"
+#include "game/flappy-bird/FlappyBirdMenu.hpp"
 #include "game/knight-game/KnightMenu.hpp"
-#include "game/lightsOut/LightsOutMenu.hpp"
+#include "game/lights-out/LightsOutMenu.hpp"
 
 int Menu::menuReturnIndex = 0;
 

@@ -1,7 +1,7 @@
-#include "game/FlappyBird/Pillar.hpp"
+#include "game/flappy-bird/Pillar.hpp"
 #include <TFT_eSPI.h>
 #include "display/DisplayManager.hpp"
-#include "bitmap/flappyBird/SkyBackgroundBitmap.hpp"
+#include "bitmap/flappy-bird/SkyBackgroundBitmap.hpp"
 
 Pillar::Pillar(int yPos, int gap, int speed, int xSize) :
     xPos(480),

@@ -2,8 +2,8 @@
 #define FlappyBird_HPP
 
 #include "game/Game.hpp"
-#include "game/FlappyBird/Pillar.hpp"
-#include "game/FlappyBird/Bird.hpp"
+#include "game/flappy-bird/Pillar.hpp"
+#include "game/flappy-bird/Bird.hpp"
 #include <Arduino.h>
 #include <random>
 #include <list>

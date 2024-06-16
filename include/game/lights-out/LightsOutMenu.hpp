@@ -2,7 +2,7 @@
 #define LIGHTSOUTMENU_HPP
 
 #include "game/menu/GameMenu.hpp"
-#include "bitmap/lightsOut/LightsOutIconBitmap.hpp"
+#include "bitmap/lights-out/LightsOutIconBitmap.hpp"
 
 class LightsOutMenu : public GameMenu 
 {

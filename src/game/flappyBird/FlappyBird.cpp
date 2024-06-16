@@ -1,8 +1,8 @@
-#include "game/flappyBird/flappyBird.hpp"
+#include "game/flappy-bird/flappyBird.hpp"
 #include "display/DisplayManager.hpp"
-#include "bitmap/flappyBird/FloorBitmap.hpp"
-#include "bitmap/flappyBird/SkyBackgroundBitmap.hpp"
-#include "bitmap/flappyBird/MessageBitmap.hpp"
+#include "bitmap/flappy-bird/FloorBitmap.hpp"
+#include "bitmap/flappy-bird/SkyBackgroundBitmap.hpp"
+#include "bitmap/flappy-bird/MessageBitmap.hpp"
 #include <TFT_eSPI.h>
 #include <list>
 #include <random>

@@ -1,8 +1,8 @@
-#include "game/flappyBird/Bird.hpp"
+#include "game/flappy-bird/Bird.hpp"
 #include <TFT_eSPI.h> 
-#include "bitmap/flappyBird/BirdBitmap.hpp"
+#include "bitmap/flappy-bird/BirdBitmap.hpp"
 #include "display/DisplayManager.hpp"
-#include "bitmap/flappyBird/SkyBackgroundBitmap.hpp"
+#include "bitmap/flappy-bird/SkyBackgroundBitmap.hpp"
 
 Bird::Bird(float gravity, float maxFallSpeed, float jumpHeight) : 
     

@@ -1,11 +1,10 @@
-
 #include "bitmap/TrophyGoldenBitmap.hpp"
 #include "core/Core.hpp"
 #include <Arduino.h>
 #include <memory>
-#include "game/lightsOut/LightsOutMenu.hpp"
-#include "game/lightsOut/LightsOut.hpp"
-#include "bitmap/lightsOut/LightsOutBackgroundBitmap.hpp"
+#include "game/lights-out/LightsOutMenu.hpp"
+#include "game/lights-out/LightsOut.hpp"
+#include "bitmap/lights-out/LightsOutBackgroundBitmap.hpp"
 #include "font/Fonts.hpp"
 #include "display/DisplayManager.hpp"
 #include <game/menu/Menu.hpp>

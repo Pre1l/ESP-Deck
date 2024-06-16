@@ -1,5 +1,5 @@
-#include "game/lightsOut/LightsOut.hpp"
-#include "bitmap/lightsOut/LightsOutBackgroundBitmap.hpp"
+#include "game/lights-out/LightsOut.hpp"
+#include "bitmap/lights-out/LightsOutBackgroundBitmap.hpp"
 #include "display/DisplayManager.hpp"
 #include "font/Fonts.hpp"
 #include <TFT_eSPI.h>
