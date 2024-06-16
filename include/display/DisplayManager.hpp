@@ -10,7 +10,7 @@ namespace DisplayManager
     void initialize();
     TFT_eSPI& getDisplay();
     void resetFont();
-    void renderPartialBitmap(int xPartialBitmap, int yPartialBitmap, int xOnBitmap, int yOnBitmap, int widthPartialBitmap, int heightPartialBitmap, int widthBitmap, const unsigned short* bitmap);
+    void renderPartialBitmap(int xPartialBitmap, int yPartialBitmap, int xOnBitmap, int yOnBitmap, int widthPartialBitmap, int heightPartialBitmap, int widthBitmap, int heightBitmap, const unsigned short* bitmap);
 }
 
 #endif // DISPLAY_MANAGER_HPP

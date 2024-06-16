@@ -8,7 +8,7 @@
 class GameFactory 
 {
     public:
-        static std::unique_ptr<Game> createUniqueKnightGame();
+        
 };
 
 #endif // GAME_FACTORY_HPP

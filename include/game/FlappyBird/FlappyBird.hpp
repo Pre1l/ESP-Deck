@@ -31,6 +31,8 @@ class FlappyBird : public Game
         int spawnSpeed;
         int TapMessageYPos;
         int TapMessageXPos;
+        bool upbutton;
+        bool jumpRequest = false;
         String difficultyText;
         void updatePillars();
         void createPillar();
@@ -48,13 +50,14 @@ class FlappyBird : public Game
             EepromManager::EEPROM_FLAPPYBIRD_HARD_HIGHSCORE_ADDR_INT16 //6 01.06.2024
         };
         void updateHighscore();
+        void onGameClosed();
     public:
         FlappyBird(int difficulty);
+        ~FlappyBird() override;
+
         void keyPressed(int key) override;
         void keyReleased(int key) override;
         void update(float deltaTime) override;
-        void onGameClosed() override;
-        
 };
 
 

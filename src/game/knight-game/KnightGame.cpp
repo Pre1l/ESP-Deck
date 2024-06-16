@@ -1,8 +1,7 @@
 #include "game/knight-game/KnightGame.hpp"
 
 #include <game/knight-game/entity/Slime.hpp>
-
-std::shared_ptr<KnightGame> KnightGame::instance = nullptr;
+#include <iostream>
 
 KnightGame::KnightGame() 
 {
@@ -22,15 +21,6 @@ KnightGame::KnightGame()
     terrains.push_back(Terrain(std::make_shared<Vector2D>(170, 140), 40, 20, 0, TFT_WHITE));
     terrains.push_back(Terrain(std::make_shared<Vector2D>(-500, 0), 40, 300, 0, TFT_WHITE));
     terrains.push_back(Terrain(std::make_shared<Vector2D>(760, 0), 40, 300, 0, TFT_WHITE));
-}
-
-std::shared_ptr<KnightGame> KnightGame::getInstance() 
-{
-    if (instance == nullptr) {
-        instance = std::shared_ptr<KnightGame>(new KnightGame());
-    }
-
-    return instance;
 }
 
 void KnightGame::update(float deltaTime) 
@@ -197,11 +187,6 @@ float KnightGame::calculateTerrainCollision(Rectangle& rectangle, Rectangle::Col
     }
 
     return 0;
-}
-
-void KnightGame::onGameClosed() 
-{
-    instance.reset();
 }
 
 std::shared_ptr<Knight> KnightGame::getKnight() 

@@ -49,7 +49,11 @@
         "streambuf": "cpp",
         "cinttypes": "cpp",
         "typeinfo": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "chrono": "cpp",
+        "list": "cpp",
+        "ratio": "cpp",
+        "thread": "cpp"
     },
     "CodeGPT.apiKey": "CodeGPT Plus Beta"
 }

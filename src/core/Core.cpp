@@ -4,10 +4,12 @@
 #include "game/Game.hpp"
 #include "game/menu/Menu.hpp"
 #include "game/snake/Snake.hpp"
-#include "game/GameFactory.hpp"
+#include "game/knight-game/KnightGameController.hpp"
 #include "display/DisplayManager.hpp"
 #include "TFT_eSPI.h"
 #include <EEPROM.h>
+#include <iostream>
+#include <eeprom/EepromManager.hpp>
 
 #define RIGHT_PIN 10
 #define UP_PIN 11
@@ -25,7 +27,9 @@ unsigned long previousMillis = 0;
 void setup() 
 {
     Serial.begin(250000);
-    EEPROM.begin(512);
+    std::cout << "Starting..." << std::endl;
+
+    EEPROM.begin(EepromManager::EEPROM_SIZE);
 
     xTaskCreatePinnedToCore(
         inputLoop,
@@ -47,14 +51,20 @@ void setup()
     randomSeed(analogRead(0));
 
     DisplayManager::initialize();
+
+    if (EepromManager::readInt8(EepromManager::EEPROM_STATUS_ADDR_INT8) != 1) {
+        std::cout << "Configurating EEPROM..." << std::endl;
+        for (int i = 0; i < EepromManager::EEPROM_SIZE - 1; i++) {
+            EepromManager::writeInt8(i, 0);
+        }
+        EepromManager::writeInt8(EepromManager::EEPROM_STATUS_ADDR_INT8, 1);
+    }
+    std::cout << "Setup Complete!" << std::endl;
 }
 
 void loop()
 {
     if (menuButtonPressed) {
-        if (currentGame != nullptr) {
-            currentGame->onGameClosed();
-        }
         currentGame.reset(new Menu());
         menuButtonPressed = false;
     }

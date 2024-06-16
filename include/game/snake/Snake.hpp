@@ -54,10 +54,11 @@ class Snake : public Game
 
     public:
         Snake(int gamemode);
+        ~Snake() override;
+
         void update(float deltaTime) override;
         void keyPressed(int key) override;
         void keyReleased(int key) override;
-        void onGameClosed() override;
 
     private:
         void init(bool renderBackground);
@@ -72,6 +73,7 @@ class Snake : public Game
         void renderSprite(Vector2D tilePosition, Vector2D sprite);
         void pullSnakeTail();
         void updateHighscore();
+        void onGameClosed();
 };
 
 #endif // SNAKE_HPP

@@ -10,6 +10,7 @@
 #include <game/menu/Menu.hpp>
 #include "eeprom/EepromManager.hpp"
 #include "game/GameFactory.hpp"
+#include <game/knight-game/KnightGameController.hpp>
 
 KnightMenu::KnightMenu() 
 {
@@ -88,5 +89,5 @@ void KnightMenu::highlightSelectedButton()
 
 void KnightMenu::executeSelected()
 {
-    setCurrentGame(GameFactory::createUniqueKnightGame());
+    setCurrentGame(std::unique_ptr<KnightGameController>(new KnightGameController()));
 }

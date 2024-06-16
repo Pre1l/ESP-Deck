@@ -16,12 +16,14 @@ class Merge : public Game
 
     public:
         Merge();
+        ~Merge() override;
+
         void update(float deltaTime) override;
         void keyPressed(int key) override;
         void keyReleased(int key) override;
-        void onGameClosed() override;
 
     private:
+        void onGameClosed();
         void generateRandomTile();
         void checkForGameOver();
         void playerGameOver();

@@ -20,7 +20,6 @@ class Menu : public Game
         void update(float deltaTime) override;
         void keyPressed(int key) override;
         void keyReleased(int key) override;
-        void onGameClosed() override;
         void static drawMenuOutline(int x, int y, int width, int height, bool roundEdges, bool status);
 
     private:

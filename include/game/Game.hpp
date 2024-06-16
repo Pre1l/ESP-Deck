@@ -7,10 +7,11 @@ class Game
         int menuReturnIndex;
 
     public:
+        virtual ~Game() {};
+
         virtual void update(float deltaTime) = 0;
         virtual void keyPressed(int key) = 0;
         virtual void keyReleased(int key) = 0;
-        virtual void onGameClosed() = 0;
 };
 
 #endif // GAME_HPP

@@ -1,9 +1,9 @@
 #ifndef SPIKE_HPP
 #define SPIKE_HPP
 
-#include "Entity.hpp"
 #include <TFT_eSPI.h>
-#include <display/DisplayManager.hpp>
+#include "display/DisplayManager.hpp"
+#include "Entity.hpp"
 
 class Spike : public Entity 
 {

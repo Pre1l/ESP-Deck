@@ -5,6 +5,8 @@
 
 namespace EepromManager 
 {
+    const int EEPROM_SIZE = 32;
+
     const int EEPROM_SNAKE_CLASSIC_HIGHSCORE_ADDR_INT8 = 0;
     const int EEPROM_SNAKE_SPEED_HIGHSCORE_ADDR_INT8 = 1;
     const int EEPROM_SNAKE_RISING_HIGHSCORE_ADDR_INT8 = 2;
@@ -12,6 +14,8 @@ namespace EepromManager
     const int EEPROM_FLAPPYBIRD_EASY_HIGHSCORE_ADDR_INT16 = 5;
     const int EEPROM_FLAPPYBIRD_NORMAL_HIGHSCORE_ADDR_INT16 = 7;
     const int EEPROM_FLAPPYBIRD_HARD_HIGHSCORE_ADDR_INT16 = 9;
+
+    const int EEPROM_STATUS_ADDR_INT8 = EEPROM_SIZE - 1;
 
     int32_t readInt32(int address);
     int16_t readInt16(int address);

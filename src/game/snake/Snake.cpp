@@ -14,6 +14,11 @@ Snake::Snake(int gamemode)
     init(true);
 }
 
+Snake::~Snake() 
+{
+    onGameClosed();
+}
+
 void Snake::init(bool renderBackground) 
 {
     direction = 0;

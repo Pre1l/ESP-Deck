@@ -31,13 +31,14 @@ class LightsOut : public Game
         void showSolved();
         void hideSolved();
         void updateMoves();
+        void onGameClosed();
     public:
         LightsOut(int difficulty);
+        ~LightsOut();
+
         void keyPressed(int key) override;
         void keyReleased(int key) override;
         void update(float deltaTime) override;
-        void onGameClosed() override;
-        
 };
 
 

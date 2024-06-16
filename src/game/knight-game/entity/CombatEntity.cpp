@@ -1,6 +1,7 @@
 #include "game/knight-game/entity/CombatEntity.hpp"
 
 #include <game/knight-game/KnightGame.hpp>
+#include <game/knight-game/KnightGameController.hpp>
 
 uint8_t CombatEntity::nextId = 0;
 
@@ -41,7 +42,7 @@ void CombatEntity::update(float offsetX, float deltaTime)
 
         ProxyHitbox& attackHitbox = isFacingRight() ? attackHitboxRight : attackHitboxLeft;
 
-        if (KnightGame::getInstance()->calculateTerrainCollision(attackHitbox, Rectangle::CollisionAxis::X, false) == 0) {
+        if (KnightGameController::getInstance()->calculateTerrainCollision(attackHitbox, Rectangle::CollisionAxis::X, false) == 0) {
             setAttackAnimation();
             attackAnimation.update(deltaTime);
         }
@@ -69,7 +70,7 @@ CallbackAnimation& CombatEntity::getAttackAnimation()
 
 void CombatEntity::handleVelocity(float deltaTime) 
 {
-    std::shared_ptr<KnightGame> knightGame = KnightGame::getInstance();
+    std::shared_ptr<KnightGame> knightGame = KnightGameController::getInstance();
     Hitbox& hitbox = getHitbox();
     Vector2D& velocity = getVelocity();
 
@@ -182,10 +183,10 @@ void CombatEntity::animationCallback()
     if (dead) {
         clearAfterImageDeath();
         std::shared_ptr<CombatEntity> selfPtr(this, [](CombatEntity*){});
-        KnightGame::getInstance()->markCombatEntityForRemoval(selfPtr);
+        KnightGameController::getInstance()->markCombatEntityForRemoval(selfPtr);
     }
 
-    std::shared_ptr<KnightGame> knightGame = KnightGame::getInstance();
+    std::shared_ptr<KnightGame> knightGame = KnightGameController::getInstance();
     ProxyHitbox& attackHitbox = isFacingRight() ? attackHitboxRight : attackHitboxLeft;
 
     std::vector<std::shared_ptr<CombatEntity>> collidingCombatEntities = knightGame->calculateCombatEntitiesCollision(attackHitbox);

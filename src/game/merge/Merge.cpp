@@ -14,6 +14,11 @@ Merge::Merge()
     init(true);
 }
 
+Merge::~Merge() 
+{
+    onGameClosed();
+}
+
 void Merge::init(bool renderBackground) 
 {
     gameOver = false;

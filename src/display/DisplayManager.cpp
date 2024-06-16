@@ -1,6 +1,7 @@
 #include "display/DisplayManager.hpp"
 #include "font/Fonts.hpp"
 #include <vector>
+#include <iostream>
 
 TFT_eSPI DisplayManager::tft = TFT_eSPI();
 
@@ -25,24 +26,24 @@ void DisplayManager::resetFont()
     tft.setTextSize(2);
 }
 
-void DisplayManager::renderPartialBitmap(int xPartialBitmap, int yPartialBitmap, int xOnBitmap, int yOnBitmap, int widthPartialBitmap, int heightPartialBitmap, int widthBitmap, const unsigned short* bitmap) 
+void DisplayManager::renderPartialBitmap(int xPartialBitmap, int yPartialBitmap, int xOnBitmap, int yOnBitmap, int widthPartialBitmap, int heightPartialBitmap, int widthBitmap, int heightBitmap, const unsigned short* bitmap) 
 {
-    std::vector<unsigned short> paritalVectorBitmap;
+    if (xOnBitmap + widthPartialBitmap > widthBitmap || yOnBitmap + heightPartialBitmap > heightBitmap) {
+        std::cerr << "Error: Partial bitmap exceeds bounds of the source bitmap." << std::endl;
+        return;
+    }
+
+    std::vector<unsigned short> partialVectorBitmap;
+    partialVectorBitmap.reserve(widthPartialBitmap * heightPartialBitmap);
+
     int index = yOnBitmap * widthBitmap + xOnBitmap;
 
     for (int row = 0; row < heightPartialBitmap; row++) {
         for (int col = 0; col < widthPartialBitmap; col++) {
-            paritalVectorBitmap.push_back(bitmap[index]);
-            index++;
+            partialVectorBitmap.push_back(bitmap[index + col]);
         }
-        index += widthBitmap - widthPartialBitmap;
+        index += widthBitmap;
     }
 
-    unsigned short paritalBitmap[widthPartialBitmap * heightPartialBitmap];
-
-    for (int i = 0; i < paritalVectorBitmap.size(); i++) {
-        paritalBitmap[i] = paritalVectorBitmap[i];
-    }
-
-    tft.pushImage(xPartialBitmap, yPartialBitmap, widthPartialBitmap, heightPartialBitmap, paritalBitmap);
+    tft.pushImage(xPartialBitmap, yPartialBitmap, widthPartialBitmap, heightPartialBitmap, partialVectorBitmap.data());
 }

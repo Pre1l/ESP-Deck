@@ -45,11 +45,6 @@ void Menu::update(float deltaTime)
     gameMenus[menuIndex]->update();
 }
 
-void Menu::onGameClosed() 
-{
-
-}
-
 void Menu::keyPressed(int key) 
 {
     if (key == 2 && focusOnSideMenu == false) {
