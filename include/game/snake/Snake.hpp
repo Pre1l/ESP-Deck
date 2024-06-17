@@ -10,72 +10,95 @@
 
 class Snake : public Game
 {
-    private:
-        const int snakeHighscoreAddresses[3] = {
-            EepromManager::EEPROM_SNAKE_CLASSIC_HIGHSCORE_ADDR_INT8, 
-            EepromManager::EEPROM_SNAKE_SPEED_HIGHSCORE_ADDR_INT8, 
-            EepromManager::EEPROM_SNAKE_RISING_HIGHSCORE_ADDR_INT8
-        };
+private:
+    enum class direction {
+        RIGHT,
+        LEFT,
+        UP,
+        DOWN
+    };
 
-        static const int gridX = 12;
-        static const int gridY = 10; 
-        static const int offsetX = 10;
-        static const int offsetY = 10;
-        static const int tileSize = 30;
+    enum class status {
+        EMPTY,
+        FOOD,
+        SNAKE
+    };
 
-        int tiles[gridY][gridX];
-        int direction;
-        int lastMovedDirection;
-        int gamemode;
-        int highscore;
-        int lastDelayTime;
+    const int snakeHighscoreAddresses[3] = {
+        EepromManager::EEPROM_SNAKE_CLASSIC_HIGHSCORE_ADDR_INT8,
+        EepromManager::EEPROM_SNAKE_SPEED_HIGHSCORE_ADDR_INT8,
+        EepromManager::EEPROM_SNAKE_RISING_HIGHSCORE_ADDR_INT8
+    };
 
-        bool gameOver;
-        TFT_eSprite snakeSpriteSheet = TFT_eSprite(&DisplayManager::tft);
-        std::vector<Vector2D> snakeTiles;
+    static const int gridX = 12;
+    static const int gridY = 10;
+    static const int offsetX = 10;
+    static const int offsetY = 10;
+    static const int tileSize = 30;
+    status tiles[gridY][gridX];
 
-        const Vector2D SNAKE_HEAD_UP = Vector2D(-90, 0);
-        const Vector2D SNAKE_HEAD_LEFT = Vector2D(-90, -30);
-        const Vector2D SNAKE_HEAD_RIGHT = Vector2D(-120, 0);
-        const Vector2D SNAKE_HEAD_DOWN = Vector2D(-120, -30);
+    direction currentDirection;
+    direction lastMovedDirection;
+    int gamemode;
+    int highscore;
+    int lastDelayTime;
 
-        const Vector2D SNAKE_TAIL_UP = Vector2D(-120, -90);
-        const Vector2D SNAKE_TAIL_LEFT = Vector2D(-120, -60);
-        const Vector2D SNAKE_TAIL_RIGHT = Vector2D(-90, -90);
-        const Vector2D SNAKE_TAIL_DOWN = Vector2D(-90, -60);
+    bool gameOver;
+    TFT_eSprite snakeSpriteSheet = TFT_eSprite(&DisplayManager::tft);
+    std::vector<Vector2D> snakeTiles;
 
-        const Vector2D SNAKE_CORNER_TOP_LEFT = Vector2D(0, 0);
-        const Vector2D SNAKE_CORNER_TOP_RIGHT = Vector2D(-60, 0);
-        const Vector2D SNAKE_CORNER_BOTTOM_LEFT = Vector2D(0, -30);
-        const Vector2D SNAKE_CORNER_BOTTOM_RIGHT = Vector2D(-60, -60);
+    // Sprite vector offsets to get to specific sprites on sprite sheet
+    const Vector2D SNAKE_HEAD_UP = Vector2D(-90, 0);
+    const Vector2D SNAKE_HEAD_LEFT = Vector2D(-90, -30);
+    const Vector2D SNAKE_HEAD_RIGHT = Vector2D(-120, 0);
+    const Vector2D SNAKE_HEAD_DOWN = Vector2D(-120, -30);
 
-        const Vector2D SNAKE_BODY_HORIZONTAL = Vector2D(-30, 0);
-        const Vector2D SNAKE_BODY_VERTICAL = Vector2D(-60, -30);
+    const Vector2D SNAKE_TAIL_UP = Vector2D(-120, -90);
+    const Vector2D SNAKE_TAIL_LEFT = Vector2D(-120, -60);
+    const Vector2D SNAKE_TAIL_RIGHT = Vector2D(-90, -90);
+    const Vector2D SNAKE_TAIL_DOWN = Vector2D(-90, -60);
 
-        const Vector2D APPLE = Vector2D(0, -90);
+    const Vector2D SNAKE_CORNER_TOP_LEFT = Vector2D(0, 0);
+    const Vector2D SNAKE_CORNER_TOP_RIGHT = Vector2D(-60, 0);
+    const Vector2D SNAKE_CORNER_BOTTOM_LEFT = Vector2D(0, -30);
+    const Vector2D SNAKE_CORNER_BOTTOM_RIGHT = Vector2D(-60, -60);
 
-    public:
-        Snake(int gamemode);
-        ~Snake() override;
+    const Vector2D SNAKE_BODY_HORIZONTAL = Vector2D(-30, 0);
+    const Vector2D SNAKE_BODY_VERTICAL = Vector2D(-60, -30);
 
-        void update(float deltaTime) override;
-        void keyPressed(int key) override;
-        void keyReleased(int key) override;
+    const Vector2D APPLE = Vector2D(0, -90);
 
-    private:
-        void init(bool renderBackground);
-        void pushSnakeTile(Vector2D newSnakeTileVector);
-        void setFoodTile(Vector2D foodTilePosition);
-        void resetTileColor(Vector2D tilePosition);
-        void moveSnake();
-        void setStatus(Vector2D tilePosition, int status);
-        void generateFood();
-        void playerGameOver();
-        void updateScore();
-        void renderSprite(Vector2D tilePosition, Vector2D sprite);
-        void pullSnakeTail();
-        void updateHighscore();
-        void onGameClosed();
+public:
+    Snake(int gamemode);
+    ~Snake() override;
+
+    void update(float deltaTime) override;
+    void keyPressed(int key) override;
+    void keyReleased(int key) override;
+
+private:
+    // Init
+    void init(bool doRenderBackground);
+    void renderBackground();
+    void renderUI();
+    void spawnSnake();
+    void resetTiles();
+
+    // General
+    void moveSnake();
+    void onGameClosed();
+    void generateFood();
+    void playerGameOver();
+    void updateScore();
+    void updateHighscore();
+
+    // Tiles
+    void pushSnakeTile(Vector2D newSnakeTileVector);
+    void pullSnakeTail();
+    void resetTileColor(Vector2D tilePosition);
+    void renderSprite(Vector2D tilePosition, Vector2D sprite);
+    void setFoodTile(Vector2D foodTilePosition);
+    void setStatus(Vector2D tilePosition, status status);
 };
 
 #endif // SNAKE_HPP
