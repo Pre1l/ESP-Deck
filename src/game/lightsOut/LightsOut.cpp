@@ -182,7 +182,7 @@ void LightsOut::showSolved()
 void LightsOut::hideSolved()
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
-    DisplayManager::renderPartialBitmap(320, 125, 320, 125, 120, 40, 480, 320, lightsOutBackgroundBitmap);
+    DisplayManager::renderPartialBitmap(320, 105, 320, 125, 120, 40, 480, 320, lightsOutBackgroundBitmap);
 }
 
 void LightsOut::updateMoves()
