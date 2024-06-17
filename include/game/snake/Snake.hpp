@@ -11,14 +11,14 @@
 class Snake : public Game
 {
 private:
-    enum class direction {
+    enum class Direction {
         RIGHT,
         LEFT,
         UP,
         DOWN
     };
 
-    enum class status {
+    enum class Status {
         EMPTY,
         FOOD,
         SNAKE
@@ -35,10 +35,10 @@ private:
     static const int offsetX = 10;
     static const int offsetY = 10;
     static const int tileSize = 30;
-    status tiles[gridY][gridX];
+    Status tiles[gridY][gridX];
 
-    direction currentDirection;
-    direction lastMovedDirection;
+    Direction currentDirection;
+    Direction lastMovedDirection;
     int gamemode;
     int highscore;
     int lastDelayTime;
@@ -98,7 +98,7 @@ private:
     void resetTileColor(Vector2D tilePosition);
     void renderSprite(Vector2D tilePosition, Vector2D sprite);
     void setFoodTile(Vector2D foodTilePosition);
-    void setStatus(Vector2D tilePosition, status status);
+    void setStatus(Vector2D tilePosition, Status Status);
 };
 
 #endif // SNAKE_HPP

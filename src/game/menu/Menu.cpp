@@ -13,6 +13,7 @@ int Menu::menuReturnIndex = 0;
 
 Menu::Menu() 
 {
+    gameType = GameType::MENU;
     TFT_eSPI& display = DisplayManager::getDisplay();
     display.fillRect(0, 0, 60, 320, 0x18e3);
     drawMenuOutline(59, 0, 421, 320, false, false);

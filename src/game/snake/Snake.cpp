@@ -22,8 +22,8 @@ Snake::~Snake()
 
 void Snake::init(bool doRenderBackground)
 {
-    currentDirection = direction::RIGHT;
-    lastMovedDirection = direction::RIGHT;
+    currentDirection = Direction::RIGHT;
+    lastMovedDirection = Direction::RIGHT;
     lastDelayTime = 0;
     gameOver = false;
 
@@ -90,7 +90,7 @@ void Snake::resetTiles()
 {
     for (int row = 0; row < gridY; ++row) {
         for (int col = 0; col < gridX; ++col) {
-            tiles[row][col] = status::EMPTY;
+            tiles[row][col] = Status::EMPTY;
         }
     }
 }
@@ -116,9 +116,9 @@ void Snake::spawnSnake()
     Vector2D spawnSnakeTile3 = spawnSnakeTile2.copy().subtractX(1);
 
     // Set status of each snake tile
-    setStatus(spawnSnakeTile1, status::SNAKE);
-    setStatus(spawnSnakeTile2, status::SNAKE);
-    setStatus(spawnSnakeTile3, status::SNAKE);
+    setStatus(spawnSnakeTile1, Status::SNAKE);
+    setStatus(spawnSnakeTile2, Status::SNAKE);
+    setStatus(spawnSnakeTile3, Status::SNAKE);
 
     // Add snake tiles to the snake vector
     snakeTiles.push_back(spawnSnakeTile3);
@@ -168,14 +168,14 @@ void Snake::keyPressed(int key)
     }
 
     // Handle key presses to change snake direction
-    if (key == 0 && lastMovedDirection != direction::LEFT) {
-        currentDirection = direction::RIGHT;
-    } else if (key == 1 && lastMovedDirection != direction::DOWN) {
-        currentDirection = direction::UP;
-    } else if (key == 2 && lastMovedDirection != direction::RIGHT) {
-        currentDirection = direction::LEFT;
-    } else if (key == 3 && lastMovedDirection != direction::UP) {
-        currentDirection = direction::DOWN;
+    if (key == 0 && lastMovedDirection != Direction::LEFT) {
+        currentDirection = Direction::RIGHT;
+    } else if (key == 1 && lastMovedDirection != Direction::DOWN) {
+        currentDirection = Direction::UP;
+    } else if (key == 2 && lastMovedDirection != Direction::RIGHT) {
+        currentDirection = Direction::LEFT;
+    } else if (key == 3 && lastMovedDirection != Direction::UP) {
+        currentDirection = Direction::DOWN;
     }
 }
 
@@ -190,16 +190,16 @@ void Snake::moveSnake()
 
     // Move in currentDirection by 1 and update lastMovedDirection
     switch (currentDirection) {
-        case direction::RIGHT: newSnakeTilePosition.addX(1); lastMovedDirection = direction::RIGHT; break;
-        case direction::UP: newSnakeTilePosition.addY(-1); lastMovedDirection = direction::UP; break;
-        case direction::LEFT: newSnakeTilePosition.addX(-1); lastMovedDirection = direction::LEFT; break;
-        case direction::DOWN: newSnakeTilePosition.addY(1); lastMovedDirection = direction::DOWN; break;
+        case Direction::RIGHT: newSnakeTilePosition.addX(1); lastMovedDirection = Direction::RIGHT; break;
+        case Direction::UP: newSnakeTilePosition.addY(-1); lastMovedDirection = Direction::UP; break;
+        case Direction::LEFT: newSnakeTilePosition.addX(-1); lastMovedDirection = Direction::LEFT; break;
+        case Direction::DOWN: newSnakeTilePosition.addY(1); lastMovedDirection = Direction::DOWN; break;
     }
 
     Vector2D frontTilePosition = snakeTiles.front();
 
     // Get status of new tile snake just moved onto
-    status newSnakeTilePositionStatus = tiles[newSnakeTilePosition.getIntY()][newSnakeTilePosition.getIntX()];
+    Status newSnakeTilePositionStatus = tiles[newSnakeTilePosition.getIntY()][newSnakeTilePosition.getIntX()];
 
     // Check if snake is outside of grid
     if (!(newSnakeTilePosition.getIntX() < gridX && newSnakeTilePosition.getIntX() >= 0 && newSnakeTilePosition.getIntY() < gridY && newSnakeTilePosition.getIntY() >= 0)) {
@@ -208,18 +208,18 @@ void Snake::moveSnake()
     // Check if not apple to approve that snake doesnt get longer by 1
     // Then set status of tail snake tile neutral 
     // This makes it possible that the snake can make a tight maneuver where the tail just moves out of the way letting the snake pass
-    } else if (newSnakeTilePositionStatus != status::FOOD) {
-        setStatus(frontTilePosition, status::EMPTY);
+    } else if (newSnakeTilePositionStatus != Status::FOOD) {
+        setStatus(frontTilePosition, Status::EMPTY);
     }
 
     // Check if the new tile is a snake tile
-    if (tiles[newSnakeTilePosition.getIntY()][newSnakeTilePosition.getIntX()] == status::SNAKE) {
+    if (tiles[newSnakeTilePosition.getIntY()][newSnakeTilePosition.getIntX()] == Status::SNAKE) {
         playerGameOver();
         return;
     }
 
     // Depending on apple tile or not, pull the snake tail or grow by 1
-    if (newSnakeTilePositionStatus == status::FOOD) {
+    if (newSnakeTilePositionStatus == Status::FOOD) {
         generateFood();
         pushSnakeTile(newSnakeTilePosition);
         updateScore();
@@ -276,7 +276,7 @@ void Snake::pushSnakeTile(Vector2D newSnakeTileVector)
     }
 
     // Set status of tile to snake
-    setStatus(newSnakeTileVector, status::SNAKE);
+    setStatus(newSnakeTileVector, Status::SNAKE);
 
     // Finally add the tile to the snake vector
     snakeTiles.push_back(newSnakeTileVector);
@@ -313,7 +313,7 @@ void Snake::generateFood()
     // Find available empty tiles for placing food
     for (int row = 0; row < gridY; row++) {
         for (int col = 0; col < gridX; col++) {
-            if (tiles[row][col] == status::EMPTY) {
+            if (tiles[row][col] == Status::EMPTY) {
                 freeTiles.push_back(Vector2D(col, row));
             }
         }
@@ -330,7 +330,7 @@ void Snake::generateFood()
     setFoodTile(freeTiles[randomTileIndex]);
 }
 
-void Snake::setStatus(Vector2D tilePosition, status status)
+void Snake::setStatus(Vector2D tilePosition, Status status)
 {
     tiles[tilePosition.getIntY()][tilePosition.getIntX()] = status;
 }
@@ -338,7 +338,7 @@ void Snake::setStatus(Vector2D tilePosition, status status)
 void Snake::setFoodTile(Vector2D foodTilePosition)
 {
     renderSprite(foodTilePosition, APPLE);
-    setStatus(foodTilePosition, status::FOOD);
+    setStatus(foodTilePosition, Status::FOOD);
 }
 
 void Snake::resetTileColor(Vector2D tilePosition)

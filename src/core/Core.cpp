@@ -65,7 +65,8 @@ void setup()
 void loop()
 {
     if (menuButtonPressed) {
-        currentGame.reset(new Menu());
+        if (!currentGame || currentGame->getGameType() != Game::GameType::MENU)
+            currentGame.reset(new Menu());
         menuButtonPressed = false;
     }
 
