@@ -135,12 +135,12 @@ void Menu::unhighlightSelectedButton()
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
     display.drawRoundRect(9, menuIndex*51 + 12, 42, 42, 4, 0x18e3);
-    display.drawRoundRect(7, menuIndex*51 + 10, 46, 46, -2, 0x18e3);
+    display.drawRoundRect(8, menuIndex*51 + 11, 44, 44, 6, 0x18e3);
 }
 
 void Menu::highlightSelectedButton() 
 {
     TFT_eSPI& display = DisplayManager::getDisplay();
     display.drawRoundRect(9, menuIndex*51 + 12, 42, 42, 4, 0xf820);
-    display.drawRoundRect(7, menuIndex*51 + 10, 46, 46, -2, 0xf820);
+    display.drawRoundRect(8, menuIndex*51 + 11, 44, 44, 6, 0xf820);
 }
