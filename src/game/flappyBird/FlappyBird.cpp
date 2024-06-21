@@ -188,8 +188,7 @@ void FlappyBird::renderTAPMessage(int x, int y)
 
     int index = y * 480 + x;//Start
 
-    for (int row = 0; row < yS; row++) {
-        
+    for (int row = 0; row < yS; row++) { 
         partialBackgroundVector.insert(partialBackgroundVector.end(), skyBackgroundBitmap + index, skyBackgroundBitmap + index + xS);//Zeilenweise 
         index += 480;
     }
@@ -212,26 +211,23 @@ void FlappyBird::removeTAPMessage(int x, int y)
     int index = y * 480 + x;//Start
 
     for (int row = 0; row < yS; row++) {
-        
         partialBackgroundVector.insert(partialBackgroundVector.end(), skyBackgroundBitmap + index, skyBackgroundBitmap + index + xS);//Zeilenweise 
         index += 480;
     }
     DisplayManager::getDisplay().pushImage(x, y, xS, yS, partialBackgroundVector.data());
 }
 
-void FlappyBird::keyPressed(int key)
+void FlappyBird::keyPressed(Core::Key key)
 {
-    if(key == 1)
-    {
+    if(key == Core::Key::UP) {
         myBird.jump();
         upbutton = true;
     }
 }
 
-void FlappyBird::keyReleased(int key)
+void FlappyBird::keyReleased(Core::Key key)
 {
-    if(key == 1)
-    {
+    if(key == Core::Key::UP) {
         upbutton = false; 
     }
 }
@@ -249,8 +245,7 @@ bool FlappyBird::checkCollision(Pillar& rect1,  Bird& rect2) {
 
 void FlappyBird::onGameClosed()
 {
-    if(score > highscore)
-    {
+    if(score > highscore) {
         EepromManager::writeInt16(FlappyBirdHighscoreAddresses[difficulty], score);
     }
 }

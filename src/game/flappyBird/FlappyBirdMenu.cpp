@@ -123,5 +123,5 @@ void FlappyBirdMenu::highlightSelectedButton()
 void FlappyBirdMenu::executeSelected()
 {
     std::unique_ptr<Game> newGame(new FlappyBird(menuIndex));
-    setCurrentGame(std::move(newGame));
+    Core::setCurrentGame(std::move(newGame));
 }

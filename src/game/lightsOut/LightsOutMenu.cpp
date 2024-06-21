@@ -85,5 +85,5 @@ void LightsOutMenu::highlightSelectedButton()
 void LightsOutMenu::executeSelected()
 {
     std::unique_ptr<Game> newGame(new LightsOut(menuIndex));
-    setCurrentGame(std::move(newGame));
+    Core::setCurrentGame(std::move(newGame));
 }

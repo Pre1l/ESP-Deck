@@ -45,12 +45,12 @@ void KnightGameController::update(float deltaTime)
         instance->update(deltaTime);
 }
 
-void KnightGameController::keyPressed(int key) 
+void KnightGameController::keyPressed(Core::Key key) 
 {
     if (instance)
         instance->keyPressed(key);
 }
-void KnightGameController::keyReleased(int key) 
+void KnightGameController::keyReleased(Core::Key key) 
 {
     if (instance)
         instance->keyReleased(key);

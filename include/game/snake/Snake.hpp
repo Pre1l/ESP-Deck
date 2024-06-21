@@ -11,13 +11,6 @@
 class Snake : public Game
 {
 private:
-    enum class Direction {
-        RIGHT,
-        LEFT,
-        UP,
-        DOWN
-    };
-
     enum class Status {
         EMPTY,
         FOOD,
@@ -37,8 +30,8 @@ private:
     static const int tileSize = 30;
     Status tiles[gridY][gridX];
 
-    Direction currentDirection;
-    Direction lastMovedDirection;
+    Core::Direction currentDirection;
+    Core::Direction lastMovedDirection;
     int gamemode;
     int highscore;
     int lastDelayTime;
@@ -73,8 +66,8 @@ public:
     ~Snake() override;
 
     void update(float deltaTime) override;
-    void keyPressed(int key) override;
-    void keyReleased(int key) override;
+    void keyPressed(Core::Key key) override;
+    void keyReleased(Core::Key key) override;
 
 private:
     // Init

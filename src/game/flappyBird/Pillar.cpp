@@ -3,19 +3,20 @@
 #include "display/DisplayManager.hpp"
 #include "bitmap/flappy-bird/SkyBackgroundBitmap.hpp"
 
-Pillar::Pillar(int yPos, int gap, int speed, int xSize) :
-    xPos(480),
-    yPos(yPos),
-    xSize(xSize),//58
-    ySize(200),
-    gap(gap),
-    speed(speed),
-    devalued(false),
-    openingXSize(xSize + 6),
-    openingYSize(15)
+Pillar::Pillar(int yPos, int gap, int speed, int xSize) 
+: xPos(480),
+  yPos(yPos),
+  xSize(xSize),//58
+  ySize(200),
+  gap(gap),
+  speed(speed),
+  devalued(false),
+  openingXSize(xSize + 6),
+  openingYSize(15)
 {
    
 }
+
 void Pillar::updatePillar()
 {
     xPos -= speed;
@@ -44,39 +45,41 @@ void Pillar::gameOverAnimation()
     DisplayManager::tft.drawRect(xPos - ((openingXSize-xSize)/2), yPos - gap - openingYSize , openingXSize, openingYSize, DisplayManager::tft.color565(0,0,0));
     DisplayManager::renderPartialBitmap(xPos - ((openingXSize-xSize)/2), yPos - gap, xPos - ((openingXSize-xSize)/2) , yPos - gap, openingXSize, 2 , 480, 320, skyBackgroundBitmap);
 
-    if(yPos + gap + openingYSize <= 251)
-    {
+    if (yPos + gap + openingYSize <= 251) {
         DisplayManager::tft.fillRect(xPos - ((openingXSize-xSize)/2)+1, yPos + gap + 1, openingXSize -2, openingYSize - 2, DisplayManager::tft.color565(7, 219, 64));
         DisplayManager::tft.drawRect(xPos - ((openingXSize-xSize)/2), yPos + gap, openingXSize, openingYSize, DisplayManager::tft.color565(0,0,0));
         DisplayManager::renderPartialBitmap(xPos - ((openingXSize-xSize)/2), yPos + gap - 2, xPos - ((openingXSize-xSize)/2) , yPos + gap -2, openingXSize, 2 , 480, 320, skyBackgroundBitmap);
-    }
-    else if(yPos + gap <= 251)
-    {
+    } else if (yPos + gap <= 251) {
         DisplayManager::renderPartialBitmap(xPos - ((openingXSize-xSize)/2), yPos + gap - 2, xPos - ((openingXSize-xSize)/2) , yPos + gap -2, openingXSize, 2 , 480, 320, skyBackgroundBitmap);
         DisplayManager::tft.drawFastHLine(xPos - ((openingXSize-xSize)/2), yPos + gap -1, openingXSize, TFT_BLACK);
     }
 }
+
 int Pillar::redeemScorePoints()
 {
-    if(devalued == false)
-    {
+    if (devalued == false) {
         devalued = true;
         return 1;
     }
     return 0;
 }
+
 int Pillar::getXPos(){
     return xPos;
 }
+
 int Pillar::getYPosAbove(){
     return yPos - gap;
 }
+
 int Pillar::getYPosBelow(){
     return yPos + gap;
 }
+
 int Pillar::getXSize(){
     return xSize;
 }
+
 int Pillar::getYSize(){
     return ySize;
 }

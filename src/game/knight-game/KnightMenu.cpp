@@ -89,5 +89,5 @@ void KnightMenu::highlightSelectedButton()
 
 void KnightMenu::executeSelected()
 {
-    setCurrentGame(std::unique_ptr<KnightGameController>(new KnightGameController()));
+    Core::setCurrentGame(std::unique_ptr<KnightGameController>(new KnightGameController()));
 }

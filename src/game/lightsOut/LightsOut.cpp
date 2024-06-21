@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <String>
+#include <core/Core.hpp>
 
 LightsOut::LightsOut(int difficulty)
 : gameOver(false),
@@ -135,28 +136,28 @@ void LightsOut::invertAllPossibleOnes(int xIndex, int yIndex, TFT_eSPI& display)
         invertOne(xIndex, yIndex - 1, display);
 }
 
-void LightsOut::keyPressed(int key) 
+void LightsOut::keyPressed(Core::Key key) 
 {
     if(gameOver == false) {
         switch (key)
         {
-            case 1: //Up
+            case Core::Key::UP: //Up
                 if(cursorY > 0)
                     moveCursor(cursorX, cursorY - 1);
                 break;
-            case 3: //Down
+            case Core::Key::DOWN: //Down
                 if(cursorY < rows - 1)
                     moveCursor(cursorX, cursorY +1);
                 break;
-            case 0: //Right
+            case Core::Key::RIGHT: //Right
                 if(cursorX < cols - 1)
                     moveCursor(cursorX + 1, cursorY);
                 break;
-            case 2: //Left
+            case Core::Key::LEFT: //Left
                 if(cursorX > 0)
                     moveCursor(cursorX - 1, cursorY);
                 break;
-            case 4: //action
+            case Core::Key::ACTION: //action
                 moves++;
                 updateMoves();
                 TFT_eSPI& display = DisplayManager::getDisplay();
@@ -192,7 +193,7 @@ void LightsOut::updateMoves()
     display.drawString(String(moves), 320, 20);
 }
 
-void LightsOut::keyReleased(int key) 
+void LightsOut::keyReleased(Core::Key key) 
 {
 
 }

@@ -110,5 +110,5 @@ void SnakeMenu::highlightSelectedButton()
 void SnakeMenu::executeSelected()
 {
     std::unique_ptr<Game> newGame(new Snake(menuIndex));
-    setCurrentGame(std::move(newGame));
+    Core::setCurrentGame(std::move(newGame));
 }

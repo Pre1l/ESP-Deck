@@ -2,6 +2,7 @@
 
 #include <game/knight-game/entity/Slime.hpp>
 #include <iostream>
+#include <core/Core.hpp>
 
 KnightGame::KnightGame() 
 {
@@ -43,22 +44,22 @@ void KnightGame::update(float deltaTime)
     }
 }
 
-void KnightGame::keyPressed(int key)
+void KnightGame::keyPressed(Core::Key key)
 {
     std::shared_ptr<Knight> knight = getKnight();
     Vector2D& velocity = knight->getVelocity();
 
     switch (key) {
-        case 0:
+        case Core::Key::RIGHT:
             knight->startRunning(Knight::Direction::RIGHT);
             break;
-        case 1:
+        case Core::Key::UP:
             knight->jump();
             break;
-        case 2:
+        case Core::Key::LEFT:
             knight->startRunning(Knight::Direction::LEFT);
             break;
-        case 4:
+        case Core::Key::ACTION:
             knight->attack();
     }
 }
@@ -69,16 +70,16 @@ void KnightGame::setKnight(std::shared_ptr<Knight> knight)
     addCombatEntity(knight);
 }
 
-void KnightGame::keyReleased(int key)
+void KnightGame::keyReleased(Core::Key key)
 {
     std::shared_ptr<Knight> knight = getKnight();
     Vector2D& velocity = knight->getVelocity();
 
     switch (key) {
-        case 0:
+        case Core::Key::RIGHT:
             knight->stopRunning(Knight::Direction::RIGHT);
             break;
-        case 2:
+        case Core::Key::LEFT:
             knight->stopRunning(Knight::Direction::LEFT);
             break;
     }

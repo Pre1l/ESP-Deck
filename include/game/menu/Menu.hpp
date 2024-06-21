@@ -18,8 +18,8 @@ class Menu : public Game
     public:
         Menu();
         void update(float deltaTime) override;
-        void keyPressed(int key) override;
-        void keyReleased(int key) override;
+        void keyPressed(Core::Key key) override;
+        void keyReleased(Core::Key key) override;
         void static drawMenuOutline(int x, int y, int width, int height, bool roundEdges, bool status);
 
     private:

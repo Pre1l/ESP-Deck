@@ -22,13 +22,13 @@ Snake::~Snake()
 
 void Snake::init(bool doRenderBackground)
 {
-    currentDirection = Direction::RIGHT;
-    lastMovedDirection = Direction::RIGHT;
+    currentDirection = Core::Direction::RIGHT;
+    lastMovedDirection = Core::Direction::RIGHT;
     lastDelayTime = 0;
     gameOver = false;
 
     snakeTiles.clear();
-    snakeSpriteSheet.createSprite(30, 30);
+    snakeSpriteSheet.createSprite(tileSize, tileSize);
     snakeSpriteSheet.setSwapBytes(true);
 
     highscore = EepromManager::readInt8(snakeHighscoreAddresses[gamemode]);
@@ -40,7 +40,7 @@ void Snake::init(bool doRenderBackground)
     // Render UI elements
     renderUI();
 
-    // Reset tiles to status 0
+    // Reset tiles to status EMPTY
     resetTiles();
 
     // Spawn snake
@@ -159,7 +159,7 @@ void Snake::onGameClosed()
     updateHighscore();
 }
 
-void Snake::keyPressed(int key)
+void Snake::keyPressed(Core::Key key)
 {
     // If game over restart game
     if (gameOver) {
@@ -168,18 +168,18 @@ void Snake::keyPressed(int key)
     }
 
     // Handle key presses to change snake direction
-    if (key == 0 && lastMovedDirection != Direction::LEFT) {
-        currentDirection = Direction::RIGHT;
-    } else if (key == 1 && lastMovedDirection != Direction::DOWN) {
-        currentDirection = Direction::UP;
-    } else if (key == 2 && lastMovedDirection != Direction::RIGHT) {
-        currentDirection = Direction::LEFT;
-    } else if (key == 3 && lastMovedDirection != Direction::UP) {
-        currentDirection = Direction::DOWN;
+    if (key == Core::Key::RIGHT && lastMovedDirection != Core::Direction::LEFT) {
+        currentDirection = Core::Direction::RIGHT;
+    } else if (key == Core::Key::UP && lastMovedDirection != Core::Direction::DOWN) {
+        currentDirection = Core::Direction::UP;
+    } else if (key == Core::Key::LEFT && lastMovedDirection != Core::Direction::RIGHT) {
+        currentDirection = Core::Direction::LEFT;
+    } else if (key == Core::Key::DOWN && lastMovedDirection != Core::Direction::UP) {
+        currentDirection = Core::Direction::DOWN;
     }
 }
 
-void Snake::keyReleased(int key)
+void Snake::keyReleased(Core::Key key)
 {
     // Currently not used/needed
 }
@@ -190,10 +190,10 @@ void Snake::moveSnake()
 
     // Move in currentDirection by 1 and update lastMovedDirection
     switch (currentDirection) {
-        case Direction::RIGHT: newSnakeTilePosition.addX(1); lastMovedDirection = Direction::RIGHT; break;
-        case Direction::UP: newSnakeTilePosition.addY(-1); lastMovedDirection = Direction::UP; break;
-        case Direction::LEFT: newSnakeTilePosition.addX(-1); lastMovedDirection = Direction::LEFT; break;
-        case Direction::DOWN: newSnakeTilePosition.addY(1); lastMovedDirection = Direction::DOWN; break;
+        case Core::Direction::RIGHT: newSnakeTilePosition.addX(1); lastMovedDirection = Core::Direction::RIGHT; break;
+        case Core::Direction::UP: newSnakeTilePosition.addY(-1); lastMovedDirection = Core::Direction::UP; break;
+        case Core::Direction::LEFT: newSnakeTilePosition.addX(-1); lastMovedDirection = Core::Direction::LEFT; break;
+        case Core::Direction::DOWN: newSnakeTilePosition.addY(1); lastMovedDirection = Core::Direction::DOWN; break;
     }
 
     Vector2D frontTilePosition = snakeTiles.front();

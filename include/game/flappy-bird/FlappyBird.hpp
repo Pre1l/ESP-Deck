@@ -9,6 +9,7 @@
 #include <list>
 #include <String>
 #include <eeprom/EepromManager.hpp>
+#include <core/Core.hpp>
 
 class FlappyBird : public Game
 {
@@ -55,8 +56,8 @@ class FlappyBird : public Game
         FlappyBird(int difficulty);
         ~FlappyBird() override;
 
-        void keyPressed(int key) override;
-        void keyReleased(int key) override;
+        void keyPressed(Core::Key key) override;
+        void keyReleased(Core::Key key) override;
         void update(float deltaTime) override;
 };
 

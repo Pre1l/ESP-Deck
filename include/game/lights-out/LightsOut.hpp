@@ -27,8 +27,8 @@ class LightsOut : public Game
         LightsOut(int difficulty);
         ~LightsOut();
 
-        void keyPressed(int key) override;
-        void keyReleased(int key) override;
+        void keyPressed(Core::Key key) override;
+        void keyReleased(Core::Key key) override;
         void update(float deltaTime) override;
 
     private:
@@ -40,7 +40,6 @@ class LightsOut : public Game
         void showSolved();
         void hideSolved();
         void updateMoves();
-        void onGameClosed();
 };
 
 

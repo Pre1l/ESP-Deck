@@ -19,8 +19,8 @@ class Merge : public Game
         ~Merge() override;
 
         void update(float deltaTime) override;
-        void keyPressed(int key) override;
-        void keyReleased(int key) override;
+        void keyPressed(Core::Key key) override;
+        void keyReleased(Core::Key key) override;
 
     private:
         void onGameClosed();
@@ -30,7 +30,7 @@ class Merge : public Game
         void updateHighscore();
         void updateScore();
         void init(bool renderBackground);
-        void moveInDirection(int direction);
+        void moveInDirection(Core::Direction direction);
         void setTile(int value, Vector2D position);
         void moveTile(Vector2D pattern, Vector2D tile, bool (&combinedTiles)[4][4], bool combined);
 };

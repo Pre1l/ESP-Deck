@@ -19,7 +19,7 @@ void EspDeckMenu::renderMenu()
     DisplayManager::resetFont();
     display.setTextColor(0xfa67);
     display.setTextSize(1);
-    display.drawString("Update Build 71", 105, 95);
+    display.drawString("Update Build 72", 105, 95);
     DisplayManager::resetFont();
 }
 

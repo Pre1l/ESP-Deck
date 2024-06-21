@@ -8,6 +8,7 @@
 #include "game/flappy-bird/FlappyBirdMenu.hpp"
 #include "game/knight-game/KnightMenu.hpp"
 #include "game/lights-out/LightsOutMenu.hpp"
+#include <core/Core.hpp>
 
 int Menu::menuReturnIndex = 0;
 
@@ -46,38 +47,38 @@ void Menu::update(float deltaTime)
     gameMenus[menuIndex]->update();
 }
 
-void Menu::keyPressed(int key) 
+void Menu::keyPressed(Core::Key key) 
 {
-    if (key == 2 && focusOnSideMenu == false) {
+    if (key == Core::Key::LEFT && focusOnSideMenu == false) {
         drawMenuOutline(59, 0, 421, 320, false, false);
         drawMenuOutline(0, 0, 60, 320, true, true);
         focusOnSideMenu = true;
-    } else if (key == 0 && focusOnSideMenu == true) {
+    } else if (key == Core::Key::RIGHT && focusOnSideMenu == true) {
         drawMenuOutline(0, 0, 60, 320, true, false);
         drawMenuOutline(59, 0, 421, 320, false, true);
         menuReturnIndex = menuIndex;
         focusOnSideMenu = false;
     } else if (!focusOnSideMenu) {
-        if (key == 1) {
+        if (key == Core::Key::UP) {
             gameMenus[menuIndex]->advanceSelectionUp();
-        } else if (key == 3) {
+        } else if (key == Core::Key::DOWN) {
             gameMenus[menuIndex]->advanceSelectionDown();
-        } else if (key == 4) {
+        } else if (key == Core::Key::ACTION) {
             if (menuIndex != 0) {
                 drawMenuOutline(59, 0, 421, 320, false, false);
             }
             gameMenus[menuIndex]->executeSelected();
         }
     } else if (focusOnSideMenu) {
-        if (key == 1) {
+        if (key == Core::Key::UP) {
             advanceSelectionUpAndExecute();
-        } else if (key == 3) {
+        } else if (key == Core::Key::DOWN) {
             advanceSelectionDownAndExecute();
         }
     }
 }
 
-void Menu::keyReleased(int key) 
+void Menu::keyReleased(Core::Key key) 
 {
 
 }

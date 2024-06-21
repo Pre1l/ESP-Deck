@@ -66,27 +66,37 @@ void Merge::onGameClosed()
     updateHighscore();
 }
 
-void Merge::keyPressed(int key) 
+void Merge::keyPressed(Core::Key key) 
 {
     if (gameOver) {
         init(false);
         return;
     }
 
+    if (key == Core::Key::ACTION)
+        return;
+
     switch (key) {
-        case 0: 
-        case 1: 
-        case 2: 
-        case 3:
-            moveInDirection(key);
-            delay(10);
-            generateRandomTile();
-            checkForGameOver();
+        case Core::Key::RIGHT:
+            moveInDirection(Core::Direction::RIGHT);
+            break;
+        case Core::Key::UP:
+            moveInDirection(Core::Direction::UP);
+            break;
+        case Core::Key::LEFT:
+            moveInDirection(Core::Direction::LEFT);
+            break;
+        case Core::Key::DOWN:
+            moveInDirection(Core::Direction::DOWN);
             break;
     }
+
+    delay(10);
+    generateRandomTile();
+    checkForGameOver();
 }
 
-void Merge::moveInDirection(int direction) 
+void Merge::moveInDirection(Core::Direction direction) 
 {
     bool combinedTiles[4][4];
 
@@ -97,7 +107,7 @@ void Merge::moveInDirection(int direction)
     }
 
     switch (direction) {
-        case 0:
+        case Core::Direction::RIGHT:
             for (int row = 0; row < 4; row++) {
                 for (int col = 3; col >= 0; col--) {
                     if (tiles[row][col] != 0) {
@@ -106,7 +116,7 @@ void Merge::moveInDirection(int direction)
                 }
             }
             break;
-        case 1:
+        case Core::Direction::UP:
             for (int row = 0; row < 4; row++) {
                 for (int col = 0; col < 4; col++) {
                     if (tiles[row][col] != 0) {
@@ -115,7 +125,7 @@ void Merge::moveInDirection(int direction)
                 }
             }
             break;
-        case 2:
+        case Core::Direction::LEFT:
             for (int row = 0; row < 4; row++) {
                 for (int col = 0; col < 4; col++) {
                     if (tiles[row][col] != 0) {
@@ -124,7 +134,7 @@ void Merge::moveInDirection(int direction)
                 }
             }
             break;
-        case 3:
+        case Core::Direction::DOWN:
             for (int row = 4; row >= 0; row--) {
                 for (int col = 0; col < 4; col++) {
                     if (tiles[row][col] != 0) {
@@ -169,7 +179,7 @@ void Merge::moveTile(Vector2D pattern, Vector2D tilePosition, bool (&combinedTil
     }
 }
 
-void Merge::keyReleased(int key) 
+void Merge::keyReleased(Core::Key key) 
 {
     
 }

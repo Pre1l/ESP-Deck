@@ -53,5 +53,5 @@ void MergeMenu::advanceSelectionUp()
 void MergeMenu::executeSelected() 
 {
     std::unique_ptr<Game> newGame(new Merge());
-    setCurrentGame(std::move(newGame));
+    Core::setCurrentGame(std::move(newGame));
 }
