@@ -93,8 +93,3 @@ Vector2D& Vector2D::multiply(float value)
 	
 	return *this;
 }
-
-bool Vector2D::equals(const Vector2D& other) const
-{
-	return x == other.x && y == other.y;
-}

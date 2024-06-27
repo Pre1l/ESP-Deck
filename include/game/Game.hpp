@@ -12,7 +12,6 @@ class Game
         };
 
     protected:
-        int menuReturnIndex;
         GameType gameType = GameType::OTHER;
 
     public:

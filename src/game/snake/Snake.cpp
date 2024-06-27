@@ -33,7 +33,7 @@ void Snake::init(bool doRenderBackground)
 
     highscore = EepromManager::readInt8(snakeHighscoreAddresses[gamemode]);
 
-    // Render background
+    // Render background, not needed on instant restart after game over
     if (doRenderBackground)
         renderBackground();
 
@@ -77,6 +77,7 @@ void Snake::renderUI()
 
     String highscoreString = String(highscore);
 
+    // Format highscore to 3 digits
     if (highscore < 10) {
         highscoreString = "00" + highscoreString;
     } else if (highscore < 100) {
@@ -346,9 +347,12 @@ void Snake::resetTileColor(Vector2D tilePosition)
     DisplayManager::getDisplay().fillRect(tilePosition.getIntX() * tileSize + offsetX, tilePosition.getIntY() * tileSize + offsetY, tileSize, tileSize, TFT_BLACK);
 }
 
-void Snake::renderSprite(Vector2D tilePosition, Vector2D sprite)
+void Snake::renderSprite(Vector2D tilePosition, Vector2D spriteSheetOffset)
 {
-    snakeSpriteSheet.pushImage(sprite.getIntX(), sprite.getIntY(), 150, 120, snakeBitmap);
+    // Render image/bitmap onto the sprite with an offset to get the wanted sprite of the spritesheet
+    snakeSpriteSheet.pushImage(spriteSheetOffset.getIntX(), spriteSheetOffset.getIntY(), 150, 120, snakeBitmap);
+
+    // Push sprite to display
     snakeSpriteSheet.pushSprite(tilePosition.getIntX() * tileSize + offsetX, tilePosition.getIntY() * tileSize + offsetY);
 }
 

@@ -9,7 +9,6 @@
 #include "bitmap/TrophyGoldenBitmap.hpp"
 #include <game/menu/Menu.hpp>
 #include "eeprom/EepromManager.hpp"
-#include "game/GameFactory.hpp"
 #include <game/knight-game/KnightGameController.hpp>
 
 KnightMenu::KnightMenu() 
@@ -30,25 +29,12 @@ void KnightMenu::renderMenu()
     display.setTextColor(0x4cb3);
     display.drawString("Knight Beta", 115, 40);
     DisplayManager::resetFont();
-    //display.fillRoundRect(310, 115, 100, 40, 10, 0xFEE0);
     display.fillRoundRect(160, 110, 180, 50, 10, 0x834c);
-    //display.pushImage(330, 118, 35, 35, trophyGoldenBitmap);
     display.drawString("Start", 210, 119);
-
-    /*int highscore = EepromManager::readInt8(EepromManager::EEPROM_KNIGHT_GAME_HIGHSCORE_ADDR_INT16);
-
-    String highscoreString = String(highscore);
-
-    if (highscore < 10) {
-        highscoreString = "00" + highscore;
-    } else if (highscore < 100) {
-        highscoreString = "0" + highscore;
-    }*/
 
     display.setTextColor(0xF440);
     display.setTextSize(1);
     display.setFreeFont(FF26);
-    //display.drawString(highscoreString, 364, 126);
 
     highlightSelectedButton();
     DisplayManager::resetFont();

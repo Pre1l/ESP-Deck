@@ -26,12 +26,10 @@ void MergeMenu::renderMenu()
     display.setTextColor(0xFA85);
     display.drawString("2048", 125, 110);
     DisplayManager::resetFont();
-    //display.fillRoundRect(310, 115, 100, 40, 10, 0xFEE0);
     display.fillRoundRect(160, 150, 180, 50, 10, TFT_DARKGREY);
 
     display.drawRoundRect(160, 150, 180, 50, 10, 0xFFFB);
     display.drawRoundRect(161, 151, 178, 48, 9, 0xFFFB);
-    //display.pushImage(330, 118, 35, 35, trophyGoldenBitmap);
     display.drawString("Start", 210, 159);
 }
  
